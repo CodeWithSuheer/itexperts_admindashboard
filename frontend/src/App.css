@@ -6,8 +6,8 @@
 
 body {
   --sb-track-color: #cbd5e1;
-  --sb-thumb-color: #2d2d2d;
-  --sb-size: 6px;
+  --sb-thumb-color: #636363;
+  --sb-size: 7px;
 
   scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
 }
