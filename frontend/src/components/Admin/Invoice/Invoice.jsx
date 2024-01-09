@@ -6,6 +6,8 @@ import { X } from "phosphor-react";
 const Invoice = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalX, setShowModalX] = useState(false);
+  const [services, setServices] = useState([{ number: 1, name: "", amount: "" }]);
+  const [serviceCounter, setServiceCounter] = useState(1);
 
   const onClickOne = () => {
     setShowModal(!showModal);
@@ -14,7 +16,7 @@ const Invoice = () => {
     setShowModalX(!showModalX);
   };
 
-  const [services, setServices] = useState([{ name: "", amount: "" }]);
+  // const [services, setServices] = useState([{ name: "", amount: "" }]);
 
   const handleInputChange = (index, key, value) => {
     const updatedServices = [...services];
@@ -23,7 +25,8 @@ const Invoice = () => {
   };
 
   const handleAddService = () => {
-    setServices([...services, { name: "", amount: "" }]);
+    setServiceCounter(serviceCounter + 1);
+    setServices([...services, { number: serviceCounter + 1, name: "", amount: "" }]);
   };
 
   const tableItems = [
@@ -143,47 +146,46 @@ const Invoice = () => {
             </div>
           </div>
           <div className="mt-5">
-            <label
-              className="text-gray-700 dark:text-gray-200 font-medium text-xl"
-              htmlFor="password"
+          <label
+            className="text-gray-700 dark:text-gray-200 font-medium text-xl"
+            htmlFor="password"
+          >
+            Services
+          </label>
+          <div className="border-solid border-2 border-gray-200 p-5 rounded-lg">
+            {services.map((service, index) => (
+              <div key={index} className="flex justify-center gap-5 w-100 mb-2">
+                <input
+                  type="number"
+                  disabled
+                  defaultValue={service.number}
+                  className="block w-11 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
+                />
+                <input
+                  type="text"
+                  placeholder="Service Name"
+                  value={service.name}
+                  onChange={(e) => handleInputChange(index, "name", e.target.value)}
+                  className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
+                />
+                <input
+                  type="number"
+                  placeholder="Service Amount"
+                  value={service.amount}
+                  onChange={(e) => handleInputChange(index, "amount", e.target.value)}
+                  className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
+                />
+              </div>
+            ))}
+            <button
+              className="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+              onClick={handleAddService}
+              type="button"
             >
-              Services
-            </label>
-            <div className="border-solid border-2 border-gray-200 p-5 rounded-lg">
-              {services.map((service, index) => (
-                <div
-                  key={index}
-                  className="flex justify-center gap-5 w-100 mb-2"
-                >
-                  <input
-                    type="text"
-                    placeholder="Service Name"
-                    value={service.name}
-                    onChange={(e) =>
-                      handleInputChange(index, "name", e.target.value)
-                    }
-                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Service Amount"
-                    value={service.amount}
-                    onChange={(e) =>
-                      handleInputChange(index, "amount", e.target.value)
-                    }
-                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
-                  />
-                </div>
-              ))}
-              <button
-                className=" px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
-                onClick={handleAddService}
-                type="button"
-              >
-                Add Services
-              </button>
-            </div>
+              Add Services
+            </button>
           </div>
+        </div>
           <div class="flex justify-center gap-10 mt-6">
             <button
               class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
