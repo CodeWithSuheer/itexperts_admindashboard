@@ -21,11 +21,8 @@ import { AdminProtected, LoginProtected } from "./components/ProtectedRoutes/Pro
 import ProjectsPanel from "./components/Admin/Projects/ProjectsPanel";
 import OnGoingProject from "./components/Admin/Projects/OnGoingProject";
 import CompletedProjects from "./components/Admin/Projects/CompletedProjects";
-import toast, { Toaster } from "react-hot-toast";
 import "./App.css";
 import OnGoingProjectsDetails from "./components/Admin/Projects/OnGoingProjectsDetails";
-import OnGoingProject from "./components/Admin/Projects/ProjectsPanel";
-import CompletedProjects from "./components/Admin/Projects/ProjectsPanel";
 
 
 function App() {
