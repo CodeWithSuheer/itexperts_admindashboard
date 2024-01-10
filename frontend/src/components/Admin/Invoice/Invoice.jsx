@@ -1,22 +1,14 @@
 import React, { useState } from "react";
 import { Button, Modal } from "keep-react";
-// import Logo from "../../../Images/ITEXPERTS_LOGO.png";
 import { X } from "phosphor-react";
 
 const Invoice = () => {
-  const [showModal, setShowModal] = useState(false);
   const [showModalX, setShowModalX] = useState(false);
   const [services, setServices] = useState([{ number: 1, name: "", amount: "" }]);
-  const [serviceCounter, setServiceCounter] = useState(1);
 
-  const onClickOne = () => {
-    setShowModal(!showModal);
-  };
   const onClickTwo = () => {
     setShowModalX(!showModalX);
   };
-
-  // const [services, setServices] = useState([{ name: "", amount: "" }]);
 
   const handleInputChange = (index, key, value) => {
     const updatedServices = [...services];
@@ -25,8 +17,22 @@ const Invoice = () => {
   };
 
   const handleAddService = () => {
-    setServiceCounter(serviceCounter + 1);
-    setServices([...services, { number: serviceCounter + 1, name: "", amount: "" }]);
+    const maxServiceNumber = Math.max(...services.map((service) => service.number), 0);
+    const newServiceNumber = maxServiceNumber + 1;
+
+    setServices([...services, { number: newServiceNumber, name: "", amount: "" }]);
+  };
+
+  const handleDeleteService = (index) => {
+    const updatedServices = [...services];
+    updatedServices.splice(index, 1);
+
+    // Update service numbers after deletion
+    updatedServices.forEach((service, i) => {
+      service.number = i + 1;
+    });
+
+    setServices(updatedServices);
   };
 
   const tableItems = [
@@ -64,7 +70,7 @@ const Invoice = () => {
 
   return (
     <>
-      <section class="max-w-4xl p-6 mx-auto mt-10 bg-white rounded-md shadow-md dark:bg-gray-800 ">
+      <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 ">
         <h2 class="text-gray-800 text-3xl font-bold sm:text-3xl text-center">
           Create Invoice
         </h2>
@@ -175,6 +181,13 @@ const Invoice = () => {
                   onChange={(e) => handleInputChange(index, "amount", e.target.value)}
                   className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
                 />
+                <button
+                  className="px-3 py-2 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                  onClick={() => handleDeleteService(index)}
+                  type="button"
+                >
+                  X
+                </button>
               </div>
             ))}
             <button
@@ -249,7 +262,6 @@ const Invoice = () => {
                             tableItems.map((item, idx) => (
                                 <tr key={idx} className="divide-x">
                                     <td className="px-6 py-4 whitespace-nowrap flex items-center gap-x-6">
-                                        {/* <span>{idx + 1}</span> */}
                                         {item.name}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
