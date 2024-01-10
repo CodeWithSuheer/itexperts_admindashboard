@@ -18,6 +18,9 @@ import { useEffect } from "react";
 import { authUserAsync } from "./features/authSlice";
 import { useDispatch } from "react-redux";
 import { AdminProtected, LoginProtected } from "./components/ProtectedRoutes/ProtectedRoutes";
+import ProjectsPanel from "./components/Admin/Projects/ProjectsPanel";
+import OnGoingProject from "./components/Admin/Projects/ProjectsPanel";
+import CompletedProjects from "./components/Admin/Projects/ProjectsPanel";
 
 
 function App() {
