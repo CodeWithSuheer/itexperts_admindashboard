@@ -21,6 +21,7 @@ import { AdminProtected, LoginProtected } from "./components/ProtectedRoutes/Pro
 import ProjectsPanel from "./components/Admin/Projects/ProjectsPanel";
 import OnGoingProject from "./components/Admin/Projects/ProjectsPanel";
 import CompletedProjects from "./components/Admin/Projects/ProjectsPanel";
+import './app.css';
 
 
 function App() {
@@ -51,7 +52,7 @@ function App() {
           {/* --------- AUTHENTICATION --------- */}
           <Route path="/signup" element={<LoginProtected><SignUp /></LoginProtected>} />
           <Route path="/forgetpassword" element={<ForgetPassword />} />
-          <Route path="/resetpassword" element={<ResetPassword />} />
+          <Route path="/api/user/resetPassword" element={<ResetPassword />} />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-center" reverseOrder={true} />

@@ -4,12 +4,10 @@ import toast from "react-hot-toast";
 
 //API URL
 const signupUrl = "http://localhost:8080/api/user/signup";
-const getUserUrl = "http://localhost:3000/api/getUser";
 const loginUrl = "http://localhost:8080/api/user/login";
 const logoutUrl = "http://localhost:8080/api/user/logout";
-const updateUserUrl = "http://localhost:3000/api/updateUser";
-const forgotPasswordUrl = "http://localhost:3000/api/forgotPassword";
-const resetPasswordUrl = "http://localhost:3000/api/resetPassword";
+const forgotPasswordUrl = "http://localhost:8080/api/user/forgotPassword";
+const resetPasswordUrl = "http://localhost:8080/api/user/resetPassword";
 const authUserUrl = "http://localhost:8080/api/user/authUser";
 
 //CREATE ASYNC THUNK
@@ -60,37 +58,37 @@ export const forgetuserAsync = createAsyncThunk(
 // RESET PASSWORD ASYNC THUNK
 export const resetpasswordAsync = createAsyncThunk(
   "user/resetPassword",
-  async (newPassword, confirmPassword, resetToken) => {
+  async ({ newPassword, confirmPassword, resetToken }) => {
     try {
-      const response = await axios.post(
-        resetPasswordUrl,
+      const response = await axios.post(resetPasswordUrl, {
         newPassword,
         confirmPassword,
-        resetToken
-      );
-      //toast.success(response.data.msg)
+        resetToken,
+      });
+      toast.success(response.data.msg);
       console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error.response.message);
-      // toast.error(error.response.data.msg);
+      console.log(error.response.data.msg);
+      toast.error(error.response.data.msg);
     }
   }
 );
 
-export const authUserAsync = createAsyncThunk("users/authUser",async ()=>{
+// AUTH USER ASYNC THUNK
+export const authUserAsync = createAsyncThunk("users/authUser", async () => {
   try {
-   const response = await axios.get(authUserUrl);
-   return response.data;
+    const response = await axios.get(authUserUrl);
+    return response.data;
   } catch (error) {
-   throw new Error(error.message)
+    throw new Error(error.message);
   }
 });
 
-export const logoutUserAsync = createAsyncThunk("users/logout",async ()=>{
+// LOGOUT ASYNC THUNK
+export const logoutUserAsync = createAsyncThunk("users/logout", async () => {
   await axios.delete(logoutUrl);
 });
-
 
 // INITIAL STATE
 const initialState = {
@@ -106,10 +104,10 @@ const authSlice = createSlice({
   name: "authSlice",
   initialState,
   reducers: {
-    reset:(state)=>initialState 
+    reset: (state) => initialState,
   },
-     extraReducers: (builder) => {
-     builder
+  extraReducers: (builder) => {
+    builder
 
       // SIGN UP ADD CASE
       .addCase(createuserAsync.pending, (state, action) => {
@@ -138,15 +136,24 @@ const authSlice = createSlice({
         state.forgetPasswordEmail = action.payload;
         state.forgetPasswordEmail = null;
       })
-       // AUTH USER ADD CASE
-      .addCase(authUserAsync.pending,(state)=>{
+
+      // RESET PASSWORD ADD CASE
+      .addCase(resetpasswordAsync.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(authUserAsync.fulfilled,(state,action)=>{
+      .addCase(resetpasswordAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.resetPassword = action.payload;
+      })
+
+      // AUTH USER ADD CASE
+      .addCase(authUserAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(authUserAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-    })
-
+      });
   },
 });
 

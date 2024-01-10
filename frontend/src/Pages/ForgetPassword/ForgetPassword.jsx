@@ -12,6 +12,7 @@ const ForgetPassword = () => {
   // HANDLE SUBMIT FUNCTION
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("email", email);
     dispatch(forgetuserAsync({ email: email }));
     setEmail("");
   };
@@ -73,6 +74,13 @@ const ForgetPassword = () => {
                   >
                     Send Email
                   </button>
+
+                  <Link
+                    to="/"
+                    className="inline-block mt-4 text-center text-blue-500 md:mt-0 md:mx-6 hover:underline"
+                  >
+                    Login to your account?
+                  </Link>
                 </div>
               </form>
             </div>
