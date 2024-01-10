@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Modal, Button } from "keep-react";
 import { MagnifyingGlass, Trash } from "phosphor-react";
+import { useNavigate } from "react-router-dom";
 
 const OnGoingProject = () => {
+  const navigate = useNavigate();
   const [showErrorModalX, setShowErrorModalX] = useState(false);
   const [deleteMsgId, setDeleteMsgId] = useState(null);
   const tableItems = [
@@ -96,6 +98,7 @@ const OnGoingProject = () => {
                       size="md"
                       type="outlineGray"
                       className="bg-red-600 text-white hover:bg-red-700 hover:text-white"
+                      onClick={() => navigate("/adminpanel/projectdetails")}
                     >
                       View Details
                     </Button>
