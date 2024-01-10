@@ -19,9 +19,10 @@ import { authUserAsync } from "./features/authSlice";
 import { useDispatch } from "react-redux";
 import { AdminProtected, LoginProtected } from "./components/ProtectedRoutes/ProtectedRoutes";
 import ProjectsPanel from "./components/Admin/Projects/ProjectsPanel";
-import OnGoingProject from "./components/Admin/Projects/ProjectsPanel";
-import CompletedProjects from "./components/Admin/Projects/ProjectsPanel";
-import './app.css';
+import OnGoingProject from "./components/Admin/Projects/OnGoingProject";
+import CompletedProjects from "./components/Admin/Projects/CompletedProjects";
+import OnGoingProjectsDetails from "./components/Admin/Projects/OnGoingProjectsDetails";
+import "./App.css";
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
             <Route path="projects" element={<ProjectsPanel />} />
             <Route path="ongoingprojects" element={<OnGoingProject />} />
             <Route path="completedprojects" element={<CompletedProjects />} />
+            <Route path="projectdetails" element={<OnGoingProjectsDetails />} />
           </Route>
 
           {/* --------- AUTHENTICATION --------- */}
