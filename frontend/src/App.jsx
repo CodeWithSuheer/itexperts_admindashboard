@@ -18,6 +18,7 @@ import OnGoingProject from "./components/Admin/Projects/OnGoingProject";
 import CompletedProjects from "./components/Admin/Projects/CompletedProjects";
 import toast, { Toaster } from "react-hot-toast";
 import "./App.css";
+import OnGoingProjectsDetails from "./components/Admin/Projects/OnGoingProjectsDetails";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="projects" element={<ProjectsPanel />} />
             <Route path="ongoingprojects" element={<OnGoingProject />} />
             <Route path="completedprojects" element={<CompletedProjects />} />
+            <Route path="projectdetails" element={<OnGoingProjectsDetails />} />
           </Route>
 
           {/* --------- AUTHENTICATION --------- */}
