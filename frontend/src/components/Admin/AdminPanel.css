@@ -12,6 +12,10 @@
 .menu-button {
   display: none;
 }
+.menu_remove {
+  display: none !important;
+}
+
 
 /* ---------------- LOGOUT BUTTON CSS ---------------- */
 .Btn {
@@ -96,5 +100,12 @@
 @media (min-width: 1023px) {
   .admin_sideMenu {
     width: 100%;
+  }
+}
+
+@media only screen and (max-width: 1023px) {
+  .menu_remove {
+      display: flex !important;
+      color: #fff;
   }
 }
