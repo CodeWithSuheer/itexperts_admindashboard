@@ -8,13 +8,16 @@ import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import AdminHeader from "./components/Admin/AdminHeader";
 import AdminBody from "./components/Admin/AdminBody";
 import Dashboard from "./components/Admin/Dashboard/Dashboard";
-import "./App.css";
 import Invoice from "./components/Admin/Invoice/Invoice";
 import NotFound from "./components/NotFound/NotFound";
 import UsersRequests from "./components/Admin/UsersRequests/UsersInfo";
 import PendingRequests from "./components/Admin/UsersRequests/PendingRequests";
 import ApprovedRequests from "./components/Admin/UsersRequests/ApprovedRequests";
+import ProjectsPanel from "./components/Admin/Projects/ProjectsPanel";
+import OnGoingProject from "./components/Admin/Projects/OnGoingProject";
+import CompletedProjects from "./components/Admin/Projects/CompletedProjects";
 import toast, { Toaster } from "react-hot-toast";
+import "./App.css";
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
             <Route path="pending-requests" element={<PendingRequests />} />
             <Route path="approved-requests" element={<ApprovedRequests />} />
             <Route path="invoice/:id" element={<Invoice />} />
+            <Route path="projects" element={<ProjectsPanel />} />
+            <Route path="ongoingprojects" element={<OnGoingProject />} />
+            <Route path="completedprojects" element={<CompletedProjects />} />
           </Route>
 
           {/* --------- AUTHENTICATION --------- */}

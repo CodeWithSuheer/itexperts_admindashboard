@@ -1,0 +1,8 @@
+.requests {
+  cursor: pointer;
+  transition: all 0.4s;
+  background-color: #fff;
+}
+.requests:hover {
+  transform: translateY(-4px);
+}
