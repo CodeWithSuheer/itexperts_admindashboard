@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dropdown } from "keep-react";
 import { Modal, Button } from "keep-react";
+import { useDispatch, useSelector } from "react-redux";
 import { MagnifyingGlass, Trash } from "phosphor-react";
 import { CloudArrowUp } from "phosphor-react";
 
@@ -30,6 +31,11 @@ const ApprovedRequests = () => {
       role: "Admin",
     },
   ];
+
+
+  // HERE WE ARE GETTING DATA OF APPROVED REQUESTS   ---> WE CALL THIS FUNCTION IN ADMIN PANEL dispatch(approvedRequestsAsync());
+  const approvedRequests = useSelector((state) => state.adminInfo.pendingRequests);
+  console.log('approvedRequests',approvedRequests);
 
   // HANDLE ROLE UPDATE
   const onClick = (id) => {
