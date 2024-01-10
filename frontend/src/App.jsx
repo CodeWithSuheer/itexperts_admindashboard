@@ -13,11 +13,20 @@ import NotFound from "./components/NotFound/NotFound";
 import UsersRequests from "./components/Admin/UsersRequests/UsersInfo";
 import PendingRequests from "./components/Admin/UsersRequests/PendingRequests";
 import ApprovedRequests from "./components/Admin/UsersRequests/ApprovedRequests";
+<<<<<<< HEAD
+import  { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import { authUserAsync } from "./features/authSlice";
+import { useDispatch } from "react-redux";
+import { AdminProtected, LoginProtected } from "./components/ProtectedRoutes/ProtectedRoutes";
+
+=======
 import ProjectsPanel from "./components/Admin/Projects/ProjectsPanel";
 import OnGoingProject from "./components/Admin/Projects/OnGoingProject";
 import CompletedProjects from "./components/Admin/Projects/CompletedProjects";
 import toast, { Toaster } from "react-hot-toast";
 import "./App.css";
+>>>>>>> 91c1e8b1f79ad171e150fce5ccd4f738ed9e60b3
 
 function App() {
   const dispatch = useDispatch();
