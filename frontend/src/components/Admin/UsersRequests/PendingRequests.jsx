@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button } from "keep-react";
 import { MagnifyingGlass, Trash } from "phosphor-react";
+import { useDispatch, useSelector } from "react-redux";
+import { pendingRequestsAsync } from "../../../features/adminInfoSlice";
 
 const PendingRequests = () => {
+  const dispatch = useDispatch();
   const [showErrorModalX, setShowErrorModalX] = useState(false);
   const [deleteMsgId, setDeleteMsgId] = useState(null);
   const tableItems = [
@@ -25,6 +28,12 @@ const PendingRequests = () => {
       role: "Admin",
     },
   ];
+
+  // HERE WE ARE GETTING DATA OF PENDING REQUESTS   ---> WE CALL THIS FUNCTION IN ADMIN PANEL dispatch(pendingRequestsAsync());
+  const pendingRequests = useSelector(
+    (state) => state.adminInfo.pendingRequests
+  );
+  console.log("pendingRequests", pendingRequests);
 
   // DELETE MESSAGE MODAL FUNCTION
   const onClickErrorModal = (id) => {

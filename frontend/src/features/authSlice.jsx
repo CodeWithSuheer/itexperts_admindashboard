@@ -3,14 +3,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 //API URL
-const signupUrl = "http://localhost:3000/api/signup";
+const signupUrl = "http://localhost:8080/api/user/signup";
 const getUserUrl = "http://localhost:3000/api/getUser";
-const loginUrl = "http://localhost:3000/api/login";
-const logoutUrl = "http://localhost:3000/api/logout";
+const loginUrl = "http://localhost:8080/api/user/login";
+const logoutUrl = "http://localhost:8080/api/user/logout";
 const updateUserUrl = "http://localhost:3000/api/updateUser";
 const forgotPasswordUrl = "http://localhost:3000/api/forgotPassword";
 const resetPasswordUrl = "http://localhost:3000/api/resetPassword";
-const validateTokenUrl = "http://localhost:3000/api/validateToken";
+const authUserUrl = "http://localhost:8080/api/user/authUser";
 
 //CREATE ASYNC THUNK
 export const createuserAsync = createAsyncThunk(
@@ -18,12 +18,11 @@ export const createuserAsync = createAsyncThunk(
   async (formData) => {
     try {
       const response = await axios.post(signupUrl, formData);
-      console.log("create user", response.data);
-      toast.success("Sign Up Succsessfull");
+      toast.success(response.data.msg);
+
       return response.data;
     } catch (error) {
-      console.log("create user", error.response);
-      toast.error("Signup failed", error.response);
+      toast.error(error.response.data.msg);
     }
   }
 );
@@ -34,12 +33,10 @@ export const loginuserAsync = createAsyncThunk(
   async (formData) => {
     try {
       const response = await axios.post(loginUrl, formData);
-      console.log(response.data);
       toast.success("Login Up Succsessfull");
-      return response;
+      return response.data;
     } catch (error) {
-      console.log("login failed", error.response);
-      toast.error("login failed", error.response);
+      toast.error(error.response.data.msg);
     }
   }
 );
@@ -81,14 +78,25 @@ export const resetpasswordAsync = createAsyncThunk(
   }
 );
 
+export const authUserAsync = createAsyncThunk("users/authUser",async ()=>{
+  try {
+   const response = await axios.get(authUserUrl);
+   return response.data;
+  } catch (error) {
+   throw new Error(error.message)
+  }
+});
+
+export const logoutUserAsync = createAsyncThunk("users/logout",async ()=>{
+  await axios.delete(logoutUrl);
+});
+
+
 // INITIAL STATE
 const initialState = {
   createUser: null,
   user: null,
-  isAuthenticated: false,
   loading: false,
-  logoutUser: null,
-  clearUser: null,
   forgetPasswordEmail: null,
   resetPassword: null,
   validateToken: null,
@@ -98,13 +106,10 @@ const authSlice = createSlice({
   name: "authSlice",
   initialState,
   reducers: {
-    clearUser: (state) => {
-      state.user = null;
-      state.isAuthenticated = false;
-    },
+    reset:(state)=>initialState 
   },
-  extraReducers: (builder) => {
-    builder
+     extraReducers: (builder) => {
+     builder
 
       // SIGN UP ADD CASE
       .addCase(createuserAsync.pending, (state, action) => {
@@ -121,8 +126,7 @@ const authSlice = createSlice({
       })
       .addCase(loginuserAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.data;
-        state.isAuthenticated = true;
+        state.user = action.payload;
       })
 
       // FORGET PASSWORD ADD CASE
@@ -133,10 +137,19 @@ const authSlice = createSlice({
         state.loading = false;
         state.forgetPasswordEmail = action.payload;
         state.forgetPasswordEmail = null;
-      });
+      })
+       // AUTH USER ADD CASE
+      .addCase(authUserAsync.pending,(state)=>{
+        state.loading = true;
+      })
+      .addCase(authUserAsync.fulfilled,(state,action)=>{
+        state.loading = false;
+        state.user = action.payload;
+    })
+
   },
 });
 
-export const { clearUser } = authSlice.actions;
+export const { reset } = authSlice.actions;
 
 export default authSlice.reducer;

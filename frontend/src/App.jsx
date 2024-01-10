@@ -13,24 +13,36 @@ import NotFound from "./components/NotFound/NotFound";
 import UsersRequests from "./components/Admin/UsersRequests/UsersInfo";
 import PendingRequests from "./components/Admin/UsersRequests/PendingRequests";
 import ApprovedRequests from "./components/Admin/UsersRequests/ApprovedRequests";
+import  { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import { authUserAsync } from "./features/authSlice";
+import { useDispatch } from "react-redux";
+import { AdminProtected, LoginProtected } from "./components/ProtectedRoutes/ProtectedRoutes";
 import ProjectsPanel from "./components/Admin/Projects/ProjectsPanel";
 import OnGoingProject from "./components/Admin/Projects/OnGoingProject";
 import CompletedProjects from "./components/Admin/Projects/CompletedProjects";
 import toast, { Toaster } from "react-hot-toast";
 import "./App.css";
 import OnGoingProjectsDetails from "./components/Admin/Projects/OnGoingProjectsDetails";
+import OnGoingProject from "./components/Admin/Projects/ProjectsPanel";
+import CompletedProjects from "./components/Admin/Projects/ProjectsPanel";
+
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(authUserAsync())
+  },[dispatch])
   return (
     <>
       <BrowserRouter>
         <Routes>
           {/* --------- INITIAL ROUTE --------- */}
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<LoginProtected><Login /></LoginProtected>} />
           <Route path="*" element={<NotFound />} />
 
           {/* --------- DASHBOARD --------- */}
-          <Route path="/adminpanel" element={<AdminPanel />}>
+          <Route path="/adminpanel" element={<AdminProtected><AdminPanel /></AdminProtected>}>
             <Route index element={<Dashboard />} />
             <Route path="usersinfo" element={<UsersRequests />} />
             <Route path="pending-requests" element={<PendingRequests />} />
@@ -43,7 +55,7 @@ function App() {
           </Route>
 
           {/* --------- AUTHENTICATION --------- */}
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<LoginProtected><SignUp /></LoginProtected>} />
           <Route path="/forgetpassword" element={<ForgetPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
         </Routes>
