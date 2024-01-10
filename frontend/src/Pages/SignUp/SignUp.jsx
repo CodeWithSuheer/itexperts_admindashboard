@@ -16,15 +16,14 @@ const SignUp = () => {
   // HANDLE SIGNUP
   const handleSignUp = async (e) => {
     e.preventDefault();
-    console.log("Signup_formData", formData);
-
     try {
-      const response = await dispatch(createuserAsync(formData));
-
-      // if (response === "") {
-      // navigate("/adminpanel");
-      // } else {
-      // }
+        await dispatch(createuserAsync(formData)).then(()=>{
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+        })
+      })
     } catch (error) {
       console.log(error);
     }

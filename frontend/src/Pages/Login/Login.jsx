@@ -1,28 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../../Images/ITEXPERTS_LOGO.png";
-import toast from "react-hot-toast";
 import { loginuserAsync } from "../../features/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({ email: "", password: "" });
-
+  const user = useSelector((state) => state.auth.user);
+  // const login = user?.login;
+ 
   // HANDLE FORM SUBMISSION
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("formData", formData);
-    // try {
-    //   const response = await dispatch(loginuserAsync(formData));
-    // if (response === "") {
-    navigate("/adminpanel");
-    // } else {
-    // }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      dispatch(loginuserAsync(formData));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -34,15 +30,11 @@ const Login = () => {
         <div className="container px-6 mx-auto">
           <div className="lg:flex">
             <div className="lg:w-1/2">
-              <img className="w-auto h-32 sm:h-20" src={Logo} alt="" />
-
-              <h1 className="mt-6 font-semibold text-gray-700 md:text-xl">
-                IT EXPERTS ADMIN DASHBOARD
-              </h1>
-
-              <h1 className="mt-6 text-4xl font-semibold text-gray-800 capitalize lg:text">
-                login to your account
-              </h1>
+              <img
+                className="w-auto h-32 sm:h-20"
+                src={Logo}
+                alt="company logo"
+              />
             </div>
 
             <div className="mt-14 lg:w-1/2 lg:mt-0">
