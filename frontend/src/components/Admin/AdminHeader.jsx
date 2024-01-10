@@ -62,9 +62,9 @@ const AdminHeader = () => {
               <div class="text">Logout</div>
             </button>
           </Navbar.Container>
-          <Navbar.Container className="flex gap-1">
+          <Navbar.Container className="menu_remove flex gap-1">
             <Navbar.Toggle
-              className="block uppercase text-white bg-white"
+              className="text-gray-100"
               onClick={() => setMenuOpen(!isMenuOpen)} // Toggle menu open/close
             />
           <div className=" uppercase text-xl text-white ">

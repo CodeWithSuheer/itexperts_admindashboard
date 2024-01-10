@@ -15,6 +15,7 @@ import {
   PaperPlaneTilt,
   UserGear,
   UsersThree,
+  FolderSimpleUser,
 } from "phosphor-react";
 import { Link, Outlet } from "react-router-dom";
 import "./AdminPanel.css";
@@ -57,37 +58,21 @@ const AdminBody = () => {
                 </Link>
               </Sidebar.Collapse>
               {/* -------- Contact Queries --------  */}
-              <Link to="/adminpanel/usersinfo">
+              {/* <Link to="/adminpanel/usersinfo">
                 <Sidebar.Item icon={<Users size={24} />}>
                   Users Info
                 </Sidebar.Item>
+              </Link> */}
+              {/* -------- PROJECTS --------  */}
+              <Link to="/adminpanel/projects">
+                <Sidebar.Item href="#" icon={<FolderSimpleUser size={24} />}>
+                  Projects
+                </Sidebar.Item>
               </Link>
-              {/* -------- Contact Queries --------  */}
-              <Sidebar.Item href="#" icon={<Users size={24} />}>
-                Projects
-              </Sidebar.Item>
-              <Sidebar.Item href="#" icon={<File size={24} />}>
-                Generate Invoice
-              </Sidebar.Item>
             </Sidebar.ItemGroup>
             <Sidebar.ItemGroup>
               <Link to="/">
-                <Sidebar.Item icon={<SignOut size={24} />}>Login</Sidebar.Item>
-              </Link>
-              <Link to="/signup">
-                <Sidebar.Item icon={<SignOut size={24} />}>
-                  Sign Up
-                </Sidebar.Item>
-              </Link>
-              <Link to="/forgetpassword">
-                <Sidebar.Item icon={<SignOut size={24} />}>
-                  Forget Password
-                </Sidebar.Item>
-              </Link>
-              <Link to="/resetpassword">
-                <Sidebar.Item icon={<SignOut size={24} />}>
-                  Reset Password
-                </Sidebar.Item>
+                <Sidebar.Item icon={<SignOut size={24} />}>Logout</Sidebar.Item>
               </Link>
             </Sidebar.ItemGroup>
           </Sidebar>
