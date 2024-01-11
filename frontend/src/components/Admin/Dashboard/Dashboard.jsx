@@ -1,20 +1,29 @@
-import { useState } from "react";
-import DashboardData from "../Dashboard/DashboardData";
+import { useEffect, useState } from "react";
 import { TextInput } from "keep-react";
 import { MagnifyingGlass, Trash } from "phosphor-react";
 import { Modal, Button } from "keep-react";
 import { CloudArrowUp } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteContactFormAsync, getAllFormsAsync } from "../../../features/contactFormSlice";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showModalX, setShowModalX] = useState(false);
   const [showErrorModalX, setShowErrorModalX] = useState(false);
   const [Message, setMessage] = useState(null);
   const [deleteMsgId, setDeleteMsgId] = useState(null);
 
+  useEffect(()=>{
+    dispatch(getAllFormsAsync())
+  },[dispatch]);
+
+  const DashboardData = useSelector((state) => state.contactForms.allForms);
+  
   // VIEW MESSAGE MODAL FUNCTION
   const onClickTwo = (id) => {
+    console.log(id);
     setShowModalX(!showModalX);
     setMessage(id);
   };
@@ -34,6 +43,13 @@ const Dashboard = () => {
   const filteredId = DashboardData.filter((data) => data.id === Message);
   const delete_MsgId = DashboardData.filter((data) => data.id === deleteMsgId);
 
+  const handleDelete = (id) => {
+    dispatch(deleteContactFormAsync(id)).then(()=>{
+      dispatch(getAllFormsAsync());
+    })
+  }
+
+ 
   return (
     <>
       <div className=" py-10 px-4 md:px-8 rounded-md bg-white">
@@ -42,7 +58,7 @@ const Dashboard = () => {
             <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
               Contact Queries
             </h3>
-            <p className="text-gray-600 mt-2">{DashboardData.length} Member</p>
+            <p className="text-gray-600 mt-2">{DashboardData.length} Total Queries</p>
           </div>
           <div className="mt-3 md:mt-0 flex gap-8">
             {/* ------------- SEARCH BAR ------------- */}
@@ -68,7 +84,7 @@ const Dashboard = () => {
           <table className="w-full table-auto text-sm text-left">
             <thead className="text-gray-600 font-medium border-b">
               <tr>
-                <th className="py-3 pr-6 text-lg">Name</th>
+                <th className="py-3 pr-3 text-lg">Name</th>
                 <th className="py-3 pr-6 text-lg">Ref Number</th>
                 <th className="py-3 pr-6 text-lg">Phone</th>
                 <th className="py-3 pr-6 text-lg">Email Address</th>
@@ -81,8 +97,8 @@ const Dashboard = () => {
               {DashboardData.map((data, idx) => (
                 <>
                   <tr key={idx} className="cursor-pointer">
-                    <td className="pr-6 py-3 text-lg">{data.name}</td>
-                    <td className="pr-6 py-3 text-lg">{data.ref}</td>
+                    <td className="pr-3 py-3 text-lg">{data.name}</td>
+                    <td className="pr-6 py-3 text-lg">{data.refNumber}</td>
                     <td className="pr-6 py-3 text-lg">{data.phone}</td>
                     <td className="pr-6 py-3 text-lg">{data.email}</td>
                     <td className="pr-6 py-3 text-lg">{data.company}</td>
@@ -95,13 +111,7 @@ const Dashboard = () => {
 
                     <td className="flex items-center justify-center py-3">
                       {/* ---------- HANDLE CREATE INVOICE BUTTON ----------  */}
-                      <button
-                        className="inline-block rounded bg-gray-800 px-4 py-2.5 text-md font-medium text-white transition hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-none"
-                        onClick={() => handleCreateInvoice(data.id)}
-                      >
-                        Generate Invoice
-                      </button>
-
+                    
                       <div
                         onClick={() => onClickErrorModal(data.id)}
                         className="trash_button rounded-full bg-red-600 text-white p-2 ms-2.5 transition hover:scale-110"
@@ -156,7 +166,7 @@ const Dashboard = () => {
             <Button type="outlineGray" onClick={onClickErrorModal}>
               Cancel
             </Button>
-            <Button type="primary" color="error" onClick={onClickErrorModal}>
+            <Button type="primary" color="error" onClick={()=>handleDelete(data.id)}>
               Delete
             </Button>
           </Modal.Footer>

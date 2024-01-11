@@ -57,12 +57,12 @@ const PendingRequests = () => {
                   <td className="pr-6 py-4 text-lg">{data.email}</td>
                   {/* <td className="pr-6 py-4 text-lg">{data.role}</td> */}
                   <td className="whitespace-nowrap">
-                    <button  onClick={()=>handleApprove(data._id)}  className="inline-block rounded-lg bg-gray-700 px-4 py-2.5 mx-1 text-md font-medium text-white focus:outline-none focus:ring active:bg-indigo-500">
+                    <button  onClick={()=>handleApprove(data.id)}  className="inline-block rounded-lg bg-gray-700 px-4 py-2.5 mx-1 text-md font-medium text-white focus:outline-none focus:ring active:bg-indigo-500">
                       Approved
                     </button>
 
                     <button
-                      onClick={()=>handleDelete(data._id)}
+                      onClick={()=>handleDelete(data.id)}
                       className="inline-block rounded-lg border border-red-600 bg-red-600 text-white px-4 py-2.5 mx-1 text-md font-medium transition  focus:outline-none focus:ring active:bg-red-500"
                     >
                       Reject

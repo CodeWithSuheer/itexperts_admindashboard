@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "keep-react";
-import { Modal, Button } from "keep-react";
 import { useDispatch, useSelector } from "react-redux";
-import { MagnifyingGlass, Trash } from "phosphor-react";
-import { CloudArrowUp } from "phosphor-react";
+
 import {
   getAllUsersAsync,
   rejectUserAsync,
@@ -16,7 +14,7 @@ const ApprovedRequests = () => {
     dispatch(getAllUsersAsync());
   }, [dispatch]);
   const approvedUsers = useSelector((state) => state.adminInfo.allUsers).filter(
-    (ele) => ele.isAuthenticated && ele._id !== "659d33bad568c4d134b6aed3"
+    (ele) => ele.isAuthenticated && ele.id !== "659d33bad568c4d134b6aed3"
   );
 
   // HANDLE ROLE UPDATE
@@ -82,20 +80,20 @@ const ApprovedRequests = () => {
                       className="bg-gray-700 mx-1 text-white hover:bg-gray-700 hover:text-white"
                     >
                       <Dropdown.Item
-                        onClick={() => handleUpdateRole(data._id, true)}
+                        onClick={() => handleUpdateRole(data.id, true)}
                         className="text-md font-medium hover:bg-gray-300 hover:text-black"
                       >
                         Super Admin
                       </Dropdown.Item>
                       <Dropdown.Item
-                        onClick={() => handleUpdateRole(data._id, false)}
+                        onClick={() => handleUpdateRole(data.id, false)}
                         className="text-md font-medium hover:bg-gray-300 hover:text-black"
                       >
                         Admin
                       </Dropdown.Item>
                     </Dropdown>
                     <button
-                      onClick={() => handleUnauthorize(data._id)}
+                      onClick={() => handleUnauthorize(data.id)}
                       className="inline-block rounded-lg bg-red-600 px-4 py-2.5 mx-1 text-md font-medium text-white focus:outline-none focus:ring active:bg-red-500"
                     >
                       Unauthorized
