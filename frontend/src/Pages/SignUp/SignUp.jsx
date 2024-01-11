@@ -17,12 +17,15 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(createuserAsync(formData)).then(() => {
+      const res = await dispatch(createuserAsync(formData)).then((res) => {
+        if(res.payload.msg == 'User Registerd SuccessFully'){
         setFormData({
           name: "",
           email: "",
           password: "",
         });
+        navigate('/', { replace: true }); 
+       }
       });
     } catch (error) {
       console.log(error);
