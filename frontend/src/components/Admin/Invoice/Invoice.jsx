@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Button, Modal } from "keep-react";
 import { X } from "phosphor-react";
+import './Invoice.css';
 
 const Invoice = () => {
   const [showModalX, setShowModalX] = useState(false);
-  const [services, setServices] = useState([{ number: 1, name: "", amount: "" }]);
+  const [services, setServices] = useState([
+    { number: 1, name: "", amount: "" },
+  ]);
 
   const onClickTwo = () => {
     setShowModalX(!showModalX);
@@ -17,10 +20,16 @@ const Invoice = () => {
   };
 
   const handleAddService = () => {
-    const maxServiceNumber = Math.max(...services.map((service) => service.number), 0);
+    const maxServiceNumber = Math.max(
+      ...services.map((service) => service.number),
+      0
+    );
     const newServiceNumber = maxServiceNumber + 1;
 
-    setServices([...services, { number: newServiceNumber, name: "", amount: "" }]);
+    setServices([
+      ...services,
+      { number: newServiceNumber, name: "", amount: "" },
+    ]);
   };
 
   const handleDeleteService = (index) => {
@@ -37,36 +46,21 @@ const Invoice = () => {
 
   const tableItems = [
     {
-        name: "Liam James",
-        email: "liamjames@example.com",
-        position: "Software engineer",
-        salary: "$100K"
+      name: "Liam James",
+      SubName: "Home page / logo / Mockups ",
+      Price: "$7500",
     },
     {
-        name: "Olivia Emma",
-        email: "oliviaemma@example.com",
-        position: "Product designer",
-        salary: "$90K"
+      name: "Liam James",
+      SubName: "Home page / logo / Mockups ",
+      Price: "$7500",
     },
     {
-        name: "William Benjamin",
-        email: "william.benjamin@example.com",
-        position: "Front-end developer",
-        salary: "$80K"
+      name: "Liam James",
+      SubName: "Home page / logo / Mockups ",
+      Price: "$7500",
     },
-    {
-        name: "Henry Theodore",
-        email: "henrytheodore@example.com",
-        position: "Laravel engineer",
-        salary: "$120K"
-    },
-    {
-        name: "Amelia Elijah",
-        email: "amelia.elijah@example.com",
-        position: "Open source manager",
-        salary: "$75K"
-    },
-]
+  ];
 
   return (
     <>
@@ -152,53 +146,60 @@ const Invoice = () => {
             </div>
           </div>
           <div className="mt-5">
-          <label
-            className="text-gray-700 dark:text-gray-200 font-medium text-xl"
-            htmlFor="password"
-          >
-            Services
-          </label>
-          <div className="border-solid border-2 border-gray-200 p-5 rounded-lg">
-            {services.map((service, index) => (
-              <div key={index} className="flex justify-center gap-5 w-100 mb-2">
-                <input
-                  type="number"
-                  disabled
-                  defaultValue={service.number}
-                  className="block w-11 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
-                />
-                <input
-                  type="text"
-                  placeholder="Service Name"
-                  value={service.name}
-                  onChange={(e) => handleInputChange(index, "name", e.target.value)}
-                  className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
-                />
-                <input
-                  type="number"
-                  placeholder="Service Amount"
-                  value={service.amount}
-                  onChange={(e) => handleInputChange(index, "amount", e.target.value)}
-                  className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
-                />
-                <button
-                  className="px-3 py-2 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
-                  onClick={() => handleDeleteService(index)}
-                  type="button"
-                >
-                  X
-                </button>
-              </div>
-            ))}
-            <button
-              className="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
-              onClick={handleAddService}
-              type="button"
+            <label
+              className="text-gray-700 dark:text-gray-200 font-medium text-xl"
+              htmlFor="password"
             >
-              Add Services
-            </button>
+              Services
+            </label>
+            <div className="border-solid border-2 border-gray-200 p-5 rounded-lg">
+              {services.map((service, index) => (
+                <div
+                  key={index}
+                  className="flex justify-center gap-5 w-100 mb-2"
+                >
+                  <input
+                    type="number"
+                    disabled
+                    defaultValue={service.number}
+                    className="block w-11 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Service Name"
+                    value={service.name}
+                    onChange={(e) =>
+                      handleInputChange(index, "name", e.target.value)
+                    }
+                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Service Amount"
+                    value={service.amount}
+                    onChange={(e) =>
+                      handleInputChange(index, "amount", e.target.value)
+                    }
+                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 dark:focus:border-[#D22B2B] focus:outline-none focus:ring"
+                  />
+                  <button
+                    className="px-3 py-2 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                    onClick={() => handleDeleteService(index)}
+                    type="button"
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+              <button
+                className="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                onClick={handleAddService}
+                type="button"
+              >
+                Add Services
+              </button>
+            </div>
           </div>
-        </div>
           <div class="flex justify-center gap-10 mt-6">
             <button
               class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
@@ -211,82 +212,92 @@ const Invoice = () => {
         </form>
       </section>
       <Modal
-        size="6xl"
+        size="4xl"
         show={showModalX}
+        icon={<X size={30} onClick={onClickTwo} />}
       >
         <Modal.Header>
-          <div className="flex justify-between items-center border-b-4 border-gray-500 pb-2">
-            <p>
-              <span>Invoice:</span> 01/01/24
-            </p>
-            <p>
-              <span>Status:</span> Pending
-            </p>
-            <button class="px-8 py-2.5 leading-5 font-light text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]">
-              Download Invoice
-            </button>
-            <X size={40} onClick={onClickTwo} />
+          {/* <div className="flex justify-between items-center border-b-4 border-gray-500 pb-2"> */}
+          <div className="flex justify-between items-center">
+          <img
+                src="https://cdn.shopify.com/s/files/1/0704/6378/2946/files/ITEXPERTS_LOGO.png?v=1704170784"
+                alt="keep"
+                width="120"
+                height="40"
+                className=""
+              />
+            <p className="text-4xl text-black font-semibold modelHead me-14">Invoice</p>
           </div>
         </Modal.Header>
-        <Modal.Body >
+        <Modal.Body>
           <div className=" flex justify-between">
-            <div className=" p-5 w-100">
-              <p className="mb-3 text-2xl">From:</p>
-              <h1 className="font-bold text-2xl">Webz Poland</h1>
-              <p className=" text-2xl">United States of America</p>
-              <p className=" text-2xl">71-123 Scotland,USA</p>
-              <p className=" text-2xl">Email: IT@it-experts.com</p>
-              <p className=" text-2xl">Phone: +48 222 444 666 33</p>
+            <div className=" p-2 w-100">
+              <p className="modelClientText mb-2 text-base">Bill To:</p>
+              <h1 className="modelClientHeadText mb-2 font-semibold text-lg">Webz Poland</h1>
+              <p className="modelClientText mb-2 text-base">(+92) 334 41087865</p>
+              <p className="modelClientText mb-2 text-base">info@gmail.com</p>
             </div>
-            <div className=" p-5 w-100">
-              <p className="mb-3 text-2xl">To</p>
-              <h1 className="font-bold text-2xl">Bob Anderson</h1>
-              <p className=" text-2xl">United States of America</p>
-              <p className=" text-2xl">71-123 Scotland,USA</p>
-              <p className=" text-2xl">Email: client@client-email.com</p>
-              <p className=" text-2xl">Phone: +48 222 444 666 33</p>
+            <div className=" p-2 w-100">
+              <p className="modelClientText mb-2 text-base">From:</p>
+              <h1 className="modelClientHeadText mb-2 font-semibold text-lg">Webz Poland</h1>
+              <p className="modelClientText mb-2 text-base">(+92) 334 41087865</p>
+              <p className="modelClientText mb-2 text-base">info@gmail.com</p>
+              <p className="modelClientText text-base">
+              3909 Heavner Avenue <br /> Mountain, GA 30083
+              </p>
             </div>
           </div>
-          <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
-                <table className="w-full table-auto text-sm text-left">
-                    <thead className="bg-gray-50 text-black font-bold text-xl border-b">
-                        <tr className="divide-x">
-                            <th className="py-3 px-6">Username</th>
-                            <th className="py-3 px-6">Email</th>
-                            <th className="py-3 px-6">Position</th>
-                            <th className="py-3 px-6">Salary</th>
-                        </tr>
-                    </thead>
-                    <tbody className="text-gray-600 divide-y">
-                        {
-                            tableItems.map((item, idx) => (
-                                <tr key={idx} className="divide-x">
-                                    <td className="px-6 py-4 whitespace-nowrap flex items-center gap-x-6">
-                                        {item.name}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{item.email}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{item.position}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">{item.salary}</td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div>
-            <table className="w-50 table-auto text-sm text-left flex justify-center mt-5 ">
-                    <tbody className="text-gray-600 divide-y border-solid border-2 border-gray-200">
-                                <tr className="divide-x">
-                                    <td className="px-6 py-4 whitespace-nowrap flex items-center gap-x-6 text-2xl text-black font-bold">SubTotal</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-2xl">$ 8672</td>
-                                </tr>
-                                <tr className="divide-x">
-                                    <td className="ps-6 pe-40 py-4 whitespace-nowrap flex items-center gap-x-6 text-2xl text-black font-bold">Total</td>
-                                    <td className="ps-6 pe-40 px-6 py-4 whitespace-nowrap text-2xl text-black font-bold">$ 8672</td>
-                                </tr>
-                    </tbody>
-                </table>
-            </div>
+          <div className="flex justify-between mx-2 mt-5">
+            <p className="text-base">Reference No: 00004 </p>
+            <p className="text-base">04 December 2024 </p>
+          </div>
+          <div className="mt-5 shadow-sm border rounded-lg overflow-x-auto">
+            <table className="w-full table-auto text-sm text-left">
+              <thead className="bg-gray-200 text-black font-normal text-lg border-b">
+                <tr>
+                  <th className="py-3 px-6">Description</th>
+                  <th className="py-3 px-6 text-end">SubTotal</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600 divide-y">
+                {tableItems.map((item, idx) => (
+                  <tr key={idx}>
+                    <td className="ps-5 py-4 whitespace-nowrap flex items-end gap-x-6">
+                      {item.name} <br />
+                      {item.SubName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-end text-lg">
+                      {item.Price}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <table className="w-full table-auto text-sm text-left">
+              <thead className="bg-gray-200 text-black text-lg border-b">
+                <tr>
+                  <th className="py-3 px-6 font-bold">Description</th>
+                  <th className="py-3 px-6 text-end">$150,000</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div className="flex justify-center gap-5 mt-5">
+          <button
+              class="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+              onClick={onClickTwo}
+              type="button"
+            >
+              Generate Invoice
+            </button>
+            <button
+              class="px-4 py-2.5 leading-5 text-black transition-colors duration-300 transform border-solid border-2 border-black bg-white rounded-md hover:bg-[#D22B2B] focus:outline-none "
+              onClick={onClickTwo}
+              type="button"
+            >
+              Download Invoice
+            </button>
+          </div>
         </Modal.Body>
       </Modal>
     </>
