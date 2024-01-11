@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal } from "keep-react";
 import { X } from "phosphor-react";
-import './Invoice.css';
+// import './Invoice.css';
 
 const Invoice = () => {
   const [showModalX, setShowModalX] = useState(false);

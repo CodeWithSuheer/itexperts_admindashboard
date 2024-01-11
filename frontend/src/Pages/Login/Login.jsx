@@ -10,7 +10,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const user = useSelector((state) => state.auth.user);
   // const login = user?.login;
- 
+
   // HANDLE FORM SUBMISSION
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -35,6 +35,14 @@ const Login = () => {
                 src={Logo}
                 alt="company logo"
               />
+
+              <h1 className="mt-6 font-semibold text-gray-700 md:text-xl">
+                IT EXPERTS ADMIN DASHBOARD
+              </h1>
+
+              <h1 className="mt-6 text-4xl font-bold text-gray-600 capitalize lg:text">
+                Login to your account
+              </h1>
             </div>
 
             <div className="mt-14 lg:w-1/2 lg:mt-0">

@@ -17,13 +17,13 @@ const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-        await dispatch(createuserAsync(formData)).then(()=>{
+      await dispatch(createuserAsync(formData)).then(() => {
         setFormData({
           name: "",
           email: "",
           password: "",
-        })
-      })
+        });
+      });
     } catch (error) {
       console.log(error);
     }
@@ -37,14 +37,14 @@ const SignUp = () => {
       >
         <div className="container px-6 mx-auto">
           <div className="lg:flex">
-            <div className="lg:w-1/2">
+            <div className="lg:w-1/2 mt-14">
               <img className="w-auto h-32 sm:h-20" src={Logo} alt="" />
 
               <h1 className="mt-6 font-semibold text-gray-700 md:text-xl">
                 IT EXPERTS ADMIN DASHBOARD
               </h1>
 
-              <h1 className="mt-6 text-4xl font-semibold text-gray-800 capitalize lg:text">
+              <h1 className="mt-6 text-4xl font-bold text-gray-600 capitalize lg:text">
                 SignUp your account
               </h1>
             </div>

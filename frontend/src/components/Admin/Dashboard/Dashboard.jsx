@@ -96,7 +96,7 @@ const Dashboard = () => {
                     <td className="flex items-center justify-center py-3">
                       {/* ---------- HANDLE CREATE INVOICE BUTTON ----------  */}
                       <button
-                        className="inline-block rounded bg-gray-800 px-4 py-2.5 text-md font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-red-500"
+                        className="inline-block rounded bg-gray-800 px-4 py-2.5 text-md font-medium text-white transition hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-none"
                         onClick={() => handleCreateInvoice(data.id)}
                       >
                         Generate Invoice
