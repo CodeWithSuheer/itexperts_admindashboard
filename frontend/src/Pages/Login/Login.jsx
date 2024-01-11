@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
     try {
       dispatch(loginuserAsync(formData));
-      setLoading(true)
+      // setLoading(true)
     } catch (error) {
       console.log(error);
     }

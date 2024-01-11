@@ -31,7 +31,7 @@ export const loginuserAsync = createAsyncThunk(
   async (formData) => {
     try {
       const response = await axios.post(loginUrl, formData);
-      toast.success("Login Up Succsessfull");
+      toast.success("Login Succsessfull");
       return response.data;
     } catch (error) {
       toast.error(error.response.data.msg);

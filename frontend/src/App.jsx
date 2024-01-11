@@ -44,7 +44,7 @@ function App() {
             <Route path="usersinfo" element={<UsersRequests />} />
             <Route path="pending-requests" element={<PendingRequests />} />
             <Route path="approved-requests" element={<ApprovedRequests />} />
-            <Route path="invoice/:id" element={<Invoice />} />
+            <Route path="invoice" element={<Invoice />} />
             <Route path="projects" element={<ProjectsPanel />} />
             <Route path="ongoingprojects" element={<OnGoingProject />} />
             <Route path="completedprojects" element={<CompletedProjects />} />

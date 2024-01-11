@@ -13,10 +13,23 @@ import "./OnGoingProjectsDetails.css";
 import OnGoingProjectsDetailsData from "./OnGoingProjectsDetailsData";
 
 const OnGoingProjectsDetails = () => {
+  const fileUploaded = true;
   const [steps, setStep] = useState({
     stepsItems: ["Planning", "Development", "Testing", "Completion"],
     currentStep: 1,
   });
+
+  const people = [
+    {
+      name: "John Doe",
+      title: "Front-end Developer",
+      department: "Engineering",
+      email: "john@devui.com",
+      role: "Developer",
+      image:
+        "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80",
+    },
+  ];
 
   const ProjectStatus = "Testing";
 
@@ -88,7 +101,7 @@ const OnGoingProjectsDetails = () => {
         {/* <-------Client and Service Detail--------> */}
         <section className="flex justify-between mx-8 mt-16">
           {/* ---------------- DETAILS-LEFT ---------------- */}
-          <div className="details_left font-normal rounded-2xl shadow-xl">
+          <div className="details_left font-normal rounded-3xl shadow-xl text-white bg-gray-800">
             <h2>Client Details</h2>
             <div className="detail_line flex mt-3">
               <span>
@@ -121,7 +134,7 @@ const OnGoingProjectsDetails = () => {
           </div>
 
           {/* ---------------- DETAILS-RIGHT ---------------- */}
-          <div className="details_right font-normal rounded-2xl shadow-xl">
+          <div className="details_right font-normal rounded-3xl shadow-xl text-white bg-gray-800">
             <h2>Service Details</h2>
             <div className="detail_line flex mt-3">
               <span>
@@ -249,7 +262,7 @@ const OnGoingProjectsDetails = () => {
           </h2>
           <div class="container px-5 pt-10 pb-16 mx-auto flex flex-wrap">
             {OnGoingProjectsDetailsData.map((data) => (
-              <div class="flex relative py-10 sm:items-center md:w-2/3 mx-auto">
+              <div class="flex relative py-8 sm:items-center md:w-2/3 mx-auto">
                 <div class="h-full w-6 absolute inset-0 flex items-center justify-center">
                   <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
                 </div>
@@ -257,8 +270,8 @@ const OnGoingProjectsDetails = () => {
                   {data.id}
                 </div>
                 <div class="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                  <div class="flex-shrink-0 w-24 h-24 bg-red-100 text-red-500 rounded-full inline-flex items-center justify-center">
-                    <Check size={46} />
+                  <div class="flex-shrink-0 w-24 h-24 bg-red-600 text-red-100 rounded-full inline-flex items-center justify-center">
+                    <Check size={48} />
                   </div>
                   <div class="flex-grow sm:pl-6 mt-6 sm:mt-0">
                     <h2 class="font-medium title-font text-gray-900 mb-1 text-xl">
@@ -296,8 +309,10 @@ const OnGoingProjectsDetails = () => {
 
         {/* <------Upload File And Message Text Area-----> */}
         <section>
-          <div className="mx-auto max-w-screen-xl py-8 sm:py-12">
-            <ul className="mt-6">
+          {/* <div className="mx-auto max-w-screen-xl py-8 sm:py-12"> */}
+          <div className="my-10">
+            <ul className="mx-auto grid w-full max-w-screen-xl items-center space-y-4 px-2 py-10 md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-2">
+              {/* ---------------- FILE UPLOAD ----------------  */}
               <li>
                 <div>
                   <label
@@ -342,8 +357,98 @@ const OnGoingProjectsDetails = () => {
                   </label>
                 </div>
               </li>
+              {/* ---------------- FILE UPLOAD TEXT ----------------  */}
+              <li>
+                <h2 className="text-4xl font-semibold text-gray-600">
+                  Upload Project Zip File Here:
+                </h2>
+              </li>
             </ul>
           </div>
+        </section>
+
+        <section className="my-20">
+          {fileUploaded ? (
+            <>
+              <table className="min-w-full divide-y divide-gray-200 border">
+                <thead className="bg-gray-50">
+                  <tr className="divide-x divide-gray-200">
+                    <th
+                      scope="col"
+                      className="px-4 py-3.5 text-left text-lg font-semibold text-gray-800"
+                    >
+                      <span>Project</span>
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-12 py-3.5 text-left text-lg font-semibold text-gray-800"
+                    >
+                      Title
+                    </th>
+
+                    <th
+                      scope="col"
+                      className="px-4 py-3.5 text-left text-lg font-semibold text-gray-800"
+                    >
+                      Status
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-4 py-3.5 text-center text-lg font-semibold text-gray-800"
+                    >
+                      Download
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  {people.map((person) => (
+                    <tr key={person.name} className="divide-x divide-gray-200">
+                      <td className="whitespace-nowrap px-4 py-4">
+                        <div className="flex items-center">
+                          <div className="h-10 w-10 flex-shrink-0">
+                            <img
+                              className="h-10 w-10 rounded-full object-cover"
+                              src={person.image}
+                              alt=""
+                            />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {person.name}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {person.email}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-12 py-4">
+                        <div className="text-sm text-gray-900">
+                          {person.title}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {person.department}
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4">
+                        <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
+                          Complete
+                        </span>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-4 text-center text-sm font-medium">
+                        <button
+                          type="button"
+                          className="rounded-md bg-gray-800 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                        >
+                          Download File
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          ) : null}
         </section>
       </div>
     </>

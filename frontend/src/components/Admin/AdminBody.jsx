@@ -80,7 +80,12 @@ const AdminBody = () => {
                   </Sidebar.Item>
                 </Link>
               </Sidebar.Collapse>
-              
+              {/* -------- GENERATE INVOICE --------  */}
+              <Link to="/adminpanel/invoice">
+                <Sidebar.Item icon={<Chat size={24} />}>
+                  <span className="text-xl">Generate Invoice</span>
+                </Sidebar.Item>
+              </Link>
             </Sidebar.ItemGroup>
             {/* -------- LOGOUT --------  */}
             <Sidebar.ItemGroup>

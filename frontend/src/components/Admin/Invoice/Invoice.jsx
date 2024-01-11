@@ -75,7 +75,7 @@ const Invoice = () => {
         <h2 class="text-gray-800 text-2xl pl-10 font-bold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
           CREATE INVOICE
         </h2>
-        {invoiceData.map((data) => (
+        {/* {invoiceData.map((data) => ( */}
           <form className=" p-10">
             {/* -------------- CLIENT DETAILS --------------  */}
             <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
@@ -151,8 +151,7 @@ const Invoice = () => {
                 </label>
                 <input
                   type="text"
-                  value={data.ref}
-                  placeholder={data.ref}
+                  placeholder="Reference Number"
                   class="block w-full px-4 py-2 text-lg mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
                   readOnly
                 />
@@ -223,7 +222,7 @@ const Invoice = () => {
               </button>
             </div>
           </form>
-        ))}
+        {/* ))} */}
       </section>
 
       {/* ----------------- PREVIEW INVOICE ----------------- */}

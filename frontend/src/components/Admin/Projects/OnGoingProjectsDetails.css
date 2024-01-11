@@ -1,10 +1,10 @@
 .details_left,
 .details_right {
-  height: 25rem;
-  width: 32rem;
+  height: 22rem;
+  width: 80%;
+  margin-inline: 2rem;
   padding-block: 2rem;
   padding-inline: 2rem;
-  background-color: #eeeeee;
 }
 
 .details_left h2,
@@ -23,10 +23,10 @@
 .detail_line {
   font-size: 1.15rem;
   font-weight: 400 !important;
-  padding-block: 0.3rem;
+  padding-block: 0.5rem;
 }
 
 .detail_line_title {
   font-weight: 600;
-  margin-right: .4rem;
+  margin-right: 0.4rem;
 }
