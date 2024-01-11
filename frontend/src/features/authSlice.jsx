@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 
 //API URL
 const signupUrl = "http://localhost:8080/api/user/signup";
-const getUserUrl = "http://localhost:3000/api/getUser";
 const loginUrl = "http://localhost:8080/api/user/login";
 const logoutUrl = "http://localhost:8080/api/user/logout";
 const updateUserUrl = "http://localhost:3000/api/updateUser";

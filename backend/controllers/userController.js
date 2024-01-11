@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { User } from "../models/userModel.js";
 import JWT from "jsonwebtoken";
 import { sendEmail } from "../assets/nodemailer.js";
+import mongoose from "mongoose";
 
 export const signUp = async (req, res, next) => {
   try {
@@ -72,8 +73,8 @@ export const updateUser = async (req, res, next) => {
     if (!id) {
       throw new Error("Id required");
     }
-
-    if (superAdmin === undefined || typeof superAdmin !== "boolean") {
+  
+    if (superAdmin === undefined ) {
       throw new Error("SuperAdmin value required ");
     }
     await User.findByIdAndUpdate(id, { superAdmin });
@@ -83,27 +84,40 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-export const authenticateUser = async (req, res, next) => {
+export const approveUser = async (req,res,next) => {
   try {
-    const { id } = req.body;
+    const {id} = req.body;
     const user = await User.findById(id);
 
     if (!user) {
-      throw new Error("User not found");
+        throw new Error("User not found");
     }
 
-    if (!user.isAuthenticated) {
-      user.isAuthenticated = true;
-      await user.save();
-      return res.status(200).json({ msg: "Successfully Authorized" });
-    } else if (user.isAuthenticated) {
-      user.isAuthenticated = false;
-      await user.save();
-      await User.deleteOne({ _id: user.id });
-      return res.status(200).json({ msg: "Successfully UnAuthorized" });
+    if (user.isAuthenticated) {
+        throw new Error("User is already approved");
     }
+
+    user.isAuthenticated = true;
+    await user.save();
+    res.status(200).json({ msg: "User approved successfully" });
   } catch (error) {
-    res.status(400).json({ msg: error.message });
+      res.status(400).json({ msg: error.message })
+  }
+};
+
+export const rejectUser = async (req,res) => {
+  try {
+    const {id} = req.body;
+    const user = await User.findById(id);
+    if (!user) {
+        throw new Error("User not found");
+    }
+        user.isApproved = false;
+        await user.save();
+        await User.findByIdAndDelete({ _id: user.id });
+        res.status(200).json({ msg: "Rejected successfully" });
+  } catch (error) {
+      res.status(400).json({ msg: error.message })
   }
 };
 
@@ -145,7 +159,7 @@ export const resetPassword = async (req, res, next) => {
   }
 };
 
-export const authUser = async (req, res) => {
+export const authUser = async (req, res , next) => {
   if (!req.session.userId) {
     return res.status(403).send({ msg: "Please Login Again" });
   }
@@ -158,3 +172,12 @@ export const authUser = async (req, res) => {
   const { id, name, isAuthenticated, superAdmin , email } = user;
   res.status(200).json({ login: true, id, name, email, isAuthenticated, superAdmin });
 };
+
+export const getAllUsers = async (req ,res ,next) => {
+  try {
+      const users = await User.find()
+      res.status(200).json({ msg: "Got All Users", users });
+  } catch (error) {
+      res.status(400).json({ msg: error.message })
+  }
+}

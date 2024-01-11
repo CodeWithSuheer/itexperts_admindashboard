@@ -9,6 +9,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import userRouter from "./routes/userRoutes.js";
 import  MongoDBStore  from "connect-mongodb-session";
+import contactFormRouter from "./routes/contactFormRoutes.js";
 
 
 
@@ -54,6 +55,7 @@ app.use(session({
 
 
 app.use("/api/user",userRouter);
+app.use("/api/contactForms",contactFormRouter)
 
 
 

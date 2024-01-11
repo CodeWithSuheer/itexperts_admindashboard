@@ -3,56 +3,59 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 //API URL
-const pendingRequestsUrl = "http://localhost:3000/api/signup";
-const pendingRequestsStatusUpdateUrl = "http://localhost:3000/api/signup";
-const approvedRequestsUrl = "http://localhost:3000/api/signup";
-const getUserUrl = "http://localhost:3000/api/getUser";
-const loginUrl = "http://localhost:3000/api/login";
+const getUserUrl = "http://localhost:8080/api/user/getAllUsers";
+const authorizeUserUrl = "http://localhost:8080/api/user/approveUser";
+const rejectUserUrl = "http://localhost:8080/api/user/rejectUser";
+const updateRoleUrl = "http://localhost:8080/api/user/updateRole";
 
 //PENDING REQUESTS ASYNC THUNK
-export const pendingRequestsAsync = createAsyncThunk("admininfo/pending", async () => {
+export const rejectUserAsync = createAsyncThunk("admininfo/authenticateUser", async (id) => {
   try {
-    const response = await axios.post(pendingRequestsUrl);
-    console.log("Pending Req..", response.data);
+    const response = await axios.post(rejectUserUrl,{id});;
+    toast.success(response.data.msg);
     return response.data;
   } catch (error) {
-    console.log("Pending Req..", error.response);
-    toast.error("Pending Req.. failed", error.response);
+    toast.error( error.response.data.msg);
   }
 });
 
-
-//PENDING REQUESTS STATUS UPDATE ASYNC THUNK
-export const pendingRequestStatusUpdateAsync = createAsyncThunk("admininfo/pendingStatus", async () => {
+export const authorizeUserAsync = createAsyncThunk("admininfo/authenticateUser", async (id) => {
   try {
-    const response = await axios.post(pendingRequestsStatusUpdateUrl);
-    console.log("Pending Req.. status", response.data);
+    const response = await axios.post(authorizeUserUrl,{id});
+    toast.success(response.data.msg);
     return response.data;
   } catch (error) {
-    console.log("Pending Req.. status", error.response);
-    toast.error("Pending Req.. status failed", error.response);
+    toast.error( error.response.data.msg);
   }
 });
 
-
-
-//APPROVED REQUESTS ASYNC THUNK
-export const approvedRequestsAsync = createAsyncThunk("admininfo/approved", async () => {
+//GET ALL USERS
+export const getAllUsersAsync = createAsyncThunk("user/getAllUser", async () => {
   try {
-    const response = await axios.post(approvedRequestsUrl);
-    console.log("Approved Req..", response.data);
-    return response.data;
+      const response = await axios.post(getUserUrl);
+      return response.data;
   } catch (error) {
-    console.log("Approved Req..", error.response);
-    toast.error("Approved Req.. failed", error.response);
+    throw error
   }
 });
+
+export const updateRoleAsync = createAsyncThunk("admininfo/authenticateUser", async ({id,superAdmin}) => {
+  try {
+    const response = await axios.post(updateRoleUrl,{id,superAdmin});
+    console.log(id,superAdmin);
+    toast.success(response.data.msg);
+    return response.data;
+  } catch (error) {
+    toast.error( error.response.data.msg);
+  }
+});
+
 
 
 // INITIAL STATE
 const initialState = {
-  pendingRequests: [],
-  approvedRequests: [],
+  allUsers:[],
+  authorizedUser:null,
   loading: false,
 };
 
@@ -62,34 +65,22 @@ const adminInfoSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // PENDING REQUESTS ADD CASE
-      .addCase(pendingRequestsAsync.pending, (state, action) => {
+      // GET ALL USERS
+      .addCase(getAllUsersAsync.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(pendingRequestsAsync.fulfilled, (state, action) => {
+      .addCase(getAllUsersAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.pendingRequests = action.payload;
-      })
-
-
-      // PENDING REQUESTS UPDATE STATUS ADD CASE
-      .addCase(pendingRequestStatusUpdateAsync.pending, (state, action) => {
-        state.loading = true;
-      })
-      .addCase(pendingRequestStatusUpdateAsync.fulfilled, (state, action) => {
-        state.loading = false;
-        state.pendingRequests = action.payload;
-      })
-
-
-      // APPROVED REQUESTS ADD CASE
-      .addCase(approvedRequestsAsync.pending, (state, action) => {
-        state.loading = true;
-      })
-      .addCase(approvedRequestsAsync.fulfilled, (state, action) => {
-        state.loading = false;
-        state.approvedRequests = action.payload;
-      });
+        state.allUsers = action.payload.users;
+    })
+  //    // UPDATE ROLE
+  //    .addCase(updateRoleAsync.pending, (state, action) => {
+  //     state.loading = true;
+  //   })
+  //   .addCase(updateRoleAsync.fulfilled, (state, action) => {
+  //     state.loading = false;
+  //     state.allUsers = action.payload.users;
+  // })
   },
 });
 
