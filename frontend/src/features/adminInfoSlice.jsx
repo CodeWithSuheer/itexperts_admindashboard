@@ -33,6 +33,7 @@ export const authorizeUserAsync = createAsyncThunk("admininfo/authenticateUser",
 export const getAllUsersAsync = createAsyncThunk("user/getAllUser", async () => {
   try {
       const response = await axios.post(getUserUrl);
+      console.log(response.data);
       return response.data;
   } catch (error) {
     throw error
@@ -42,7 +43,6 @@ export const getAllUsersAsync = createAsyncThunk("user/getAllUser", async () => 
 export const updateRoleAsync = createAsyncThunk("admininfo/authenticateUser", async ({id,superAdmin}) => {
   try {
     const response = await axios.post(updateRoleUrl,{id,superAdmin});
-    console.log(id,superAdmin);
     toast.success(response.data.msg);
     return response.data;
   } catch (error) {

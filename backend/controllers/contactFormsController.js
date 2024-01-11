@@ -1,11 +1,23 @@
 
+import mongoose from "mongoose";
 import { Contacts } from "../models/contactForms.js";
+
+function setMongoose() {
+  return mongoose.set("toJSON", {
+    virtuals: true,
+    transform: (doc, returnValue) => {
+      delete returnValue._id;
+      delete returnValue.__v;
+    },
+  });
+}
 
 
 export const getAllForms = async (req, res, next) => {
   try {
-    const allFormData = await Contacts.find()
+    const allFormData = await Contacts.find({})
     .sort({createdAt: -1})
+    setMongoose();
     res.status(200).json(allFormData);
   } catch (error) {
     res.status(500).json({ msg:error.message});

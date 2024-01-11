@@ -4,6 +4,18 @@ import JWT from "jsonwebtoken";
 import { sendEmail } from "../assets/nodemailer.js";
 import mongoose from "mongoose";
 
+function setMongoose() {
+  return mongoose.set("toJSON", {
+    virtuals: true,
+    transform: (doc, returnValue) => {
+      delete returnValue._id;
+      delete returnValue.__v;
+      delete returnValue.createdAt;
+      delete returnValue.updatedAt;
+    },
+  });
+}
+
 export const signUp = async (req, res, next) => {
   try {
     const { name, email, password, isAuthenticated, superAdmin } = req.body;
@@ -176,6 +188,7 @@ export const authUser = async (req, res , next) => {
 export const getAllUsers = async (req ,res ,next) => {
   try {
       const users = await User.find()
+      setMongoose();
       res.status(200).json({ msg: "Got All Users", users });
   } catch (error) {
       res.status(400).json({ msg: error.message })

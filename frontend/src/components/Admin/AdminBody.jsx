@@ -25,6 +25,8 @@ const AdminBody = () => {
     });
   };
 
+  const admin = useSelector((state)=>state.auth.user);
+
   return (
     <>
       <div className="adminBody bg-slate-300 px-0">
@@ -43,24 +45,24 @@ const AdminBody = () => {
                 </Sidebar.Item>
               </Link>
               {/* -------- ADMIN INFO'S --------  */}
-              <Sidebar.Collapse
+              {admin?.superAdmin ? (<Sidebar.Collapse
                 icon={<UsersThree size={24} />}
                 label="Admin's Info"
                 style={{ fontSize: "1.2rem" }}
               >
-                {/* -------- PENDING REQUESTS --------  */}
-                <Link to="/adminpanel/pending-requests">
+                
+              <><Link to="/adminpanel/pending-requests">
                   <Sidebar.Item icon={<PaperPlaneTilt size={24} />}>
                     <span className="text-lg">Pending Requests</span>
                   </Sidebar.Item>
                 </Link>
-                {/* -------- APPROVED USERS --------  */}
+              
                 <Link to="/adminpanel/approved-requests">
                   <Sidebar.Item icon={<UserGear size={24} />}>
                     <span className="text-lg">Appproved Admins</span>
                   </Sidebar.Item>
-                </Link>
-              </Sidebar.Collapse>
+                </Link></>
+              </Sidebar.Collapse>) : ''}
               {/* -------- PROJECTS --------  */}
               <Sidebar.Collapse
                 icon={<Browsers size={24} />}
