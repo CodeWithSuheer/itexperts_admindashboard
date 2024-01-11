@@ -8,27 +8,19 @@ const CompletedProjects = () => {
   const tableItems = [
     {
       id: 1,
-      name: "Suheer Zahid",
-      email: "suheer@gmail.com",
-      role: "Admin",
+      name: "Dummy Client",
+      ref: "ITE-654",
+      service: "Landing Page Services",
+      invoice_status: "unpaid",
+      project_status: "In Progress",
     },
     {
       id: 2,
-      name: "Haris Saeed",
-      email: "haris@gmail.com",
-      role: "Admin",
-    },
-    {
-      id: 3,
-      name: "Usama Jameel",
-      email: "usama@gmail.com",
-      role: "Admin",
-    },
-    {
-      id: 4,
-      name: "Arqum",
-      email: "arqum@gmail.com",
-      role: "Admin",
+      name: "Dummy Client",
+      ref: "ITE-664",
+      service: "React JS Website",
+      invoice_status: "unpaid",
+      project_status: "In Progress",
     },
   ];
 
@@ -55,33 +47,59 @@ const CompletedProjects = () => {
         </div>
         <div className="mt-12 relative h-max">
           <table className="w-full table-auto text-sm text-left">
-            <thead className="text-gray-600 font-medium border-b">
+          <thead className="text-gray-600 font-medium border-b">
               <tr>
                 <th className="py-3 pr-6 text-lg">Id</th>
-                <th className="py-3 pr-6 text-lg">Name</th>
-                <th className="py-3 pr-6 text-lg">Email</th>
-                {/* <th className="py-3 pr-6 text-lg">Role</th> */}
-                <th className="py-3 pl-2 text-lg">Actions</th>
+                <th className="py-3 pr-6 text-lg">Client Name</th>
+                <th className="py-3 pl-2 text-lg">Ref No</th>
+                <th className="py-3 pr-6 text-lg">Service</th>
+                <th className="py-3 pr-6 text-lg">Invoice Status</th>
+                <th className="py-3 pl-2 text-lg">Project Status</th>
+                <th className="py-3 pl-2 text-lg">Details</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
               {tableItems.map((data, idx) => (
                 <tr key={idx}>
-                  <td className="pr-6 py-4 text-lg">{data.id}</td>
-                  <td className="pr-6 py-4 text-lg">{data.name}</td>
-                  <td className="pr-6 py-4 text-lg">{data.email}</td>
-                  {/* <td className="pr-6 py-4 text-lg">{data.role}</td> */}
-                  <td className="whitespace-nowrap">
-                    <button className="inline-block rounded-lg bg-gray-700 px-4 py-2.5 mx-1 text-md font-medium text-white focus:outline-none focus:ring active:bg-indigo-500">
-                      Approved
-                    </button>
-
-                    <button
-                      onClick={() => onClickErrorModal(data.id)}
-                      className="inline-block rounded-lg border border-red-600 bg-red-600 text-white px-4 py-2.5 mx-1 text-md font-medium transition  focus:outline-none focus:ring active:bg-red-500"
+                  <td className="pr-0 py-4 text-lg capitalize">{data.id}</td>
+                  <td className="pr-0 py-4 text-lg capitalize">{data.name}</td>
+                  <td className="pr-0 py-4 text-lg capitalize tracking-wide text-red-600">
+                    {data.ref}
+                  </td>
+                  <td className="pr-0 py-4 text-lg capitalize">
+                    {data.service}
+                  </td>
+                  <td className="pr-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-3 py-2 rounded-full font-semibold text-sm capitalize ${
+                        data.invoice_status == "Active"
+                          ? "text-green-600 bg-green-50"
+                          : "text-blue-600 bg-blue-50"
+                      }`}
                     >
-                      Reject
-                    </button>
+                      {data.invoice_status}
+                    </span>
+                  </td>
+                  <td className="pr-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-3 py-2 rounded-full font-semibold text-sm capitalize ${
+                        data.invoice_status == "Active"
+                          ? "text-green-600 bg-green-50"
+                          : "text-blue-600 bg-blue-50"
+                      }`}
+                    >
+                      {data.project_status}
+                    </span>
+                  </td>
+                  <td className="pr-0 py-4 text-lg ">
+                    <Button
+                      size="md"
+                      type="outlineGray"
+                      className="bg-red-600 text-white hover:bg-red-700 hover:text-white"
+                      onClick={() => navigate("/adminpanel/projectdetails")}
+                    >
+                      View Details
+                    </Button>
                   </td>
                 </tr>
               ))}

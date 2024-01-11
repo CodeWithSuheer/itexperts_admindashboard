@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button } from "keep-react";
-import { MagnifyingGlass, Trash } from "phosphor-react";
+import { Trash } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
 
 const OnGoingProject = () => {
@@ -33,6 +33,7 @@ const OnGoingProject = () => {
   };
 
   const delete_MsgId = tableItems.filter((data) => data.id === deleteMsgId);
+
   return (
     <>
       <div className="py-10 px-4 md:px-8 rounded-md bg-white">
@@ -45,7 +46,6 @@ const OnGoingProject = () => {
               Here you can view and manage all ongoing projects.
             </p>
           </div>
-          {/* <div className="mt-3 md:mt-0"></div> */}
         </div>
         <div className="mt-12 relative h-max">
           <table className="w-full table-auto text-sm text-left">
