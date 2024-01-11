@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Modal } from "keep-react";
 import { X, FileText  } from "phosphor-react";
-import DashboardData from "../Dashboard/DashboardData";
+import { useSelector } from "react-redux";
+
 
 const Invoice = () => {
   const { id } = useParams();
@@ -11,10 +12,9 @@ const Invoice = () => {
     { number: 1, name: "", amount: "" },
   ]);
 
-  const data = DashboardData;
+  const data = useSelector((state) => state.contactForms.allForms);
 
   const invoiceData = data.filter((data) => data.id == id);
-  console.log("invoiceData", invoiceData);
 
   const onClickTwo = () => {
     setShowModalX(!showModalX);
@@ -86,9 +86,11 @@ const Invoice = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="Name"
+                  placeholder={data.name}
+                  value={data.name}
                   class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                   required
+                  readOnly
                 />
               </div>
 
@@ -101,9 +103,11 @@ const Invoice = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="Company Name"
+                  placeholder={data.company}
+                  value={data.company}
                   class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                   required
+                  readOnly
                 />
               </div>
 
@@ -113,21 +117,24 @@ const Invoice = () => {
                 </label>
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder={data.email}
+                  value={data.email}
                   class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                   required
+                  readOnly
                 />
               </div>
 
               <div>
                 <label class="text-gray-700 font-medium text-xl">
-                  Client Number
+                  Client Phone Number
                 </label>
                 <input
                   type="number"
-                  placeholder="Phone Number"
+                  placeholder={data.phone}
                   class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                   required
+                  readOnly
                 />
               </div>
 

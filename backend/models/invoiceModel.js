@@ -26,7 +26,7 @@ const schema = new mongoose.Schema({
         required:[true,"Please provide a amount"],
     },
     customerId:{
-        type: mongoose.Types.ObjectId,
+        type: Number,
         required:[true,"Please provide a customerId"]
     },
     refNumber: {
