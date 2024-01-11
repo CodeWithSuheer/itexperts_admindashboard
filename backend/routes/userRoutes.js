@@ -1,10 +1,12 @@
 import express from "express";
 import {
+  approveUser,
   authUser,
-  authenticateUser,
   forgotPassword,
+  getAllUsers,
   login,
   logout,
+  rejectUser,
   resetPassword,
   signUp,
   updateUser,
@@ -16,10 +18,12 @@ const userRouter = express.Router();
 userRouter.post("/signup", signUp);
 userRouter.post("/login", login);
 userRouter.delete("/logout",verifyUser,logout);
-userRouter.post("/authenticateUser",verifyUser,adminOnly,authenticateUser);
+userRouter.post("/approveUser",verifyUser,adminOnly,approveUser);
+userRouter.post("/rejectUser",verifyUser,adminOnly,rejectUser);
 userRouter.post("/updateRole", verifyUser,adminOnly,updateUser);
 userRouter.post("/forgotPassword", forgotPassword);
 userRouter.post("/resetPassword", resetPassword);
+userRouter.post("/getAllUsers", getAllUsers);
 userRouter.get("/authUser",authUser);
 
 export default userRouter;

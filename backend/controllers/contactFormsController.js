@@ -1,5 +1,5 @@
 
-import { Contacts } from "../models/contactForms";
+import { Contacts } from "../models/contactForms.js";
 
 
 export const getAllForms = async (req, res, next) => {
