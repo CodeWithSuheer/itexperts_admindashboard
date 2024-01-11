@@ -3,19 +3,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../../Images/ITEXPERTS_LOGO.png";
 import { loginuserAsync } from "../../features/authSlice";
+import Loader from "../../components/Loader/Loader";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const user = useSelector((state) => state.auth.user);
-  // const login = user?.login;
 
   // HANDLE FORM SUBMISSION
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       dispatch(loginuserAsync(formData));
+      setLoading(true)
     } catch (error) {
       console.log(error);
     }
@@ -23,6 +25,7 @@ const Login = () => {
 
   return (
     <>
+    {loading ? <Loader/> : 
       <section
         className="bg-gray-100 flex justify-center items-center"
         style={{ minHeight: "100vh" }}
@@ -137,6 +140,7 @@ const Login = () => {
           </div>
         </div>
       </section>
+      }
     </>
   );
 };
