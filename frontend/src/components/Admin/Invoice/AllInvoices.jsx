@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { TextInput } from "keep-react";
+import { TextInput, Tabs } from "keep-react";
 import { MagnifyingGlass, Trash, Chat } from "phosphor-react";
 import { Modal, Button } from "keep-react";
-import { CloudArrowUp } from "phosphor-react";
+import { X } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteContactFormAsync,
   getAllFormsAsync,
 } from "../../../features/contactFormSlice";
-import "./Dashboard.css";
+import "../AdminPanel.css";
 
-const Dashboard = () => {
+const AllInvoices = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showModalX, setShowModalX] = useState(false);
@@ -34,7 +34,7 @@ const Dashboard = () => {
   } else {
     filterdData = DashboardData;
   }
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(7);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(filterdData.length / limit);
   const disabled = currentPage === totalPages;
@@ -86,45 +86,80 @@ const Dashboard = () => {
     });
   };
 
+  const tableItems = [
+    {
+      name: "Project Name",
+      SubName: "Home page / logo / Mockups ",
+      Price: "$7500",
+    },
+    {
+      name: "Project Name",
+      SubName: "Home page / logo / Mockups ",
+      Price: "$7500",
+    },
+    {
+      name: "Project Name",
+      SubName: "Home page / logo / Mockups ",
+      Price: "$7500",
+    },
+  ];
+
   return (
     <>
       <div className=" py-10 px-4 md:px-8 rounded-md bg-white">
         <div className="items-start justify-between md:flex">
           <div className="max-w-lg">
             <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
-              Contact Queries
+              All Invoices
             </h3>
-            <p className="text-gray-600 mt-2">
-              {DashboardData.length} Total Queries
-            </p>
+            {/* <p className="text-gray-600 mt-2">
+              {DashboardData.length} Invoices
+            </p> */}
           </div>
           <div className="mt-3 md:mt-0 flex gap-8">
             {/* ------------- SEARCH BAR ------------- */}
-             <input
-                type="text"
-                placeholder="Search..."
-                className=" ml-4 border text-black border-gray-500 w-72 rounded-lg px-4 py-2 focus:outline-none"
-                value={searchQuery}
-                onChange={handleSearch}
-              />
-            <button className="inline-block rounded bg-red-600 px-8 py-3 text-sm font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-red-500">
-              Export CSV
-            </button>
+            <input
+              type="text"
+              placeholder="Search..."
+              className=" ml-4 border text-black border-gray-500 w-72 rounded-lg px-4 py-2 focus:outline-none"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
           </div>
         </div>
-        <div className="mt-12 relative h-max overflow-x-auto">
+        <div className="mt-6">
+          <Tabs aria-label="tabs" style="underline" borderPosition="bottom">
+            <Tabs.Item
+              title="All Invoices"
+              className="custom-tab-title"
+            ></Tabs.Item>
+            <Tabs.Item
+              title="Paid Invoices"
+              className="custom-tab-title"
+            ></Tabs.Item>
+            <Tabs.Item
+              title="UnPaid Invoices"
+              className="custom-tab-title"
+            ></Tabs.Item>
+            <Tabs.Item
+              title="Partially Paid Invoices"
+              className="custom-tab-title"
+            ></Tabs.Item>
+          </Tabs>
+        </div>
+
+        <div className="-mt-2 relative h-max overflow-auto">
           {/* ------------- CONTACT QUERIES TABLE ------------- */}
-          <table className="contact_table w-full table-auto text-sm text-left overflow-x-auto">
+          <table className="w-full table-auto text-sm text-left">
             <thead className="text-gray-600 font-medium border-b">
               <tr>
                 <th className="py-3 pr-3 text-lg">Name</th>
                 <th className="py-3 pr-3 text-lg">Date</th>
                 <th className="py-3 pr-6 text-lg">Ref Number</th>
-                <th className="py-3 pr-6 text-lg">Phone</th>
-                <th className="py-3 pr-6 text-lg">Email</th>
-                <th className="py-3 pr-6 text-lg">Company</th>
+                <th className="py-3 pr-6 text-lg">Email Address</th>
+                <th className="py-3 pr-6 text-lg">Invoice Status</th>
                 <th className="py-3 pr-6 text-lg">Message</th>
-                <th className="py-3 pl-6 text-lg">Actions</th>
+                <th className="py-3 pl-14 text-lg">Actions</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
@@ -133,19 +168,28 @@ const Dashboard = () => {
                   return (
                     <>
                       <tr key={idx} className="cursor-pointer">
-                        <td className="pr-3 py-3 text-lg">{data.name}</td>
+                        <td className="pr-0 py-3 text-lg">{data.name}</td>
                         <td className="pr-3 py-3 text-lg">
                           {new Date(data.createdAt).toLocaleDateString()}
                         </td>
                         <td className="pr-6 py-3 text-lg">{data.refNumber}</td>
-                        <td className="pr-6 py-3 text-lg">{data.phone}</td>
                         <td className="pr-6 py-3 text-lg">{data.email}</td>
-                        <td className="pr-6 py-3 text-lg">{data.company}</td>
+                        <td className="pr-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`px-5 py-2 rounded-full font-semibold text-sm ${
+                              data.status == "Active"
+                                ? "text-green-600 bg-green-50"
+                                : "text-red-600 bg-red-50"
+                            }`}
+                          >
+                            Unpaid
+                          </span>
+                        </td>
                         <td
-                          className="pr-1 py-3 text-lg font-semibold underline underline-offset-4 text-blue-700"
+                          className="pr-6 py-3 text-lg font-semibold underline underline-offset-4 text-blue-700"
                           onClick={() => onClickTwo(data.id)}
                         >
-                          View Message
+                          Preview Invoice
                         </td>
 
                         <td className="flex items-center justify-center py-3">
@@ -218,7 +262,7 @@ const Dashboard = () => {
       </div>
 
       {/* ------------- VIEW MESSAGE MODAL ------------- */}
-      {filteredId.map((data, idx) => (
+      {/* {filteredId.map((data, idx) => (
         <Modal
           icon={<Chat size={28} color="#1B4DFF" />}
           size="4xl"
@@ -234,7 +278,7 @@ const Dashboard = () => {
             </div>
           </Modal.Body>
         </Modal>
-      ))}
+      ))} */}
 
       {/* ------------- DELETE MESSAGE MODAL ------------- */}
       {delete_MsgId.map((data, idx) => (
@@ -266,8 +310,109 @@ const Dashboard = () => {
           </Modal.Footer>
         </Modal>
       ))}
+
+      {/* ----------------- PREVIEW INVOICE ----------------- */}
+      <Modal
+        size="4xl"
+        show={showModalX}
+        icon={<X size={28} onClick={onClickTwo} className="cursor-pointer" />}
+      >
+        <Modal.Header>
+          {/* <div className="flex justify-between items-center border-b-4 border-gray-500 pb-2"> */}
+          <div className="flex justify-between items-center">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0704/6378/2946/files/ITEXPERTS_LOGO.png?v=1704170784"
+              alt="keep"
+              width="120"
+              height="40"
+              className=""
+            />
+            <p className="text-4xl text-black font-semibold modelHead me-14">
+              Invoice
+            </p>
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          <div className=" flex justify-between">
+            <div className=" p-2 w-100">
+              <p className="modelClientText mb-2 text-base">Bill To:</p>
+              <h1 className="modelClientHeadText mb-2 font-semibold text-lg">
+                Webz Poland
+              </h1>
+              <p className="modelClientText mb-2 text-base">
+                (+92) 334 41087865
+              </p>
+              <p className="modelClientText mb-2 text-base">info@gmail.com</p>
+            </div>
+            <div className=" p-2 w-100">
+              <p className="modelClientText mb-2 text-base">From:</p>
+              <h1 className="modelClientHeadText mb-2 font-semibold text-lg">
+                Webz Poland
+              </h1>
+              <p className="modelClientText mb-2 text-base">
+                (+92) 334 41087865
+              </p>
+              <p className="modelClientText mb-2 text-base">info@gmail.com</p>
+              <p className="modelClientText text-base">
+                3909 Heavner Avenue <br /> Mountain, GA 30083
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-between mx-2 mt-5">
+            <p className="text-base">Reference No: 00004 </p>
+            <p className="text-base">04 December 2024 </p>
+          </div>
+          <div className="mt-5 shadow-sm border rounded-lg overflow-x-auto">
+            <table className="w-full table-auto text-sm text-left">
+              <thead className="bg-gray-200 text-black font-normal text-lg border-b">
+                <tr>
+                  <th className="py-3 px-6">Description</th>
+                  <th className="py-3 px-6 text-end">SubTotal</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600 divide-y">
+                {tableItems.map((item, idx) => (
+                  <tr key={idx}>
+                    <td className="ps-5 py-4 whitespace-nowrap flex items-end gap-x-6">
+                      {item.name} <br />
+                      {item.SubName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-end text-lg">
+                      {item.Price}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <table className="w-full table-auto text-sm text-left">
+              <thead className="bg-gray-200 text-black text-lg border-b">
+                <tr>
+                  <th className="py-3 px-6 font-bold">Description</th>
+                  <th className="py-3 px-6 text-end">$150,000</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div className="flex justify-center gap-5 mt-5">
+            <button
+              class="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+              onClick={onClickTwo}
+              type="button"
+            >
+              Generate Invoice
+            </button>
+            <button
+              class="px-4 py-2.5 leading-5 text-black transition-colors duration-300 transform border-solid border-2 border-black bg-white rounded-md hover:bg-[#D22B2B] focus:outline-none "
+              onClick={onClickTwo}
+              type="button"
+            >
+              Download Invoice
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
 
-export default Dashboard;
+export default AllInvoices;

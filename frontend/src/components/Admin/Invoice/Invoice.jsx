@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Modal } from "keep-react";
-import { X, FileText  } from "phosphor-react";
+import { Button, Modal, Toggle } from "keep-react";
+import { X, FileText } from "phosphor-react";
 import { useSelector } from "react-redux";
-
 
 const Invoice = () => {
   const { id } = useParams();
   const [showModalX, setShowModalX] = useState(false);
+  const [toggle, setToggle] = useState(false);
   const [services, setServices] = useState([
     { number: 1, name: "", amount: "" },
   ]);
@@ -69,6 +69,11 @@ const Invoice = () => {
     },
   ];
 
+  const handleToggle = () => {
+    setToggle(true);
+  };
+
+  console.log("toggle", toggle);
   return (
     <>
       <section class="max-w-7xl px-4 py-10 mx-auto bg-gray-50 rounded-md shadow-md">
@@ -76,159 +81,182 @@ const Invoice = () => {
           CREATE INVOICE
         </h2>
         {/* {invoiceData.map((data) => ( */}
-          <form className=" p-10">
-            {/* -------------- CLIENT DETAILS --------------  */}
-            <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-              {/* ---------- NAME ---------- */}
-              <div>
-                <label class="text-gray-700 font-medium text-xl">
-                  Client Name
-                </label>
-                <input
-                  type="text"
-                  placeholder={data.name}
-                  value={data.name}
-                  class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
-                  required
-                  readOnly
-                />
-              </div>
-
-              <div>
-                <label
-                  class="text-gray-700 font-medium text-xl"
-                  for="emailAddress"
-                >
-                  Client Company Name
-                </label>
-                <input
-                  type="text"
-                  placeholder={data.company}
-                  value={data.company}
-                  class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
-                  required
-                  readOnly
-                />
-              </div>
-
-              <div>
-                <label class="text-gray-700 font-medium text-xl" for="password">
-                  Client Email
-                </label>
-                <input
-                  type="email"
-                  placeholder={data.email}
-                  value={data.email}
-                  class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
-                  required
-                  readOnly
-                />
-              </div>
-
-              <div>
-                <label class="text-gray-700 font-medium text-xl">
-                  Client Phone Number
-                </label>
-                <input
-                  type="number"
-                  placeholder={data.phone}
-                  class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
-                  required
-                  readOnly
-                />
-              </div>
-
-              <div>
-                <label
-                  class="text-gray-700  font-medium text-xl"
-                  for="password"
-                >
-                  Invoice Date
-                </label>
-                <input
-                  type="date"
-                  class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
-                  required
-                />
-              </div>
-
-              <div>
-                <label class="text-gray-700 font-medium text-xl">
-                  Reference Number
-                </label>
-                <input
-                  type="text"
-                  placeholder="Reference Number"
-                  class="block w-full px-4 py-2 text-lg mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
-                  readOnly
-                />
-              </div>
+        <form className=" p-10">
+          {/* -------------- CLIENT DETAILS --------------  */}
+          <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+            {/* ---------- NAME ---------- */}
+            <div>
+              <label class="text-gray-700 font-medium text-xl">
+                Client Name
+              </label>
+              <input
+                type="text"
+                placeholder={data.name}
+                value={data.name}
+                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                required
+                readOnly
+              />
             </div>
 
-            {/* -------------- SERVICES DETAILS --------------  */}
-            <div className="mt-8">
-              <h1 className="text-gray-700 ml-1 font-semibold text-2xl">
-                Services
-              </h1>
+            <div>
+              <label
+                class="text-gray-700 font-medium text-xl"
+                for="emailAddress"
+              >
+                Client Company Name
+              </label>
+              <input
+                type="text"
+                placeholder={data.company}
+                value={data.company}
+                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                required
+                readOnly
+              />
+            </div>
 
-              <div className="border-solid border-2 border-gray-200 mt-3 p-5 rounded-lg">
-                {services.map((service, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-center gap-5 w-100 mb-2"
+            <div>
+              <label class="text-gray-700 font-medium text-xl" for="password">
+                Client Email
+              </label>
+              <input
+                type="email"
+                placeholder={data.email}
+                value={data.email}
+                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                required
+                readOnly
+              />
+            </div>
+
+            <div>
+              <label class="text-gray-700 font-medium text-xl">
+                Client Phone Number
+              </label>
+              <input
+                type="number"
+                placeholder={data.phone}
+                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                required
+                readOnly
+              />
+            </div>
+
+            <div>
+              <label class="text-gray-700  font-medium text-xl" for="password">
+                Invoice Date
+              </label>
+              <input
+                type="date"
+                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
+                required
+              />
+            </div>
+
+            <div>
+              <label class="text-gray-700 font-medium text-xl">
+                Reference Number
+              </label>
+              <input
+                type="text"
+                placeholder="Reference Number"
+                class="block w-full px-4 py-2 text-lg mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
+                readOnly
+              />
+            </div>
+
+            <div>
+              <label
+                class="text-gray-700 font-medium text-xl"
+                for="emailAddress"
+              >
+                Discount
+              </label>
+              <input
+                type="text"
+                // value={data.company}
+                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                required
+                readOnly
+              />
+            </div>
+
+            <div className="flex items-center gap-4 pt-6 pl-6">
+              <label
+                class="text-gray-700 font-medium text-xl"
+                for="emailAddress"
+              >
+                Partially ?
+              </label>
+              <Toggle bgColor="primary" size="md" onChange={handleToggle} />
+            </div>
+          </div>
+
+          {/* -------------- SERVICES DETAILS --------------  */}
+          <div className="mt-8">
+            <h1 className="text-gray-700 ml-1 font-semibold text-2xl">
+              Services
+            </h1>
+
+            <div className="border-solid border-2 border-gray-300 mt-3 p-5 rounded-lg">
+              {services.map((service, index) => (
+                <div
+                  key={index}
+                  className="flex justify-center gap-5 w-100 mb-2"
+                >
+                  <input
+                    type="number"
+                    disabled
+                    defaultValue={service.number}
+                    className="block w-11 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Service Name"
+                    value={service.name}
+                    onChange={(e) =>
+                      handleInputChange(index, "name", e.target.value)
+                    }
+                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Service Amount"
+                    value={service.amount}
+                    onChange={(e) =>
+                      handleInputChange(index, "amount", e.target.value)
+                    }
+                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                  />
+                  <button
+                    className=" h-10 w-24 text-xl text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                    onClick={() => handleDeleteService(index)}
+                    type="button"
                   >
-                    <input
-                      type="number"
-                      disabled
-                      defaultValue={service.number}
-                      className="block w-11 px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Service Name"
-                      value={service.name}
-                      onChange={(e) =>
-                        handleInputChange(index, "name", e.target.value)
-                      }
-                      className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Service Amount"
-                      value={service.amount}
-                      onChange={(e) =>
-                        handleInputChange(index, "amount", e.target.value)
-                      }
-                      className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-200 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
-                    />
-                    <button
-                      className=" h-10 w-24 text-xl text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
-                      onClick={() => handleDeleteService(index)}
-                      type="button"
-                    >
-                      X
-                    </button>
-                  </div>
-                ))}
-                <button
-                  className="mt-3 px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
-                  onClick={handleAddService}
-                  type="button"
-                >
-                  Add Services
-                </button>
-              </div>
-            </div>
-            <div class="flex justify-center gap-10 mt-6">
+                    X
+                  </button>
+                </div>
+              ))}
               <button
-                class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
-                onClick={onClickTwo}
+                className="mt-3 px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                onClick={handleAddService}
                 type="button"
               >
-                Preview Invoice
+                Add Services
               </button>
             </div>
-          </form>
+          </div>
+          <div class="flex justify-center gap-10 mt-6">
+            <button
+              class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+              onClick={onClickTwo}
+              type="button"
+            >
+              Preview Invoice
+            </button>
+          </div>
+        </form>
         {/* ))} */}
       </section>
 
@@ -241,31 +269,41 @@ const Invoice = () => {
         <Modal.Header>
           {/* <div className="flex justify-between items-center border-b-4 border-gray-500 pb-2"> */}
           <div className="flex justify-between items-center">
-          <img
-                src="https://cdn.shopify.com/s/files/1/0704/6378/2946/files/ITEXPERTS_LOGO.png?v=1704170784"
-                alt="keep"
-                width="120"
-                height="40"
-                className=""
-              />
-            <p className="text-4xl text-black font-semibold modelHead me-14">Invoice</p>
+            <img
+              src="https://cdn.shopify.com/s/files/1/0704/6378/2946/files/ITEXPERTS_LOGO.png?v=1704170784"
+              alt="keep"
+              width="120"
+              height="40"
+              className=""
+            />
+            <p className="text-4xl text-black font-semibold modelHead me-14">
+              Invoice
+            </p>
           </div>
         </Modal.Header>
         <Modal.Body>
           <div className=" flex justify-between">
             <div className=" p-2 w-100">
               <p className="modelClientText mb-2 text-base">Bill To:</p>
-              <h1 className="modelClientHeadText mb-2 font-semibold text-lg">Webz Poland</h1>
-              <p className="modelClientText mb-2 text-base">(+92) 334 41087865</p>
+              <h1 className="modelClientHeadText mb-2 font-semibold text-lg">
+                Webz Poland
+              </h1>
+              <p className="modelClientText mb-2 text-base">
+                (+92) 334 41087865
+              </p>
               <p className="modelClientText mb-2 text-base">info@gmail.com</p>
             </div>
             <div className=" p-2 w-100">
               <p className="modelClientText mb-2 text-base">From:</p>
-              <h1 className="modelClientHeadText mb-2 font-semibold text-lg">Webz Poland</h1>
-              <p className="modelClientText mb-2 text-base">(+92) 334 41087865</p>
+              <h1 className="modelClientHeadText mb-2 font-semibold text-lg">
+                Webz Poland
+              </h1>
+              <p className="modelClientText mb-2 text-base">
+                (+92) 334 41087865
+              </p>
               <p className="modelClientText mb-2 text-base">info@gmail.com</p>
               <p className="modelClientText text-base">
-              3909 Heavner Avenue <br /> Mountain, GA 30083
+                3909 Heavner Avenue <br /> Mountain, GA 30083
               </p>
             </div>
           </div>
@@ -305,7 +343,7 @@ const Invoice = () => {
             </table>
           </div>
           <div className="flex justify-center gap-5 mt-5">
-          <button
+            <button
               class="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
               onClick={onClickTwo}
               type="button"
@@ -322,8 +360,6 @@ const Invoice = () => {
           </div>
         </Modal.Body>
       </Modal>
-
-
     </>
   );
 };

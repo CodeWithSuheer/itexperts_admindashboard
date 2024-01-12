@@ -23,6 +23,7 @@ import OnGoingProject from "./components/Admin/Projects/OnGoingProject";
 import CompletedProjects from "./components/Admin/Projects/CompletedProjects";
 import OnGoingProjectsDetails from "./components/Admin/Projects/OnGoingProjectsDetails";
 import "./App.css";
+import AllInvoices from "./components/Admin/Invoice/AllInvoices";
 
 
 function App() {
@@ -39,12 +40,13 @@ function App() {
           <Route path="*" element={<NotFound />} />
 
           {/* --------- DASHBOARD --------- */}
-          <Route path="/adminpanel" element={<AdminProtected><AdminPanel /></AdminProtected>}>
+          <Route path="/adminpanel" element={<AdminPanel />}>
             <Route index element={<Dashboard />} />
             <Route path="usersinfo" element={<UsersRequests />} />
             <Route path="pending-requests" element={<PendingRequests />} />
             <Route path="approved-requests" element={<ApprovedRequests />} />
             <Route path="invoice" element={<Invoice />} />
+            <Route path="all-invoice" element={<AllInvoices />} />
             <Route path="projects" element={<ProjectsPanel />} />
             <Route path="ongoingprojects" element={<OnGoingProject />} />
             <Route path="completedprojects" element={<CompletedProjects />} />
