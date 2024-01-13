@@ -47,8 +47,9 @@ const PendingRequests = () => {
       <div className="py-10 px-4 md:px-8 rounded-md bg-white">
         <div className="items-start justify-between md:flex">
           <div className="max-w-4xl">
-            <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
-              PENDING REQUESTS
+            <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl">
+              PENDING REQUESTS{" "}
+              <span className="text-lg font-normal">({allUsers.length})</span>
             </h3>
             <p className="text-gray-700 text-lg mt-4">
               Here you can view and manage the pending requests from users who

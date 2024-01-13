@@ -142,14 +142,14 @@ const Dashboard = () => {
           <table className="contact_table w-full table-auto text-sm text-left overflow-x-auto">
             <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
-                <th className="py-3 pr-3 text-lg font-medium pl-3">Name</th>
-                <th className="py-3 pr-3 text-lg font-medium">Date</th>
-                <th className="py-3 pr-6 text-lg font-medium">Ref Number</th>
-                <th className="py-3 pr-6 text-lg font-medium">Phone</th>
-                <th className="py-3 pr-6 text-lg font-medium">Email</th>
-                <th className="py-3 pr-6 text-lg font-medium">Company</th>
-                <th className="py-3 pr-6 text-lg font-medium">Message</th>
-                <th className="py-3 pl-6 text-lg font-medium">Actions</th>
+                <th className="py-4 px-6 text-lg font-medium pl-3">Name</th>
+                <th className="py-4 px-6 text-lg font-medium">Date</th>
+                <th className="py-4 px-6 text-lg font-medium">Ref Number</th>
+                <th className="py-4 px-6 text-lg font-medium">Phone</th>
+                <th className="py-4 px-6 text-lg font-medium">Email</th>
+                <th className="py-4 px-6 text-lg font-medium">Company</th>
+                <th className="py-4 px-6 text-lg font-medium">Message</th>
+                <th className="py-4 px-6 text-lg font-medium">Actions</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">

@@ -45,8 +45,11 @@ const ApprovedRequests = () => {
       <div className="py-10 px-4 md:px-8 rounded-md bg-white">
         <div className="items-start justify-between md:flex">
           <div className="max-w-4xl">
-            <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
-              ADMINS
+            <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl">
+              ADMINS{" "}
+              <span className="text-lg font-normal">
+                ({approvedUsers.length})
+              </span>
             </h3>
             <p className="text-gray-700 text-lg mt-4">
               List of authorized admins.
@@ -71,7 +74,9 @@ const ApprovedRequests = () => {
                   <td className="pr-6 py-4 text-lg">{index + 1}</td>
                   <td className="pr-6 py-4 text-lg">{data.name}</td>
                   <td className="pr-6 py-4 text-lg">{data.email}</td>
-                  <td className="pr-6 py-4 text-lg">{displayRole(data.superAdmin)}</td>
+                  <td className="pr-6 py-4 text-lg">
+                    {displayRole(data.superAdmin)}
+                  </td>
                   <td className="whitespace-nowrap flex py-2">
                     <Dropdown
                       label="Update Role"

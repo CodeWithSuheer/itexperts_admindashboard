@@ -61,13 +61,12 @@ const AllUsers = () => {
     <div className="py-10 px-4 md:px-8 rounded-md bg-white">
       <div className="items-start justify-between md:flex">
         <div className="max-w-2xl">
-          <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
-            USERS
+          <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
+            USERS{" "}
+            <span className="text-lg font-normal">
+                ({userData.length})
+              </span>
           </h3>
-          <p className="text-gray-600 text-lg mt-4">
-            Here you can view and manage the user which are using IT-Experts
-            user panel.
-          </p>
         </div>
         <div className="mt-3 md:mt-0">
           {/* ------------- SEARCH BAR ------------- */}
@@ -80,22 +79,22 @@ const AllUsers = () => {
           />
         </div>
       </div>
-      <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
+      <div className="mt-12 shadow-sm rounded-lg overflow-x-auto">
         <table className="w-full table-auto text-md text-left">
-          <thead className="bg-gray-500 text-gray-100 font-medium border-b">
+          <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
             <tr>
-              <th className="py-4 px-6">Username</th>
-              <th className="py-4 px-6">Phone</th>
-              <th className="py-4 px-6">Position</th>
-              <th className="py-4 px-6">Salary</th>
-              <th className="py-4 px-6"></th>
+              <th className="py-4 px-6 text-lg font-medium">Username</th>
+              <th className="py-4 px-6 text-lg font-medium">Phone</th>
+              <th className="py-4 px-6 text-lg font-medium">Position</th>
+              <th className="py-4 px-6 text-lg font-medium">Salary</th>
+              <th className="py-4 px-6 text-lg font-medium"></th>
             </tr>
           </thead>
           <tbody className="text-gray-600 divide-y">
             {userData.map((item, idx) => (
               <tr key={idx}>
                 <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
-                  <img src={item.avatar} className="w-10 h-10 rounded-full" />
+                  <img src="https://cdn.shopify.com/s/files/1/0704/6378/2946/files/profile-pic.png?v=1704625675" className="w-10 h-10 rounded-full" />
                   <div>
                     <span className="block text-gray-700 text-md font-medium">
                       {item.name}
@@ -105,7 +104,7 @@ const AllUsers = () => {
                     </span>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">546351435146532</td>
+                <td className="px-6 py-4 whitespace-nowrap">03324700802</td>
                 <td className="px-6 py-4 whitespace-nowrap">Developer</td>
                 <td className="px-6 py-4 whitespace-nowrap">6541653</td>
                 <td className="text-right px-6 whitespace-nowrap">

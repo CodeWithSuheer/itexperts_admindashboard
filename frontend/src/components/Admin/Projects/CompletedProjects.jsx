@@ -36,8 +36,9 @@ const CompletedProjects = () => {
       <div className="py-10 px-4 md:px-8 rounded-md bg-white">
         <div className="items-start justify-between md:flex">
           <div className="max-w-4xl">
-            <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
-              COMPLETED PROJECTS
+            <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl">
+              COMPLETED PROJECTS{" "}
+              <span className="text-lg font-normal">({tableItems.length})</span>
             </h3>
             <p className="text-gray-700 text-lg mt-4">
               Here you can view and manage all ongoing projects.
@@ -47,7 +48,7 @@ const CompletedProjects = () => {
         </div>
         <div className="mt-12 relative h-max">
           <table className="w-full table-auto text-sm text-left">
-          <thead className="text-gray-600 font-medium border-b">
+            <thead className="text-gray-600 font-medium border-b">
               <tr>
                 <th className="py-3 pr-6 text-lg">Id</th>
                 <th className="py-3 pr-6 text-lg">Client Name</th>
