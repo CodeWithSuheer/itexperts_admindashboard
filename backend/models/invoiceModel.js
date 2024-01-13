@@ -1,4 +1,4 @@
-import mongoose from mongoose;
+import mongoose from "mongoose";
 
 const serviceSchema = new mongoose.Schema({
     serviceName: {
@@ -11,32 +11,84 @@ const serviceSchema = new mongoose.Schema({
     }
 });
 
-const schema = new mongoose.Schema({
+const clientDetails = new mongoose.Schema({
+    name:{
+        type:String,
+        required:[true,"Please provide a name"]
+    },
+    phone:{
+        type:Number,
+        required:[true,"Please provide a number"]
+    },
+    email:{
+        type:String,
+        required:[true,"Please provide a email"]
+    }
+
+});
+
+const InvoiceSchema = new mongoose.Schema({
+    to:{
+        type:clientDetails,
+        required: [true, "Please provide recipient information"],
+       
+    },
     service:{
         type: [serviceSchema],
-        required:[true,"Please provide a service"]
+        required:[true,"Please provide at least one service"]
     },
-    status:{
-        type:String,
-        default:"unpaid",
-        required:[true,"Please provide a status"],
-    },
+    paymentStatus: {
+        type: String,
+        enum: ['paid','unpaid'],
+        default: 'unpaid'
+     },
     amount:{
         type:Number,
         required:[true,"Please provide a amount"],
     },
+    discount: {
+        type:Number
+    },
     customerId:{
-        type: Number,
+        type: String,
         required:[true,"Please provide a customerId"]
     },
-    refNumber: {
+    orderId: {
         type: String,
-        required:[true,"Please provide a refNumber"]
+        required:[true,"Please provide a OrderId"]
       },
-    date:{
-        type:Date,
-        required:[true,"Please provide a date"]
+    invoiceType: {
+        type: String,
+        enum: ['full', 'half'],
+        default: 'full'
     },
+    dueDate:{
+        type:Date,
+    },
+    secondInvoiceDueDate:{
+        type:Date,
+    },
+
 },{timestamps:true});
 
-export const Invoices = mongoose.model("Invoices", schema);
+const mainDocumentSchema = new mongoose.Schema({
+    paymentStatus: {
+        type: String,
+        enum: ['paid', 'partial', 'unpaid'],
+        default: 'unpaid'
+    },
+    orderId: {
+        type: String,
+        required: [true, "Please provide a OrderId"]
+    },
+    customerId:{
+        type: String,
+        required:[true,"Please provide a customerId"]
+    },
+    halfInvoices: [InvoiceSchema],
+    invoice:InvoiceSchema
+    
+});
+
+export const Invoices = mongoose.model("Invoice", InvoiceSchema);
+export const MainDocument  = mongoose.model("Invoices", mainDocumentSchema);
