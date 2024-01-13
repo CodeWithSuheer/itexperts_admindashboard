@@ -13,56 +13,52 @@ function setMongoose() {
 
 export const createInvoice = async (req, res, next) => {
   try {
-   const invoiceData = req.body;
+    const invoiceData = req.body;
 
-    if (invoiceData.invoiceType === 'half') {
-        const invoice1 = new Invoices({
-          to: invoiceData.to,
-          service: invoiceData.service,
-          paymentStatus: invoiceData.paymentStatus,
-          amount: invoiceData.amount / 2, 
-          discount: invoiceData.discount,
-          customerId: invoiceData.customerId,
-          orderId: invoiceData.orderId,
-          invoiceType: 'half',
-          dueDate: invoiceData.dueDate
-        });
-  
-        const invoice2 = new Invoices({
-          to: invoiceData.to,
-          service: invoiceData.service,
-          paymentStatus: invoiceData.paymentStatus,
-          amount: invoiceData.amount / 2,
-          discount: invoiceData.discount,
-          customerId: invoiceData.customerId,
-          orderId: invoiceData.orderId,
-          invoiceType: 'half',
-          secondInvoiceDueDate: invoiceData.secondInvoiceDueDate,
-        });
-  
-        const mainDocument = new MainDocument({
-            to: invoiceData.to,
-            customerId: invoiceData.customerId,
-            paymentStatus: invoiceData.paymentStatus,
-            orderId: invoiceData.orderId,
-            halfInvoices: [
-                invoice1,
-                invoice2
-            ],
-        });
-        await mainDocument.save();
-      } else {
-        const mainDocument = new MainDocument({
-            customerId: invoiceData.customerId,
-            to: invoiceData.to,
-            paymentStatus: invoiceData.paymentStatus,
-            orderId: invoiceData.orderId,
-            invoice: new Invoices(invoiceData)
-        });
-         mainDocument.halfInvoices = undefined;
-        await mainDocument.save();
+    if (invoiceData.invoiceType === "half") {
+      const invoice1 = new Invoices({
+        to: invoiceData.to,
+        service: invoiceData.service,
+        paymentStatus: invoiceData.paymentStatus,
+        amount: invoiceData.amount / 2,
+        discount: invoiceData.discount,
+        customerId: invoiceData.customerId,
+        orderId: invoiceData.orderId,
+        invoiceType: "half",
+        dueDate: invoiceData.dueDate,
+      });
+
+      const invoice2 = new Invoices({
+        to: invoiceData.to,
+        service: invoiceData.service,
+        paymentStatus: invoiceData.paymentStatus,
+        amount: invoiceData.amount / 2,
+        discount: invoiceData.discount,
+        customerId: invoiceData.customerId,
+        orderId: invoiceData.orderId,
+        invoiceType: "half",
+        secondInvoiceDueDate: invoiceData.secondInvoiceDueDate,
+      });
+
+      const mainDocument = new MainDocument({
+        to: invoiceData.to,
+        customerId: invoiceData.customerId,
+        paymentStatus: invoiceData.paymentStatus,
+        orderId: invoiceData.orderId,
+        invoices: [invoice1, invoice2],
+      });
+      await mainDocument.save();
+    } else {
+      const mainDocument = new MainDocument({
+        customerId: invoiceData.customerId,
+        to: invoiceData.to,
+        paymentStatus: invoiceData.paymentStatus,
+        orderId: invoiceData.orderId,
+        invoices: new Invoices(invoiceData),
+      });
+      await mainDocument.save();
     }
-  
+
     res.status(201).json({ msg: "Invoice Generated" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
@@ -71,13 +67,77 @@ export const createInvoice = async (req, res, next) => {
 
 export const getAllInvoices = async (req, res, next) => {
   try {
-    const getAllInvoices = await MainDocument.find({})
-    .sort({createdAt: -1})
+    const getAllInvoices = await MainDocument.find({}).sort({ createdAt: -1 });
     setMongoose();
     res.status(200).json(getAllInvoices);
   } catch (error) {
-    res.status(500).json({ msg:error.message});
+    res.status(500).json({ msg: error.message });
   }
 };
 
+export const updateInvoice = async (req, res, next) => {
+  const {
+    id,
+    invoiceId,
+    to,
+    service,
+    paymentStatus,
+    amount,
+    discount,
+    customerId,
+    orderId,
+    dueDate,
+    secondInvoiceDueDate,
+  } = req.body;
+ try {
+  let updateQuery = {};
+  if (to) {
+    updateQuery = { ...updateQuery, to };
+  }
+  if (service) {
+    updateQuery = { ...updateQuery, service };
+  }
+  if (paymentStatus) {
+    updateQuery = { ...updateQuery, paymentStatus };
+  }
+  if (amount) {
+    updateQuery = { ...updateQuery, amount };
+  }
+  if (discount) {
+    updateQuery = { ...updateQuery, discount };
+  }
+  if (amount) {
+    updateQuery = { ...updateQuery, amount };
+  }
+  if (customerId) {
+    updateQuery = { ...updateQuery, customerId };
+  }
+  if (orderId) {
+    updateQuery = { ...updateQuery, orderId };
+  }
+  if (dueDate) {
+    updateQuery = { ...updateQuery, dueDate };
+  }
+  if (secondInvoiceDueDate) {
+    updateQuery = { ...updateQuery, secondInvoiceDueDate };
+  }
 
+ 
+  const mainDocument = await MainDocument.findById(id);
+  
+  if (!mainDocument) {
+    return res.status(404).json({ msg: "MainDocument not found" });
+  }
+  const invoiceToUpdate = mainDocument.invoices.find(
+    (invoice) => invoice._id.toString() === invoiceId
+  );
+  if(!invoiceToUpdate){
+    return res.status(404).json({msg:"Invoice not found"})
+    };
+    Object.assign(invoiceToUpdate,updateQuery)
+    await mainDocument.save();
+  res.status(200).json({msg:"invoice Updated"})
+ } catch (error) {
+  res.status(500).json({msg:error.message})
+ }
+};
