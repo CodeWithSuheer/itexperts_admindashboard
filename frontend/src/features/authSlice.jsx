@@ -11,13 +11,10 @@ const resetPasswordUrl = "http://localhost:8080/api/user/resetPassword";
 const authUserUrl = "http://localhost:8080/api/user/authUser";
 
 //CREATE ASYNC THUNK
-export const createuserAsync = createAsyncThunk(
-  "user/create",
-  async (formData) => {
+export const createuserAsync = createAsyncThunk( "user/create", async (formData) => {
     try {
       const response = await axios.post(signupUrl, formData);
       toast.success(response.data.msg);
-
       return response.data;
     } catch (error) {
       toast.error(error.response.data.msg);
@@ -26,9 +23,7 @@ export const createuserAsync = createAsyncThunk(
 );
 
 // lOGIN ASYNC THUNK
-export const loginuserAsync = createAsyncThunk(
-  "user/login",
-  async (formData) => {
+export const loginuserAsync = createAsyncThunk( "user/login", async (formData) => {
     try {
       const response = await axios.post(loginUrl, formData);
       toast.success("Login Succsessfull");

@@ -26,6 +26,13 @@
   color: white !important;
 }
 
+/* .navbar{
+  position: sticky;
+  width: 100%;
+  top: 0;
+  z-index: 999;
+} */
+
 /* ---------------- LOGOUT BUTTON CSS ---------------- */
 .Btn {
   --black: #000000;

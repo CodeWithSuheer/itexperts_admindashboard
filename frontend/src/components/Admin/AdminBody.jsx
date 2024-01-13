@@ -15,6 +15,7 @@ import {
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAsync, reset } from "../../features/authSlice";
+import Icons from "./Icons";
 import "./AdminPanel.css";
 
 const AdminBody = () => {
@@ -29,6 +30,25 @@ const AdminBody = () => {
     });
   };
 
+  const AllUsersIcon = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`lucide lucide-users-round ${location.pathname === "/adminpanel/allusers" ? "text-white" : ""}`}
+    >
+      <path d="M18 21a8 8 0 0 0-16 0" />
+      <circle cx="10" cy="8" r="5" />
+      <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
+    </svg>
+  );
+
   const admin = useSelector((state) => state.auth.user);
 
   return (
@@ -36,8 +56,7 @@ const AdminBody = () => {
       <div className="adminBody bg-slate-300 px-0">
         {/* ------------ DASHBOARD SIDE MENU ------------  */}
         <div className="admin_sideMenu md:max-w-60 lg:max-w-72 mt-5 ">
-          <Sidebar
-            className="pt-6 rounded-md"
+          <Sidebar className="pt-6 rounded-md"
             aria-label="Sidebar with multi-level dropdown example"
             style={{ minHeight: "92.1vh", backgroundColor: "#fff" }}
           >
@@ -57,9 +76,7 @@ const AdminBody = () => {
                       }`}
                     />
                   }
-                  className={
-                    location.pathname === "/adminpanel" ? "active-link" : ""
-                  }
+                  className={`my-2 ${ location.pathname === "/adminpanel" ? "active-link" : "" }`}
                 >
                   <span className="text-lg">Contact Queries</span>
                 </Sidebar.Item>
@@ -67,7 +84,8 @@ const AdminBody = () => {
               {/* -------- ADMIN INFO'S --------  */}
               {admin?.superAdmin ? (
                 <Sidebar.Collapse
-                  icon={<UsersThree size={24} />}
+                  // icon={<UsersThree size={24} />}
+                  icon={<Icons.AdminInfoIcon location={location} />}
                   label="Admin's Info"
                   style={{ fontSize: "1.15rem" }}
                 >
@@ -85,11 +103,8 @@ const AdminBody = () => {
                             }`}
                           />
                         }
-                        className={
-                          location.pathname === "/adminpanel/pending-requests"
-                            ? "active-link"
-                            : ""
-                        }
+                        className={`my-1 ${ location.pathname === "/adminpanel/pending-requests" ? "active-link" : "" }`}
+                        
                       >
                         <span className="text-lg">Pending Requests</span>
                       </Sidebar.Item>
@@ -108,11 +123,7 @@ const AdminBody = () => {
                             }`}
                           />
                         }
-                        className={
-                          location.pathname === "/adminpanel/approved-requests"
-                            ? "active-link"
-                            : ""
-                        }
+                        className={`my-1 ${ location.pathname === "/adminpanel/approved-requests" ? "active-link" : "" }`}
                       >
                         <span className="text-lg">Appproved Admins</span>
                       </Sidebar.Item>
@@ -122,6 +133,18 @@ const AdminBody = () => {
               ) : (
                 ""
               )}
+
+               {/* -------- ALL USERS --------  */}
+               <Link to="/adminpanel/allusers">
+                <Sidebar.Item
+                  // icon={ <Files size={24} className={` ${ location.pathname === "/adminpanel/allusers" ? "text-white" : "" }`} /> }
+                  icon={<Icons.AllUsersIcon location={location} />}
+                  className={`my-2 ${ location.pathname === "/adminpanel/allusers" ? "active-link" : "" }`} 
+                >
+                  <span className="text-lg">All Users</span>
+                </Sidebar.Item>
+              </Link>
+
               {/* -------- PROJECTS --------  */}
               <Sidebar.Collapse
                 icon={<Browsers size={24} />}
@@ -141,11 +164,7 @@ const AdminBody = () => {
                         }`}
                       />
                     }
-                    className={
-                      location.pathname === "/adminpanel/ongoingprojects"
-                        ? "active-link"
-                        : ""
-                    }
+                    className={`my-1 ${ location.pathname === "/adminpanel/ongoingprojects" ? "active-link" : "" }`}
                   >
                     <span className="text-lg">Ongoing Projects</span>
                   </Sidebar.Item>
@@ -163,11 +182,7 @@ const AdminBody = () => {
                         }`}
                       />
                     }
-                    className={
-                      location.pathname === "/adminpanel/completedprojects"
-                        ? "active-link"
-                        : ""
-                    }
+                    className={`my-1 ${ location.pathname === "/adminpanel/completedprojects" ? "active-link" : "" }`}
                   >
                     <span className="text-lg">Completed Projects</span>
                   </Sidebar.Item>
@@ -177,21 +192,8 @@ const AdminBody = () => {
               {/* -------- ALL INVOICE --------  */}
               <Link to="/adminpanel/all-invoice">
                 <Sidebar.Item
-                  icon={
-                    <Files
-                      size={24}
-                      className={` ${
-                        location.pathname === "/adminpanel/all-invoice"
-                          ? "text-white"
-                          : ""
-                      }`}
-                    />
-                  }
-                  className={
-                    location.pathname === "/adminpanel/all-invoice"
-                      ? "active-link"
-                      : ""
-                  }
+                  icon={ <Files size={24} className={` ${ location.pathname === "/adminpanel/all-invoice" ? "text-white" : "" }`} /> }
+                  className={`my-2 ${ location.pathname === "/adminpanel/all-invoice" ? "active-link" : "" }`} 
                 >
                   <span className="text-lg">All Invoices</span>
                 </Sidebar.Item>
@@ -210,11 +212,7 @@ const AdminBody = () => {
                       }`}
                     />
                   }
-                  className={
-                    location.pathname === "/adminpanel/invoice"
-                      ? "active-link"
-                      : ""
-                  }
+                  className={`my-1 ${ location.pathname === "/adminpanel/invoice" ? "active-link" : "" }`}
                 >
                   <span className="text-lg">Generate Invoice</span>
                 </Sidebar.Item>

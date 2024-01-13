@@ -34,7 +34,7 @@ const Dashboard = () => {
   } else {
     filterdData = DashboardData;
   }
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(filterdData.length / limit);
   const disabled = currentPage === totalPages;

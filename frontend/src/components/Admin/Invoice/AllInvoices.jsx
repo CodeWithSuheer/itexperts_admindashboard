@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TextInput, Tabs } from "keep-react";
-import { MagnifyingGlass, Trash, Chat } from "phosphor-react";
-import { Modal, Button } from "keep-react";
+import { MagnifyingGlass, Trash, PencilSimple } from "phosphor-react";
+import { Modal, Button, Tooltip } from "keep-react";
 import { X } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,8 @@ import {
   deleteContactFormAsync,
   getAllFormsAsync,
 } from "../../../features/contactFormSlice";
+import { getAllInvoicesAsync } from "../../../features/invoiceSlice";
+import Icons from "../Icons";
 import "../AdminPanel.css";
 
 const AllInvoices = () => {
@@ -18,44 +20,48 @@ const AllInvoices = () => {
   const [showErrorModalX, setShowErrorModalX] = useState(false);
   const [Message, setMessage] = useState(null);
   const [deleteMsgId, setDeleteMsgId] = useState(null);
-
   const [name, setName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const DashboardData = useSelector((state) => state.contactForms.allForms);
+  // HERE WE GET DATA USING USESELECTOR FROM STATE
+  const InvoicesData = useSelector((state) => state.invoice.allInvoices);
+  console.log("InvoicesData", InvoicesData);
 
+  // CALL TO GET ALL INVOICES
+  useEffect(() => {
+    dispatch(getAllInvoicesAsync());
+  }, [dispatch]);
+
+  // HANDLE SEARCH FUNCTION
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
 
   let filterdData;
   if (name) {
-    filterdData = DashboardData.filter((item) => item.reference === name);
+    filterdData = InvoicesData.filter((item) => item.reference === name);
   } else {
-    filterdData = DashboardData;
+    filterdData = InvoicesData;
   }
+
+  // THESE STATE ARE RELATED TO PAGINATION
   const [limit, setLimit] = useState(7);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(filterdData.length / limit);
   const disabled = currentPage === totalPages;
   const disabled2 = currentPage === 1;
 
-  // Calculate the index range for the currently displayed data
   const startIndex = (currentPage - 1) * limit;
 
   const endIndex = startIndex + limit;
   let displayedData = filterdData.slice(startIndex, endIndex);
   let searchData = [];
   if (searchQuery) {
-    searchData = DashboardData.filter((data) =>
+    searchData = InvoicesData.filter((data) =>
       data.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }
   displayedData = searchQuery.length > 1 ? searchData : displayedData;
-
-  useEffect(() => {
-    dispatch(getAllFormsAsync());
-  }, [dispatch]);
 
   // VIEW MESSAGE MODAL FUNCTION
   const onClickTwo = (id) => {
@@ -75,9 +81,6 @@ const AllInvoices = () => {
     navigate(`/adminpanel/invoice/${invoice_Id}`);
     console.log("invoice_Id", invoice_Id);
   };
-
-  const filteredId = DashboardData.filter((data) => data.id === Message);
-  const delete_MsgId = DashboardData.filter((data) => data.id === deleteMsgId);
 
   // HANDLE CREATE INVOICE
   const handleDelete = (id) => {
@@ -104,6 +107,9 @@ const AllInvoices = () => {
     },
   ];
 
+  const filteredId = InvoicesData.filter((data) => data.id === Message);
+  const delete_MsgId = InvoicesData.filter((data) => data.id === deleteMsgId);
+
   return (
     <>
       <div className=" py-10 px-4 md:px-8 rounded-md bg-white">
@@ -127,6 +133,7 @@ const AllInvoices = () => {
             />
           </div>
         </div>
+        {/* ------------- TABS ------------- */}
         <div className="mt-6">
           <Tabs aria-label="tabs" style="underline" borderPosition="bottom">
             <Tabs.Item
@@ -185,6 +192,7 @@ const AllInvoices = () => {
                             Unpaid
                           </span>
                         </td>
+                        {/* ---------- PREVIEW BUTTON ----------  */}
                         <td
                           className="pr-6 py-3 text-lg font-semibold underline underline-offset-4 text-blue-700"
                           onClick={() => onClickTwo(data.id)}
@@ -193,20 +201,25 @@ const AllInvoices = () => {
                         </td>
 
                         <td className="flex items-center justify-center py-3">
-                          {/* ---------- HANDLE CREATE INVOICE BUTTON ----------  */}
+                         {/* ---------- EDIT BUTTON ----------  */}
+                            <div className="rounded-full bg-gray-200 text-gray-800 p-2 ms-2.5 transition hover:scale-110"
+                              onClick={() => onClickErrorModal(data.id)} >
+                              <PencilSimple size={24} />
+                            </div>
 
-                          <div
-                            onClick={() => onClickErrorModal(data.id)}
-                            className="trash_button rounded-full bg-red-600 text-white p-2 ms-2.5 transition hover:scale-110"
-                          >
-                            <Trash size={24} />
-                          </div>
+                          {/* ---------- DELETE BUTTON ----------  */}
+                            <div className="trash_button rounded-full bg-red-600 text-white p-2 ms-2.5 transition hover:scale-110"
+                              onClick={() => onClickErrorModal(data.id)} >
+                              <Trash size={24} />
+                            </div>
+                            
                         </td>
                       </tr>
                     </>
                   );
                 })
               ) : (
+                // THIS LINE WILL SHOW IF NO DATA IS AVAILABLE
                 <tr>
                   <td className="px-6 py-4 text-2xl text-gray-950">
                     No data available
@@ -217,6 +230,8 @@ const AllInvoices = () => {
           </table>
         </div>
       </div>
+
+      {/* --------------- PAGINATION --------------- */}
       <div className=" flex justify-center mt-5 mb-5">
         <nav aria-label="Page navigation example">
           <ul className="inline-flex -space-x-px text-lg">
@@ -261,26 +276,7 @@ const AllInvoices = () => {
         </nav>
       </div>
 
-      {/* ------------- VIEW MESSAGE MODAL ------------- */}
-      {/* {filteredId.map((data, idx) => (
-        <Modal
-          icon={<Chat size={28} color="#1B4DFF" />}
-          size="4xl"
-          show={showModalX}
-          onClose={onClickTwo}
-        >
-          <Modal.Header>Message</Modal.Header>
-          <Modal.Body>
-            <div className="space-y-6">
-              <p className="text-xl leading-relaxed text-metal-500">
-                {data.message}
-              </p>
-            </div>
-          </Modal.Body>
-        </Modal>
-      ))} */}
-
-      {/* ------------- DELETE MESSAGE MODAL ------------- */}
+      {/* ---------- DELETE MESSAGE MODAL ---------- */}
       {delete_MsgId.map((data, idx) => (
         <Modal
           icon={<Trash size={28} color="#E92215" />}
@@ -311,7 +307,7 @@ const AllInvoices = () => {
         </Modal>
       ))}
 
-      {/* ----------------- PREVIEW INVOICE ----------------- */}
+      {/* ------------- PREVIEW INVOICE ------------- */}
       <Modal
         size="4xl"
         show={showModalX}

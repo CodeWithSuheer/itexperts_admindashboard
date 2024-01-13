@@ -70,16 +70,27 @@ const Invoice = () => {
   ];
 
   const handleToggle = () => {
-    setToggle(true);
+    setToggle(!toggle);
+    console.log(toggle);
   };
 
   console.log("toggle", toggle);
   return (
     <>
-      <section class="max-w-7xl px-4 py-10 mx-auto bg-gray-50 rounded-md shadow-md">
-        <h2 class="text-gray-800 text-2xl pl-10 font-bold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
-          CREATE INVOICE
-        </h2>
+      <section class="max-w-7xl px-4 py-12 mx-auto bg-gray-50 rounded-md shadow-md">
+        <div className="flex justify-between items-center">
+          <h2 class="text-gray-800 text-2xl pl-10 font-bold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
+            CREATE INVOICE
+          </h2>
+
+          <div className="flex items-center gap-4 mr-11">
+            <label class="text-gray-700 font-medium text-xl" for="emailAddress">
+              Partial Payment?
+            </label>
+            <Toggle bgColor="primary" size="md" onChange={handleToggle} />
+          </div>
+        </div>
+
         {/* {invoiceData.map((data) => ( */}
         <form className=" p-10">
           {/* -------------- CLIENT DETAILS --------------  */}
@@ -145,7 +156,7 @@ const Invoice = () => {
 
             <div>
               <label class="text-gray-700  font-medium text-xl" for="password">
-                Invoice Date
+                Due Date
               </label>
               <input
                 type="date"
@@ -155,9 +166,7 @@ const Invoice = () => {
             </div>
 
             <div>
-              <label class="text-gray-700 font-medium text-xl">
-                Reference Number
-              </label>
+              <label class="text-gray-700 font-medium text-xl">Order No.</label>
               <input
                 type="text"
                 placeholder="Reference Number"
@@ -183,13 +192,7 @@ const Invoice = () => {
             </div>
 
             <div className="flex items-center gap-4 pt-6 pl-6">
-              <label
-                class="text-gray-700 font-medium text-xl"
-                for="emailAddress"
-              >
-                Partially ?
-              </label>
-              <Toggle bgColor="primary" size="md" onChange={handleToggle} />
+              
             </div>
           </div>
 

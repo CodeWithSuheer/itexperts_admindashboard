@@ -14,15 +14,17 @@ import {
 } from "phosphor-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./AdminPanel.css";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAsync, reset } from "../../features/authSlice";
+import "./AdminPanel.css";
 
 const AdminHeader = () => {
   const dispatch = useDispatch();
   const [isMenuOpen, setMenuOpen] = useState(false);
   const user = useSelector((state)=>state.auth.user);
 
+
+  // HANDLE LOGOUT
   const handleLogout = () => {
     dispatch(logoutUserAsync())
     .then(()=>{
@@ -33,8 +35,10 @@ const AdminHeader = () => {
   const handleMenuItemClick = () => {
     setMenuOpen(false);
   };
+
+
   return (
-    <Navbar fluid={true} className="bg-gray-800">
+    <Navbar fluid={true} className="bg-gray-800 navbar">
       <Navbar.Container className="flex items-center justify-between py-4 px-16">
         <Link to="/adminpanel">
           <Navbar.Brand>
@@ -48,6 +52,18 @@ const AdminHeader = () => {
         </Link>
 
         <Navbar.Container className="flex items-center gap-6">
+
+        <Navbar.Container className="menu_remove flex gap-1">
+            <Navbar.Toggle
+              className="text-gray-100"
+              onClick={() => setMenuOpen(!isMenuOpen)} // Toggle menu open/close
+            />
+          <div className=" capitalize text-xl text-white">
+          {user?.login ? user.name : ''}
+          </div>
+          </Navbar.Container>
+
+
           <Navbar.Container
             tag="ul"
             className="lg:flex hidden items-center justify-between gap-4"
@@ -62,15 +78,9 @@ const AdminHeader = () => {
               <div class="text">Logout</div>
             </button>
           </Navbar.Container>
-          <Navbar.Container className="menu_remove flex gap-1">
-            <Navbar.Toggle
-              className="text-gray-100"
-              onClick={() => setMenuOpen(!isMenuOpen)} // Toggle menu open/close
-            />
-          <div className=" uppercase text-xl text-white ">
-          {user?.login ? user.name : ''}
-          </div>
-          </Navbar.Container>
+
+          
+
         </Navbar.Container>
         <Navbar.Collapse
           collapseType="sidebar"
