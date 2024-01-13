@@ -5,8 +5,8 @@ import './Loader.css';
 const Loader = () => {
   return (
     <>
-      <div class="Container loader">
-        <div class="glitch">
+      <div className="Container loader">
+        <div className="glitch">
           <img src={Logo} alt="Company Logo" />
         </div>
       </div>

@@ -18,20 +18,17 @@
 }
 
 .active-link {
-  background-color: #dc2626;
+  background-color: #f11900;
   color: white !important;
 }
 .active-link:hover {
-  background-color: #dc2626 !important;
+  background-color: #f11900 !important;
   color: white !important;
 }
 
-/* .navbar{
-  position: sticky;
-  width: 100%;
-  top: 0;
-  z-index: 999;
-} */
+.navbar {
+  border-bottom: 1px solid #c0c0c0 !important;
+}
 
 /* ---------------- LOGOUT BUTTON CSS ---------------- */
 .Btn {
@@ -45,8 +42,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  width: 45px;
-  height: 45px;
+  width: 42px;
+  height: 42px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -81,7 +78,7 @@
   opacity: 0;
   color: var(--night-rider);
   font-size: 1.2em;
-  font-weight: 600;
+  font-weight: 500;
   transition-duration: 0.3s;
 }
 /* hover effect on button width */

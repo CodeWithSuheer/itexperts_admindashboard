@@ -256,28 +256,28 @@ const OnGoingProjectsDetails = () => {
         </div> */}
 
         {/* ---------------- STEPS ----------------  */}
-        <section class="text-gray-600 body-font my-20">
+        <section className="text-gray-600 body-font my-20">
           <h2 className="text-gray-800 block text-lg mb-2 ml-52 font-semibold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
             PROJECT STEPS
           </h2>
-          <div class="container px-5 pt-10 pb-16 mx-auto flex flex-wrap">
+          <div className="container px-5 pt-10 pb-16 mx-auto flex flex-wrap">
             {OnGoingProjectsDetailsData.map((data) => (
-              <div class="flex relative py-8 sm:items-center md:w-2/3 mx-auto">
-                <div class="h-full w-6 absolute inset-0 flex items-center justify-center">
-                  <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+              <div className="flex relative py-8 sm:items-center md:w-2/3 mx-auto">
+                <div className="h-full w-6 absolute inset-0 flex items-center justify-center">
+                  <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
                 </div>
-                <div class="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-red-500 text-white relative z-10 title-font font-medium text-sm">
+                <div className="flex-shrink-0 w-6 h-6 rounded-full mt-10 sm:mt-0 inline-flex items-center justify-center bg-red-500 text-white relative z-10 title-font font-medium text-sm">
                   {data.id}
                 </div>
-                <div class="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
-                  <div class="flex-shrink-0 w-24 h-24 bg-red-600 text-red-100 rounded-full inline-flex items-center justify-center">
+                <div className="flex-grow md:pl-8 pl-6 flex sm:items-center items-start flex-col sm:flex-row">
+                  <div className="flex-shrink-0 w-24 h-24 bg-red-600 text-red-100 rounded-full inline-flex items-center justify-center">
                     <Check size={48} />
                   </div>
-                  <div class="flex-grow sm:pl-6 mt-6 sm:mt-0">
-                    <h2 class="font-medium title-font text-gray-900 mb-1 text-xl">
+                  <div className="flex-grow sm:pl-6 mt-6 sm:mt-0">
+                    <h2 className="font-medium title-font text-gray-900 mb-1 text-xl">
                       {data.title}
                     </h2>
-                    <p class="leading-relaxed">{data.description}</p>
+                    <p className="leading-relaxed">{data.description}</p>
                   </div>
                 </div>
               </div>
@@ -317,7 +317,7 @@ const OnGoingProjectsDetails = () => {
                 <div>
                   <label
                     for="dropzone-file"
-                    class="flex flex-col items-center justify-center w-full h-72 max-w-lg p-5 mx-auto mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer rounded-xl"
+                    className="flex flex-col items-center justify-center w-full h-72 max-w-lg p-5 mx-auto mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer rounded-xl"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -325,7 +325,7 @@ const OnGoingProjectsDetails = () => {
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
                       stroke="currentColor"
-                      class="w-8 h-8 text-gray-500"
+                      className="w-8 h-8 text-gray-500"
                     >
                       <path
                         stroke-linecap="round"
@@ -334,17 +334,17 @@ const OnGoingProjectsDetails = () => {
                       />
                     </svg>
 
-                    <h2 class="mt-1 font-medium tracking-wide text-gray-700">
+                    <h2 className="mt-1 font-medium tracking-wide text-gray-700">
                       Upload File
                     </h2>
 
-                    <p class="mt-2 text-xs tracking-wide text-gray-500">
+                    <p className="mt-2 text-xs tracking-wide text-gray-500">
                       Upload or darg & drop your ZIP File Only.
                     </p>
 
                     <button
                       type="button"
-                      class="focus:outline-none text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-10 mt-5 py-2.5 me-2 mb-2"
+                      className="focus:outline-none text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-10 mt-5 py-2.5 me-2 mb-2"
                     >
                       Choose File
                     </button>
@@ -352,7 +352,7 @@ const OnGoingProjectsDetails = () => {
                     <input
                       id="dropzone-file"
                       type="file"
-                      class="hidden w-full h-80"
+                      className="hidden w-full h-80"
                     />
                   </label>
                 </div>

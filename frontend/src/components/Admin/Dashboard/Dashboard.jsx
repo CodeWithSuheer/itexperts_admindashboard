@@ -88,25 +88,50 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className=" py-10 px-4 md:px-8 rounded-md bg-white">
+      <div className=" py-10 px-2 md:px-5 rounded-md bg-white">
         <div className="items-start justify-between md:flex">
           <div className="max-w-lg">
-            <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
-              Contact Queries
+            <h3 className="text-gray-800 tracking-wide text-2xl font-bold sm:text-3xl">
+              Contact Queries{" "}
+              <span className="text-lg font-normal">
+                ({DashboardData.length})
+              </span>
             </h3>
-            <p className="text-gray-600 mt-2">
+            {/* <p className="text-gray-600 mt-2">
               {DashboardData.length} Total Queries
-            </p>
+            </p> */}
           </div>
           <div className="mt-3 md:mt-0 flex gap-8">
             {/* ------------- SEARCH BAR ------------- */}
-             <input
-                type="text"
-                placeholder="Search..."
-                className=" ml-4 border text-black border-gray-500 w-72 rounded-lg px-4 py-2 focus:outline-none"
-                value={searchQuery}
-                onChange={handleSearch}
-              />
+
+            <div className="search_bar">
+              <div class="relative mt-4 md:mt-0">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                  <svg
+                    class="w-5 h-5 text-red-600"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </svg>
+                </span>
+
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-[#D9D9D9] rounded-lg focus:border-red-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-red-300"
+                  placeholder="Search name & email"
+                />
+              </div>
+            </div>
+
             <button className="inline-block rounded bg-red-600 px-8 py-3 text-sm font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-red-500">
               Export CSV
             </button>
@@ -115,16 +140,16 @@ const Dashboard = () => {
         <div className="mt-12 relative h-max overflow-x-auto">
           {/* ------------- CONTACT QUERIES TABLE ------------- */}
           <table className="contact_table w-full table-auto text-sm text-left overflow-x-auto">
-            <thead className="text-gray-600 font-medium border-b">
+            <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
-                <th className="py-3 pr-3 text-lg">Name</th>
-                <th className="py-3 pr-3 text-lg">Date</th>
-                <th className="py-3 pr-6 text-lg">Ref Number</th>
-                <th className="py-3 pr-6 text-lg">Phone</th>
-                <th className="py-3 pr-6 text-lg">Email</th>
-                <th className="py-3 pr-6 text-lg">Company</th>
-                <th className="py-3 pr-6 text-lg">Message</th>
-                <th className="py-3 pl-6 text-lg">Actions</th>
+                <th className="py-3 pr-3 text-lg font-medium pl-3">Name</th>
+                <th className="py-3 pr-3 text-lg font-medium">Date</th>
+                <th className="py-3 pr-6 text-lg font-medium">Ref Number</th>
+                <th className="py-3 pr-6 text-lg font-medium">Phone</th>
+                <th className="py-3 pr-6 text-lg font-medium">Email</th>
+                <th className="py-3 pr-6 text-lg font-medium">Company</th>
+                <th className="py-3 pr-6 text-lg font-medium">Message</th>
+                <th className="py-3 pl-6 text-lg font-medium">Actions</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
@@ -133,7 +158,7 @@ const Dashboard = () => {
                   return (
                     <>
                       <tr key={idx} className="cursor-pointer">
-                        <td className="pr-3 py-3 text-lg">{data.name}</td>
+                        <td className="pr-3 py-3 text-lg pl-3">{data.name}</td>
                         <td className="pr-3 py-3 text-lg">
                           {new Date(data.createdAt).toLocaleDateString()}
                         </td>
@@ -142,20 +167,36 @@ const Dashboard = () => {
                         <td className="pr-6 py-3 text-lg">{data.email}</td>
                         <td className="pr-6 py-3 text-lg">{data.company}</td>
                         <td
-                          className="pr-1 py-3 text-lg font-semibold underline underline-offset-4 text-blue-700"
+                          className="pr-1 py-3 text-lg font-semibold underline underline-offset-4 text-[#F11900]"
                           onClick={() => onClickTwo(data.id)}
                         >
-                          View Message
+                          View Now
                         </td>
 
                         <td className="flex items-center justify-center py-3">
                           {/* ---------- HANDLE CREATE INVOICE BUTTON ----------  */}
-
                           <div
                             onClick={() => onClickErrorModal(data.id)}
-                            className="trash_button rounded-full bg-red-600 text-white p-2 ms-2.5 transition hover:scale-110"
+                            className="trash_button rounded-full bg-[#F7F7F7] text-black p-2 ms-2.5 transition hover:scale-110"
                           >
-                            <Trash size={24} />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="lucide lucide-trash-2"
+                            >
+                              <path d="M3 6h18" />
+                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                              <line x1="10" x2="10" y1="11" y2="17" />
+                              <line x1="14" x2="14" y1="11" y2="17" />
+                            </svg>
                           </div>
                         </td>
                       </tr>

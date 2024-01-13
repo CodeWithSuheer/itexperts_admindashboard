@@ -25,7 +25,7 @@ const AllInvoices = () => {
 
   // HERE WE GET DATA USING USESELECTOR FROM STATE
   const InvoicesData = useSelector((state) => state.invoice.allInvoices);
-  console.log("InvoicesData", InvoicesData);
+  // console.log("InvoicesData", InvoicesData);
 
   // CALL TO GET ALL INVOICES
   useEffect(() => {
@@ -391,14 +391,14 @@ const AllInvoices = () => {
           </div>
           <div className="flex justify-center gap-5 mt-5">
             <button
-              class="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+              className="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
               onClick={onClickTwo}
               type="button"
             >
               Generate Invoice
             </button>
             <button
-              class="px-4 py-2.5 leading-5 text-black transition-colors duration-300 transform border-solid border-2 border-black bg-white rounded-md hover:bg-[#D22B2B] focus:outline-none "
+              className="px-4 py-2.5 leading-5 text-black transition-colors duration-300 transform border-solid border-2 border-black bg-white rounded-md hover:bg-[#D22B2B] focus:outline-none "
               onClick={onClickTwo}
               type="button"
             >

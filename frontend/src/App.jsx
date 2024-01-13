@@ -37,7 +37,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
 
           {/* --------- DASHBOARD --------- */}
-          <Route path="/adminpanel" element={<AdminPanel />}>
+          <Route path="/adminpanel" element={<AdminProtected><AdminPanel /></AdminProtected>}>
             <Route index element={<Dashboard />} />
             <Route path="pending-requests" element={<PendingRequests />} />
             <Route path="approved-requests" element={<ApprovedRequests />} />

@@ -51,7 +51,7 @@ const AllUsers = () => {
   ];
 
   const userData = useSelector((state) => state.users.userData);
-  console.log("userData", userData);
+  // console.log("userData", userData);
 
   useEffect(() => {
     dispatch(getAllUsersDataAsync());

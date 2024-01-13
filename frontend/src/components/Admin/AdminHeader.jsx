@@ -16,6 +16,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAsync, reset } from "../../features/authSlice";
+import logo from "../../assets/logo2.png";
 import "./AdminPanel.css";
 
 const AdminHeader = () => {
@@ -38,15 +39,15 @@ const AdminHeader = () => {
 
 
   return (
-    <Navbar fluid={true} className="bg-gray-800 navbar">
-      <Navbar.Container className="flex items-center justify-between py-4 px-16">
+    <Navbar fluid={true} className="bg-white navbar">
+      <Navbar.Container className="flex items-center justify-between py-1 px-16">
         <Link to="/adminpanel">
           <Navbar.Brand>
             <img
-              src="https://cdn.shopify.com/s/files/1/0704/6378/2946/files/ITEXPERTS_LOGO.png?v=1704170784"
+              src={logo}
               alt="keep"
-              width="120"
-              height="40"
+              width="150"
+              height="60"
             />
           </Navbar.Brand>
         </Link>
@@ -58,7 +59,7 @@ const AdminHeader = () => {
               className="text-gray-100"
               onClick={() => setMenuOpen(!isMenuOpen)} // Toggle menu open/close
             />
-          <div className=" capitalize text-xl text-white">
+          <div className=" capitalize text-xl text-black">
           {user?.login ? user.name : ''}
           </div>
           </Navbar.Container>
@@ -68,14 +69,14 @@ const AdminHeader = () => {
             tag="ul"
             className="lg:flex hidden items-center justify-between gap-4"
           >
-            <button class="Btn" onClick={handleLogout}>
-              <div class="sign">
+            <button className="Btn" onClick={handleLogout}>
+              <div className="sign">
                 <svg viewBox="0 0 512 512">
                   <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
                 </svg>
               </div>
 
-              <div class="text">Logout</div>
+              <div className="text">Logout</div>
             </button>
           </Navbar.Container>
 
