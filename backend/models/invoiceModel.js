@@ -85,8 +85,8 @@ const mainDocumentSchema = new mongoose.Schema({
         type: String,
         required:[true,"Please provide a customerId"]
     },
-    halfInvoices: [InvoiceSchema],
-    invoice:InvoiceSchema
+    //halfInvoices: [InvoiceSchema],
+    invoices:[InvoiceSchema]
     
 });
 
