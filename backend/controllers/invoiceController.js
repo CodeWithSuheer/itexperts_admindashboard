@@ -19,7 +19,7 @@ export const createInvoice = async (req, res, next) => {
       const invoice1 = new Invoices({
         to: invoiceData.to,
         service: invoiceData.service,
-        paymentStatus: invoiceData.paymentStatus,
+        status: invoiceData.status,
         amount: invoiceData.amount / 2,
         discount: invoiceData.discount,
         customerId: invoiceData.customerId,
@@ -31,7 +31,7 @@ export const createInvoice = async (req, res, next) => {
       const invoice2 = new Invoices({
         to: invoiceData.to,
         service: invoiceData.service,
-        paymentStatus: invoiceData.paymentStatus,
+        status: invoiceData.status,
         amount: invoiceData.amount / 2,
         discount: invoiceData.discount,
         customerId: invoiceData.customerId,
@@ -82,6 +82,7 @@ export const updateInvoice = async (req, res, next) => {
     to,
     service,
     paymentStatus,
+    status,
     amount,
     discount,
     customerId,
@@ -99,6 +100,9 @@ export const updateInvoice = async (req, res, next) => {
   }
   if (paymentStatus) {
     updateQuery = { ...updateQuery, paymentStatus };
+  }
+  if (status) {
+    updateQuery = { ...updateQuery, status };
   }
   if (amount) {
     updateQuery = { ...updateQuery, amount };
@@ -128,16 +132,43 @@ export const updateInvoice = async (req, res, next) => {
   if (!mainDocument) {
     return res.status(404).json({ msg: "MainDocument not found" });
   }
-  const invoiceToUpdate = mainDocument.invoices.find(
-    (invoice) => invoice._id.toString() === invoiceId
-  );
-  if(!invoiceToUpdate){
-    return res.status(404).json({msg:"Invoice not found"})
-    };
-    Object.assign(invoiceToUpdate,updateQuery)
-    await mainDocument.save();
-  res.status(200).json({msg:"invoice Updated"})
- } catch (error) {
-  res.status(500).json({msg:error.message})
- }
+
+    if (invoiceId) {
+      const invoiceToUpdate = mainDocument.invoices.find(
+        (invoice) => invoice._id.toString() === invoiceId
+      );
+
+      if (!invoiceToUpdate) {
+        return res.status(404).json({ msg: "Invoice not found" });
+      }
+
+      Object.assign(invoiceToUpdate, updateQuery);
+      await mainDocument.save();
+
+      Object.assign(mainDocument, updateQuery);
+      await mainDocument.save();
+
+      return res.status(200).json({ msg: "Invoice Updated" });
+    } else {
+      // Update only MainDocument 
+      Object.assign(mainDocument, updateQuery);
+      await mainDocument.save();
+      return res.status(200).json({ msg: "Invoice Updated" });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const deleteInvoice = async (req,res,next) => {
+  try {
+    const {id} = req.body;
+    if(!id){
+      res.status(404).json({ msg: "Id not Found" });
+    }
+    await MainDocument.findByIdAndDelete(id);
+    res.status(200).json({msg:"Deleted"})
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
 };
