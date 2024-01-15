@@ -157,26 +157,13 @@ const AllInvoices = () => {
             </div>
           </div>
         </div>
+
         {/* ------------- TABS ------------- */}
-        <div className="mt-6">
-          <Tabs aria-label="tabs" style="underline" borderPosition="bottom">
-            <Tabs.Item
-              title="All Invoices"
-              className="custom-tab-title"
-            ></Tabs.Item>
-            <Tabs.Item
-              title="Paid Invoices"
-              className="custom-tab-title"
-            ></Tabs.Item>
-            <Tabs.Item
-              title="UnPaid Invoices"
-              className="custom-tab-title"
-            ></Tabs.Item>
-            <Tabs.Item
-              title="Partially Paid Invoices"
-              className="custom-tab-title"
-            ></Tabs.Item>
-          </Tabs>
+        <div className="my-10 flex justify-start items-center">
+          <button className="bg-[#F11900] text-white rounded-md mr-5" style={{padding:'8px 25px'}}>All</button>
+          <button className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5" style={{padding:'8px 25px'}}>Paid</button>
+          <button className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5" style={{padding:'8px 25px'}}>Partially Payment</button>
+          <button className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5" style={{padding:'8px 25px'}}>Pending</button>
         </div>
 
         <div className="-mt-2 relative h-max overflow-auto">

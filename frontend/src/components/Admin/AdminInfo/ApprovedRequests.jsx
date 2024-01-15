@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "keep-react";
 import { useDispatch, useSelector } from "react-redux";
-
 import {
   getAllUsersAsync,
   rejectUserAsync,
@@ -10,20 +9,22 @@ import {
 
 const ApprovedRequests = () => {
   const dispatch = useDispatch();
+
+
   useEffect(() => {
     dispatch(getAllUsersAsync());
   }, [dispatch]);
-  const approvedUsers = useSelector((state) => state.adminInfo.allUsers).filter(
-    (ele) => ele.isAuthenticated && ele.id !== "659d33bad568c4d134b6aed3"
-  );
+
+
+  const approvedUsers = useSelector((state) => state.adminInfo.allUsers).filter((ele) => ele.isAuthenticated && ele.id !== "659d33bad568c4d134b6aed3");
 
   // HANDLE ROLE UPDATE
-
   const handleUnauthorize = (id) => {
     dispatch(rejectUserAsync(id)).then(() => {
       dispatch(getAllUsersAsync());
     });
   };
+
 
   const handleUpdateRole = (id, superAdmin) => {
     console.log(id, superAdmin);
@@ -55,26 +56,25 @@ const ApprovedRequests = () => {
               List of authorized admins.
             </p>
           </div>
-          {/* <div className="mt-3 md:mt-0"></div> */}
         </div>
         <div className="mt-12 relative h-max">
           <table className="w-full table-auto text-sm text-left">
-            <thead className="text-gray-600 font-medium border-b">
+            <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
-                <th className="py-3 pr-6 text-lg">Id</th>
-                <th className="py-3 pr-6 text-lg">Name</th>
-                <th className="py-3 pr-6 text-lg">Email</th>
-                <th className="py-3 pr-6 text-lg">Role</th>
-                <th className="py-3 pl-2 text-lg">Actions</th>
+              <th className="py-4 px-6 text-lg font-medium">Id</th>
+                <th className="py-4 px-6 text-lg font-medium">Name</th>
+                <th className="py-4 px-6 text-lg font-medium">Email</th>
+                <th className="py-4 px-6 text-lg font-medium">Role</th>
+                <th className="py-4 px-6 text-lg font-medium">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-gray-600 divide-y">
+            <tbody className="text-gray-600 text-lg divide-y">
               {approvedUsers.map((data, index) => (
                 <tr key={index}>
-                  <td className="pr-6 py-4 text-lg">{index + 1}</td>
-                  <td className="pr-6 py-4 text-lg">{data.name}</td>
-                  <td className="pr-6 py-4 text-lg">{data.email}</td>
-                  <td className="pr-6 py-4 text-lg">
+                  <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{data.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{data.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     {displayRole(data.superAdmin)}
                   </td>
                   <td className="whitespace-nowrap flex py-2">
@@ -99,7 +99,7 @@ const ApprovedRequests = () => {
                     </Dropdown>
                     <button
                       onClick={() => handleUnauthorize(data.id)}
-                      className="inline-block rounded-lg bg-red-600 px-4 py-2.5 mx-1 text-md font-medium text-white focus:outline-none focus:ring active:bg-red-500"
+                      className="inline-block rounded-lg bg-red-600 px-4 py-2.5 mx-1 text-sm font-medium text-white focus:outline-none focus:ring active:bg-red-500"
                     >
                       Unauthorized
                     </button>

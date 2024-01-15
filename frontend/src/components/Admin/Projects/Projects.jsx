@@ -3,7 +3,7 @@ import { Modal, Button } from "keep-react";
 import { Trash } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
 
-const OnGoingProject = () => {
+const Projects = () => {
   const navigate = useNavigate();
   const [showErrorModalX, setShowErrorModalX] = useState(false);
   const [deleteMsgId, setDeleteMsgId] = useState(null);
@@ -11,19 +11,13 @@ const OnGoingProject = () => {
     {
       id: 1,
       name: "Dummy Client",
-      ref: "ITE-654",
+      email: "suheer@gmail.com",
+      order_id: "43543654",
       service: "Landing Page Services",
       invoice_status: "unpaid",
       project_status: "In Progress",
     },
-    {
-      id: 2,
-      name: "Dummy Client",
-      ref: "ITE-664",
-      service: "React JS Website",
-      invoice_status: "unpaid",
-      project_status: "In Progress",
-    },
+    
   ];
 
   // DELETE MESSAGE MODAL FUNCTION
@@ -49,65 +43,82 @@ const OnGoingProject = () => {
           </div>
         </div>
 
-         {/* ------------- TABS ------------- */}
-         <div className="my-10 flex justify-start items-center">
-          <button className="bg-[#F11900] text-white rounded-md mr-5" style={{padding:'8px 25px'}}>All</button>
-          <button className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5" style={{padding:'8px 25px'}}>Ongoing Projects</button>
-          <button className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5" style={{padding:'8px 25px'}}>Complete Projects</button>
+        {/* ------------- TABS ------------- */}
+        <div className="my-10 flex justify-start items-center">
+          <button
+            className="bg-[#F11900] text-white rounded-md mr-5"
+            style={{ padding: "8px 25px" }}
+          >
+            All
+          </button>
+          <button
+            className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5"
+            style={{ padding: "8px 25px" }}
+          >
+            Ongoing Projects
+          </button>
+          <button
+            className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5"
+            style={{ padding: "8px 25px" }}
+          >
+            Complete Projects
+          </button>
         </div>
 
-        
-        <div className="mt-12 relative h-max">
-          <table className="w-full table-auto text-sm text-left">
-            <thead className="text-gray-600 font-medium border-b">
+        <div className="mt-12 relative h-max overflow-auto">
+          <table className="w-full table-auto text-md text-left overflow-auto">
+            <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
-                <th className="py-3 pr-6 text-lg">Id</th>
-                <th className="py-3 pr-6 text-lg">Client Name</th>
-                <th className="py-3 pl-2 text-lg">Ref No</th>
-                <th className="py-3 pr-6 text-lg">Service</th>
-                <th className="py-3 pr-6 text-lg">Invoice Status</th>
-                <th className="py-3 pl-2 text-lg">Project Status</th>
-                <th className="py-3 pl-2 text-lg">Details</th>
+                <th className="py-4 px-6 text-lg font-medium">Order Id</th>
+                <th className="py-4 px-6 text-lg font-medium">Client</th>
+                <th className="py-4 px-6 text-lg font-medium">Service</th>
+                <th className="py-4 px-6 text-lg font-medium">Invoice Status</th>
+                <th className="py-4 px-6 text-lg font-medium">Project Status</th>
+                <th className="py-4 px-6 text-lg font-medium">Details</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
-              {tableItems.map((data, idx) => (
+              {tableItems.map((item, idx) => (
                 <tr key={idx}>
-                  <td className="pr-0 py-4 text-lg capitalize">{data.id}</td>
-                  <td className="pr-0 py-4 text-lg capitalize">{data.name}</td>
-                  <td className="pr-0 py-4 text-lg capitalize tracking-wide text-red-600">
-                    {data.ref}
+                  <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
+                    <div>
+                      <span className="block text-gray-700 text-md font-medium">
+                        {item.name}
+                      </span>
+                      <span className="block text-gray-700 text-sm">
+                        {item.email}
+                      </span>
+                    </div>
                   </td>
-                  <td className="pr-0 py-4 text-lg capitalize">
-                    {data.service}
-                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.order_id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.service}</td>
                   <td className="pr-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-3 py-2 rounded-full font-semibold text-sm capitalize ${
-                        data.invoice_status == "Active"
+                      className={`mx-4 px-3 py-2 rounded-full font-semibold text-sm capitalize ${
+                        item.invoice_status == "Active"
                           ? "text-green-600 bg-green-50"
                           : "text-blue-600 bg-blue-50"
                       }`}
                     >
-                      {data.invoice_status}
+                      {item.invoice_status}
                     </span>
                   </td>
                   <td className="pr-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-3 py-2 rounded-full font-semibold text-sm capitalize ${
-                        data.invoice_status == "Active"
+                      className={`mx-4 px-3 py-2 rounded-full font-semibold text-sm capitalize ${
+                        item.invoice_status == "Active"
                           ? "text-green-600 bg-green-50"
-                          : "text-blue-600 bg-blue-50"
+                          : "text-green-600 bg-green-50"
                       }`}
                     >
-                      {data.project_status}
+                      {item.project_status}
                     </span>
                   </td>
                   <td className="pr-0 py-4 text-lg ">
                     <Button
-                      size="md"
+                      size="sm"
                       type="outlineGray"
-                      className="bg-red-600 text-white hover:bg-red-700 hover:text-white"
+                      className="bg-[#f11900] text-white border-[#f11900] hover:bg-[#f11900] hover:text-white"
                       onClick={() => navigate("/adminpanel/projectdetails")}
                     >
                       View Details
@@ -117,6 +128,7 @@ const OnGoingProject = () => {
               ))}
             </tbody>
           </table>
+
         </div>
       </div>
       {/* ------------- DELETE MESSAGE MODAL ------------- */}
@@ -149,4 +161,4 @@ const OnGoingProject = () => {
   );
 };
 
-export default OnGoingProject;
+export default Projects;

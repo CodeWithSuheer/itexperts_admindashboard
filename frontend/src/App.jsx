@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomePage from "./components/Home/HomePage";
 import AdminPanel from "./components/Admin/AdminPanel";
 import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
@@ -18,16 +17,20 @@ import { AdminProtected, LoginProtected } from "./components/ProtectedRoutes/Pro
 import OnGoingProject from "./components/Admin/Projects/OnGoingProject";
 import CompletedProjects from "./components/Admin/Projects/CompletedProjects";
 import OnGoingProjectsDetails from "./components/Admin/Projects/OnGoingProjectsDetails";
-import "./App.css";
 import AllInvoices from "./components/Admin/Invoice/AllInvoices";
 import AllUsers from "./components/Admin/Users/AllUsers";
+import "./App.css";
+import Projects from "./components/Admin/Projects/Projects";
 
 
 function App() {
   const dispatch = useDispatch();
+
+  // SLICE FUNCTION CALL HERE
   useEffect(()=>{
     dispatch(authUserAsync())
   },[dispatch])
+  
   return (
     <>
       <BrowserRouter>
@@ -43,8 +46,9 @@ function App() {
             <Route path="approved-requests" element={<ApprovedRequests />} />
             <Route path="invoice" element={<Invoice />} />
             <Route path="all-invoice" element={<AllInvoices />} />
-            <Route path="ongoingprojects" element={<OnGoingProject />} />
-            <Route path="completedprojects" element={<CompletedProjects />} />
+            <Route path="projects" element={<Projects />} />
+            {/* <Route path="ongoingprojects" element={<OnGoingProject />} /> */}
+            {/* <Route path="completedprojects" element={<CompletedProjects />} /> */}
             <Route path="projectdetails" element={<OnGoingProjectsDetails />} />
             <Route path="allusers" element={<AllUsers />} />
           </Route>

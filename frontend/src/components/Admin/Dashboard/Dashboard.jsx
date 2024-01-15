@@ -132,7 +132,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <button className="inline-block rounded bg-red-600 px-8 py-3 text-sm font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-red-500">
+            <button className="inline-block rounded bg-[#f11900] px-8 py-3 text-sm font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-red-500">
               Export CSV
             </button>
           </div>

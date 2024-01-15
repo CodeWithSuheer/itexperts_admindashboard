@@ -8,7 +8,6 @@ const authorizeUserUrl = "http://localhost:8080/api/user/approveUser";
 const rejectUserUrl = "http://localhost:8080/api/user/rejectUser";
 const updateRoleUrl = "http://localhost:8080/api/user/updateRole";
 
-//PENDING REQUESTS ASYNC THUNK
 export const rejectUserAsync = createAsyncThunk("admininfo/authenticateUser", async (id) => {
   try {
     const response = await axios.post(rejectUserUrl,{id});;
@@ -29,7 +28,6 @@ export const authorizeUserAsync = createAsyncThunk("admininfo/authenticateUser",
   }
 });
 
-//GET ALL USERS
 export const getAllUsersAsync = createAsyncThunk("user/getAllUser", async () => {
   try {
       const response = await axios.post(getUserUrl);

@@ -123,13 +123,27 @@ const AdminBody = () => {
                 </Sidebar.Item>
               </Link>
 
+
+               {/* -------- ALL USERS --------  */}
+               <Link to="/adminpanel/projects">
+                <Sidebar.Item
+                  icon={ <Browsers size={24} className={` ${ location.pathname === "/adminpanel/projects" ? "text-white" : "" }`} /> }
+                  className={`my-3 ${
+                    location.pathname === "/adminpanel/projects"
+                      ? "active-link"
+                      : ""
+                  }`}
+                >
+                  <span className="text-lg">Projects</span>
+                </Sidebar.Item>
+              </Link>
+
               {/* -------- PROJECTS --------  */}
-              <Sidebar.Collapse
+              {/* <Sidebar.Collapse
                 icon={<Browsers size={24} />}
                 label="Projects"
                 style={{ fontSize: "1.125rem" }}
               >
-                {/* -------- PENDING REQUESTS --------  */}
                 <Link to="/adminpanel/ongoingprojects">
                   <Sidebar.Item
                     icon={
@@ -151,7 +165,6 @@ const AdminBody = () => {
                     <span className="text-lg">Ongoing Projects</span>
                   </Sidebar.Item>
                 </Link>
-                {/* -------- APPROVED USERS --------  */}
                 <Link to="/adminpanel/completedprojects">
                   <Sidebar.Item
                     icon={
@@ -173,7 +186,7 @@ const AdminBody = () => {
                     <span className="text-lg">Completed Projects</span>
                   </Sidebar.Item>
                 </Link>
-              </Sidebar.Collapse>
+              </Sidebar.Collapse> */}
 
               {/* -------- ADMIN INFO'S --------  */}
               {admin?.superAdmin ? (
