@@ -95,7 +95,7 @@ const AdminBody = () => {
                       : ""
                   }`}
                 >
-                  <span className="text-lg">All Users</span>
+                  <span className="text-lg">Users</span>
                 </Sidebar.Item>
               </Link>
 
@@ -119,7 +119,7 @@ const AdminBody = () => {
                       : ""
                   }`}
                 >
-                  <span className="text-lg">All Invoices</span>
+                  <span className="text-lg">Invoices</span>
                 </Sidebar.Item>
               </Link>
 

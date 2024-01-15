@@ -12,6 +12,31 @@ const Invoice = () => {
     { number: 1, name: "", amount: "" },
   ]);
 
+
+  const [formData, setFormData] = useState({
+    name: data.name || '',
+    company: data.company || '',
+    email: data.email || '',
+    phone: data.phone || '',
+    discount: '',
+    orderId: '',
+    firstDueDate: '',
+    secondDueDate: '',
+    services: [
+      { number: 1, name: '', amount: '' }
+    ],
+  });
+
+  const handleFormChange = (index, field, value) => {
+    const updatedServices = [...formData.services];
+    updatedServices[index][field] = value;
+
+    setFormData(prevData => ({
+      ...prevData,
+      services: updatedServices,
+    }));
+  };
+
   // HANDLE TOGGLE
   const handleToggle = () => {
     setToggle((prevToggle) => !prevToggle);
@@ -74,6 +99,13 @@ const Invoice = () => {
     },
   ];
 
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    console.log('Form data to be sent:', formData);
+  };
+
   return (
     <>
       <section className="max-w-7xl px-4 py-12 mx-auto bg-gray-50 rounded-md shadow-md">
@@ -101,7 +133,7 @@ const Invoice = () => {
         </div>
 
         {/* {invoiceData.map((data) => ( */}
-        <form className=" p-10">
+        <form className="p-10" onSubmit={handleFormSubmit}>
           {/* -------------- CLIENT DETAILS --------------  */}
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
             {/* ---------- CLIENT NAME ---------- */}
@@ -376,14 +408,14 @@ const Invoice = () => {
             <button
               className="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
               onClick={onClickTwo}
-              type="button"
+              type="submit"
             >
               Generate Invoice
             </button>
             <button
               className="px-4 py-2.5 leading-5 text-black transition-colors duration-300 transform border-solid border-2 border-black bg-white rounded-md hover:bg-[#D22B2B] focus:outline-none "
               onClick={onClickTwo}
-              type="button"
+              type="submit"
             >
               Download Invoice
             </button>

@@ -26,6 +26,7 @@ export const createInvoice = async (req, res, next) => {
         orderId: invoiceData.orderId,
         invoiceType: "half",
         dueDate: invoiceData.dueDate,
+        company: invoiceData.company,
       });
 
       const invoice2 = new Invoices({
@@ -38,6 +39,7 @@ export const createInvoice = async (req, res, next) => {
         orderId: invoiceData.orderId,
         invoiceType: "half",
         secondInvoiceDueDate: invoiceData.secondInvoiceDueDate,
+        company: invoiceData.company,
       });
 
       const mainDocument = new MainDocument({

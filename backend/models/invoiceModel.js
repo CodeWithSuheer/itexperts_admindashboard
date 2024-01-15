@@ -23,8 +23,11 @@ const clientDetails = new mongoose.Schema({
     email:{
         type:String,
         required:[true,"Please provide a email"]
+    },
+    company:{
+        type:String,
+        required:[true,"Please provide a company name"]
     }
-
 });
 
 const InvoiceSchema = new mongoose.Schema({

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsersAsync } from "../../../features/adminInfoSlice";
-import { getAllUsersDataAsync } from "../../../features/UsersSlice";
+import { getAllClientsDataAsync } from "../../../features/UsersSlice";
 
 const AllUsers = () => {
   const dispatch = useDispatch();
@@ -50,11 +49,11 @@ const AllUsers = () => {
     },
   ];
 
-  const userData = useSelector((state) => state.users.userData);
-  // console.log("userData", userData);
+  const clientsData = useSelector((state) => state.users.clientsData);
+  // console.log("clientsData", clientsData);
 
   useEffect(() => {
-    dispatch(getAllUsersDataAsync());
+    dispatch(getAllClientsDataAsync())
   }, []);
 
   return (
@@ -64,7 +63,7 @@ const AllUsers = () => {
           <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
             USERS{" "}
             <span className="text-lg font-normal">
-                ({userData.length})
+                ({clientsData.length})
               </span>
           </h3>
         </div>
@@ -91,7 +90,7 @@ const AllUsers = () => {
             </tr>
           </thead>
           <tbody className="text-gray-600 divide-y">
-            {userData.map((item, idx) => (
+            {clientsData.map((item, idx) => (
               <tr key={idx}>
                 <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
                   <img src="https://cdn.shopify.com/s/files/1/0704/6378/2946/files/profile-pic.png?v=1704625675" className="w-10 h-10 rounded-full" />

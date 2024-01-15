@@ -3,13 +3,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 //API URL
-const getAllUsersUrl = "http://localhost:8080/api/user/getAllUsers";
+const getAllClientsUrl = "http://localhost:8080/api/clients/getAllClients";
 
 
 //GET ALL USERS
-export const getAllUsersDataAsync = createAsyncThunk("user/getAllUsersData", async () => {
+export const getAllClientsDataAsync = createAsyncThunk("clients/getAllClientsData", async () => {
     try {
-        const response = await axios.post(getAllUsersUrl);
+        const response = await axios.post(getAllClientsUrl);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -19,7 +19,7 @@ export const getAllUsersDataAsync = createAsyncThunk("user/getAllUsersData", asy
 
 // INITIAL STATE
 const initialState = {
-  userData: [],
+  clientsData: [],
   authorizedUser: null,
   loading: false,
 };
@@ -31,12 +31,12 @@ const UsersSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // GET ALL INVOICES
-      .addCase(getAllUsersDataAsync.pending, (state, action) => {
+      .addCase(getAllClientsDataAsync.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(getAllUsersDataAsync.fulfilled, (state, action) => {
+      .addCase(getAllClientsDataAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.userData = action.payload.users;
+        state.clientsData = action.payload;
       });
   },
 });
