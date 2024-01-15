@@ -37,7 +37,7 @@ const InvoiceSchema = new mongoose.Schema({
         type: [serviceSchema],
         required:[true,"Please provide at least one service"]
     },
-    paymentStatus: {
+    status: {
         type: String,
         enum: ['paid','unpaid'],
         default: 'unpaid'
@@ -74,7 +74,7 @@ const InvoiceSchema = new mongoose.Schema({
 const mainDocumentSchema = new mongoose.Schema({
     paymentStatus: {
         type: String,
-        enum: ['paid', 'partial', 'unpaid'],
+        enum: ['paid', 'partially paid', 'unpaid'],
         default: 'unpaid'
     },
     orderId: {
@@ -85,8 +85,8 @@ const mainDocumentSchema = new mongoose.Schema({
         type: String,
         required:[true,"Please provide a customerId"]
     },
-    halfInvoices: [InvoiceSchema],
-    invoice:InvoiceSchema
+    //halfInvoices: [InvoiceSchema],
+    invoices:[InvoiceSchema]
     
 });
 
