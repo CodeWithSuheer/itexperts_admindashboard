@@ -11,6 +11,7 @@ import userRouter from "./routes/userRoutes.js";
 import  MongoDBStore  from "connect-mongodb-session";
 import contactFormRouter from "./routes/contactFormRoutes.js";
 import invoiceRouter from "./routes/invoiceRoutes.js";
+import clientRouter from "./routes/clientRoutes.js";
 
 
 
@@ -58,6 +59,7 @@ app.use(session({
 app.use("/api/user",userRouter);
 app.use("/api/contactForms",contactFormRouter)
 app.use("/api/invoices",invoiceRouter);
+app.use("/api/clients",clientRouter);
 
 
 
@@ -69,4 +71,6 @@ mongoose
 })
 .catch((error)=>{
     console.log(error)
-})
+});
+
+

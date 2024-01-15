@@ -22,10 +22,6 @@ const schema = new mongoose.Schema({
     type: String,
     required:[true,"Please provide a message"]
   },
-  customerId:{
-    type: mongoose.Types.ObjectId,
-    required:[true,"Please provide a customerId"]
-},
   refNumber: {
     type: String,
   },
