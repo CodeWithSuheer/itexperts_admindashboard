@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Modal, Toggle } from "keep-react";
 import { X, FileText } from "phosphor-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { createInvoicesAsync } from "../../../features/invoiceSlice";
 
 const Invoice = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { id } = useParams();
   const [showModalX, setShowModalX] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -12,37 +15,53 @@ const Invoice = () => {
     { number: 1, name: "", amount: "" },
   ]);
 
+  const data = useSelector((state) => state.contactForms.allForms);
 
   const [formData, setFormData] = useState({
-    name: data.name || '',
-    company: data.company || '',
-    email: data.email || '',
-    phone: data.phone || '',
-    discount: '',
-    orderId: '',
-    firstDueDate: '',
-    secondDueDate: '',
-    services: [
-      { number: 1, name: '', amount: '' }
+    to: {
+      name: "",
+      phone: "",
+      email: "",
+      company: "",
+    },
+    service: [
+      {
+        serviceName: "",
+        price: 0,
+      },
     ],
+    paymentStatus: "unpaid",
+    amount: "",
+    discount: "",
+    customerId: "",
+    orderId: "",
+    invoiceType: "full",
+    dueDate: "",
+    secondInvoiceDueDate: "",
   });
 
+  // HANDLE FORM CHANGE
   const handleFormChange = (index, field, value) => {
     const updatedServices = [...formData.services];
     updatedServices[index][field] = value;
 
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       services: updatedServices,
     }));
   };
 
   // HANDLE TOGGLE
-  const handleToggle = () => {
+  const handleToggle = (e) => {
     setToggle((prevToggle) => !prevToggle);
-  };
+    const isChecked = e.target.checked;
+    const newInvoiceType = isChecked ? "half" : "full";
 
-  const data = useSelector((state) => state.contactForms.allForms);
+    setFormData((prevData) => ({
+      ...prevData,
+      invoiceType: newInvoiceType,
+    }));
+  };
 
   const invoiceData = data.filter((data) => data.id == id);
 
@@ -50,25 +69,67 @@ const Invoice = () => {
     setShowModalX(!showModalX);
   };
 
-  const handleInputChange = (index, key, value) => {
-    const updatedServices = [...services];
-    updatedServices[index][key] = value;
-    setServices(updatedServices);
+  // HANDLE INPUT CHANGE
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    if (!name) {
+      console.error("Input field name is undefined");
+      return;
+    }
+
+    const [category, index, fieldName] = name.split(".");
+
+    if (category === "to") {
+      setFormData((prevData) => ({
+        ...prevData,
+        to: {
+          ...prevData.to,
+          [fieldName]: value,
+        },
+      }));
+    } else if (category === "service") {
+      setFormData((prevData) => ({
+        ...prevData,
+        service: prevData.service.map((s, i) =>
+          i === parseInt(index) ? { ...s, [fieldName]: value } : s
+        ),
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
+  // HANDLE ADD SERVICE
   const handleAddService = () => {
     const maxServiceNumber = Math.max(
-      ...services.map((service) => service.number),
+      ...formData.service.map((service) => service.number),
       0
     );
     const newServiceNumber = maxServiceNumber + 1;
 
-    setServices([
-      ...services,
-      { number: newServiceNumber, name: "", amount: "" },
-    ]);
+    setFormData((prevData) => ({
+      ...prevData,
+      service: [
+        ...prevData.service,
+        { number: newServiceNumber, serviceName: "", price: "" },
+      ],
+    }));
   };
 
+  // HANDLE SERVICE CHANGE
+  const handleServiceChange = (index, property, value) => {
+    setFormData((prevData) => {
+      const updatedServices = [...prevData.service];
+      updatedServices[index] = { ...updatedServices[index], [property]: value };
+      return { ...prevData, service: updatedServices };
+    });
+  };
+
+  // HANDLE DELETE SERVICE
   const handleDeleteService = (index) => {
     const updatedServices = [...services];
     updatedServices.splice(index, 1);
@@ -99,16 +160,57 @@ const Invoice = () => {
     },
   ];
 
-
+  // HANDLE FORM SUBMIT FUNCTION
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    console.log('Form data to be sent:', formData);
+    // Calculate the total amount based on service prices
+    const totalAmount = formData.service.reduce((total, service) => total + service.price, 0 );
+
+    // Deduct the discount value
+    const discountedAmount = totalAmount - Number(formData.discount);
+    console.log("discountedAmount", discountedAmount);
+
+    
+    const invoiceType = toggle ? "half" : "full";
+    const includeSecondDueDate = toggle;
+
+    // Create the final data structure
+    const finalData = {
+      to: {
+        name: document.querySelector('[name="name"]').value,
+        phone: document.querySelector('[name="phone"]').value,
+        email: document.querySelector('[name="email"]').value,
+        company: document.querySelector('[name="company"]').value,
+      },
+      service: formData.service.map((s, index) => ({
+        serviceName: document.querySelector(
+          `[name="service.${index}.serviceName"]`
+        ).value,
+        price: Number(
+          document.querySelector(`[name="service.${index}.price"]`).value
+        ),
+      })),
+      paymentStatus: "unpaid",
+      amount: discountedAmount.toString(),
+      discount: document.querySelector('[name="discount"]').value,
+      customerId: document.querySelector('[name="customerId"]').value,
+      orderId: document.querySelector('[name="orderId"]').value,
+      invoiceType: invoiceType,
+      dueDate: document.querySelector('[name="dueDate"]').value,
+      secondInvoiceDueDate: includeSecondDueDate
+        ? document.querySelector('[name="secondInvoiceDueDate"]').value || ""
+        : "",
+    };
+
+    console.log(finalData);
+
+    dispatch(createInvoicesAsync(finalData));
   };
 
   return (
     <>
-      <section className="max-w-7xl px-4 py-12 mx-auto bg-gray-50 rounded-md shadow-md">
+      <section className="max-w-7xl px-4 mb-5 py-12 mx-auto bg-gray-50 rounded-md shadow-md">
         <div className="flex justify-between items-center">
           <h2 className="text-gray-800 text-2xl pl-10 font-bold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
             CREATE INVOICE
@@ -116,7 +218,10 @@ const Invoice = () => {
 
           {/* -------------- TOGGLE BUTTON --------------  */}
           <div className="flex items-center gap-4 mr-11">
-            <label className="text-gray-700 font-medium text-xl" htmlFor="emailAddress">
+            <label
+              className="text-gray-700 font-medium text-xl"
+              htmlFor="emailAddress"
+            >
               Partial Payment?
             </label>
             <label
@@ -134,23 +239,23 @@ const Invoice = () => {
 
         {/* {invoiceData.map((data) => ( */}
         <form className="p-10" onSubmit={handleFormSubmit}>
-          {/* -------------- CLIENT DETAILS --------------  */}
+          {/* CLIENT DETAILS */}
           <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
-            {/* ---------- CLIENT NAME ---------- */}
+            {/* CLIENT NAME */}
             <div>
               <label className="text-gray-700 font-medium text-xl">
                 Client Name
               </label>
               <input
                 type="text"
-                placeholder={data.name}
-                value={data.name}
+                name="name"
+                placeholder="Enter client name"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                 required
-                readOnly
               />
             </div>
-            {/* ---------- CLIENT COMPANY NAME ---------- */}
+
+            {/* CLIENT COMPANY NAME */}
             <div>
               <label
                 className="text-gray-700 font-medium text-xl"
@@ -160,44 +265,62 @@ const Invoice = () => {
               </label>
               <input
                 type="text"
-                placeholder={data.company}
-                value={data.company}
+                name="company"
+                placeholder="Client company name"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                 required
-                readOnly
               />
             </div>
 
-            {/* ---------- CLIENT EMAIL ---------- */}
+            {/* CLIENT EMAIL */}
             <div>
-              <label className="text-gray-700 font-medium text-xl" htmlFor="password">
+              <label
+                className="text-gray-700 font-medium text-xl"
+                htmlFor="password"
+              >
                 Client Email
               </label>
               <input
                 type="email"
-                placeholder={data.email}
-                value={data.email}
+                name="email"
+                placeholder="Enter client email"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                 required
-                readOnly
               />
             </div>
 
-            {/* ---------- CLIENT PHONE ---------- */}
+            {/* CLIENT PHONE */}
             <div>
               <label className="text-gray-700 font-medium text-xl">
                 Client Phone Number
               </label>
               <input
                 type="number"
-                placeholder={data.phone}
+                name="phone"
+                placeholder="Client phone number"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                 required
-                readOnly
               />
             </div>
 
-            {/* ---------- DISCOUNT ---------- */}
+            {/* AMOUNT */}
+            {/* <div>
+              <label
+                className="text-gray-700 font-medium text-xl"
+                htmlFor="amount"
+              >
+                Amount
+              </label>
+              <input
+                type="number"
+                name="amount"
+                placeholder="Amount"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                required
+              />
+            </div> */}
+
+            {/* DISCOUNT */}
             <div>
               <label
                 className="text-gray-700 font-medium text-xl"
@@ -206,38 +329,57 @@ const Invoice = () => {
                 Discount
               </label>
               <input
-                type="text"
-                // value={data.company}
+                type="number"
+                name="discount"
+                placeholder="Discount"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                 required
-                readOnly
               />
             </div>
 
-            {/* ---------- ORDER ID ---------- */}
+            {/* ORDER ID */}
             <div>
-              <label className="text-gray-700 font-medium text-xl">Order No.</label>
+              <label className="text-gray-700 font-medium text-xl">
+                Order No.
+              </label>
               <input
                 type="text"
-                placeholder="Reference Number"
+                name="orderId"
+                placeholder="Order Id"
                 className="block w-full px-4 py-2 text-lg mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
-                readOnly
               />
             </div>
 
-            {/* ---------- DUE DATE ---------- */}
+            {/* CUSTOMER ID */}
             <div>
-              <label className="text-gray-700  font-medium text-xl" htmlFor="password">
+              <label className="text-gray-700 font-medium text-xl">
+                Customer Id
+              </label>
+              <input
+                type="text"
+                name="customerId"
+                placeholder="customer Id"
+                className="block w-full px-4 py-2 text-lg mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
+              />
+            </div>
+
+            {/* DUE DATE */}
+            <div>
+              <label
+                className="text-gray-700  font-medium text-xl"
+                htmlFor="password"
+              >
                 {toggle ? "First Invoice Due Date" : "Due Date"}
               </label>
               <input
                 type="date"
+                name="dueDate"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
                 required
               />
             </div>
 
-            {/* ---------- NEXT DUE DATE ---------- */}
+            {/* NEXT DUE DATE */}
             {toggle && (
               <div>
                 <label
@@ -248,6 +390,7 @@ const Invoice = () => {
                 </label>
                 <input
                   type="date"
+                  name="secondInvoiceDueDate"
                   className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
                   required
                 />
@@ -255,44 +398,47 @@ const Invoice = () => {
             )}
           </div>
 
-          {/* -------------- SERVICES DETAILS --------------  */}
+          {/* SERVICES DETAILS */}
           <div className="mt-8">
             <h1 className="text-gray-700 ml-1 font-semibold text-2xl">
               Services
             </h1>
 
             <div className="border-solid border-2 border-gray-300 mt-3 p-5 rounded-lg">
-              {services.map((service, index) => (
+              {formData.service.map((service, index) => (
                 <div
                   key={index}
                   className="flex justify-center gap-5 w-100 mb-2"
                 >
-                  <input
+                  {/* <input
                     type="number"
                     disabled
-                    defaultValue={service.number}
-                    className="block w-11 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
-                  />
+                    value={service.number}
+                    className="block w-11 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
+                  /> */}
                   <input
                     type="text"
+                    name={`service.${index}.serviceName`}
                     placeholder="Service Name"
-                    value={service.name}
+                    value={service.serviceName}
                     onChange={(e) =>
-                      handleInputChange(index, "name", e.target.value)
+                      handleServiceChange(index, "serviceName", e.target.value)
                     }
-                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
                   />
                   <input
                     type="number"
-                    placeholder="Service Amount"
-                    value={service.amount}
+                    name={`service.${index}.price`}
+                    placeholder="Service amount"
+                    value={service.price}
                     onChange={(e) =>
-                      handleInputChange(index, "amount", e.target.value)
+                      handleServiceChange(index, "price", e.target.value)
                     }
-                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
+                    className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
                   />
+
                   <button
-                    className=" h-10 w-24 text-xl text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                    className="h-10 w-24 text-xl text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
                     onClick={() => handleDeleteService(index)}
                     type="button"
                   >
@@ -300,6 +446,7 @@ const Invoice = () => {
                   </button>
                 </div>
               ))}
+
               <button
                 className="mt-3 px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
                 onClick={handleAddService}
@@ -309,11 +456,12 @@ const Invoice = () => {
               </button>
             </div>
           </div>
+
           <div className="flex justify-center gap-10 mt-6">
             <button
               className="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
               onClick={onClickTwo}
-              type="button"
+              type="submit"
             >
               Preview Invoice
             </button>

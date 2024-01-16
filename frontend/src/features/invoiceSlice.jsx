@@ -9,13 +9,16 @@ const deleteInvoicesUrl = "http://localhost:8080/api/invoices/deleteInvoice";
 
 
 // CREATE INVOICES ASYNC THUNK
-export const createInvoicesAsync = createAsyncThunk( "create/invoices",  async () => {
+export const createInvoicesAsync = createAsyncThunk( "create/invoices",  async (formData) => {
+    console.log('formData',formData);
     try {
-      const response = await axios.post(createInvoicesUrl);
+      const response = await axios.post(createInvoicesUrl, formData);
       console.log(response.data);
+      toast.success(response.data.msg);
       return response.data;
     } catch (error) {
       console.log(error.response.data.msg);
+      toast.success(error.response.data.msg);
     }
   }
 );
