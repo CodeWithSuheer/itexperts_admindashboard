@@ -103,6 +103,17 @@ const Invoice = () => {
     }
   };
 
+
+  const isFormEmpty = () => {
+    const formFields = document.querySelectorAll('input, select, textarea');
+    for (const field of formFields) {
+      if (!field.value.trim()) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   // HANDLE ADD SERVICE
   const handleAddService = () => {
     const maxServiceNumber = Math.max(
@@ -165,17 +176,26 @@ const Invoice = () => {
     e.preventDefault();
 
     // Calculate the total amount based on service prices
-    const totalAmount = formData.service.reduce((total, service) => total + service.price, 0 );
+    const totalAmount = formData.service.reduce(
+      (total, service) => total + Number(service.price),
+      0
+    );
 
-    // Deduct the discount value
-    const discountedAmount = totalAmount - Number(formData.discount);
-    console.log("discountedAmount", discountedAmount);
+    // Get the discount value
+    const discountValue = Number(
+      document.querySelector('[name="discount"]').value
+    );
 
-    
+    // Calculate the discounted amount
+    const discountedAmount = totalAmount - discountValue;
+
+    // Update the total amount field
+    document.querySelector('[name="amount"]').value =
+      discountedAmount.toFixed(2);
+
     const invoiceType = toggle ? "half" : "full";
     const includeSecondDueDate = toggle;
 
-    // Create the final data structure
     const finalData = {
       to: {
         name: document.querySelector('[name="name"]').value,
@@ -192,7 +212,7 @@ const Invoice = () => {
         ),
       })),
       paymentStatus: "unpaid",
-      amount: discountedAmount.toString(),
+      amount: discountedAmount,
       discount: document.querySelector('[name="discount"]').value,
       customerId: document.querySelector('[name="customerId"]').value,
       orderId: document.querySelector('[name="orderId"]').value,
@@ -204,7 +224,6 @@ const Invoice = () => {
     };
 
     console.log(finalData);
-
     dispatch(createInvoicesAsync(finalData));
   };
 
@@ -304,12 +323,12 @@ const Invoice = () => {
             </div>
 
             {/* AMOUNT */}
-            {/* <div>
+            <div>
               <label
                 className="text-gray-700 font-medium text-xl"
                 htmlFor="amount"
               >
-                Amount
+                Total Amount
               </label>
               <input
                 type="number"
@@ -317,8 +336,9 @@ const Invoice = () => {
                 placeholder="Amount"
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40  focus:outline-none focus:ring"
                 required
+                readOnly
               />
-            </div> */}
+            </div>
 
             {/* DISCOUNT */}
             <div>
@@ -340,7 +360,7 @@ const Invoice = () => {
             {/* ORDER ID */}
             <div>
               <label className="text-gray-700 font-medium text-xl">
-                Order No.
+                Order No
               </label>
               <input
                 type="text"
@@ -410,12 +430,6 @@ const Invoice = () => {
                   key={index}
                   className="flex justify-center gap-5 w-100 mb-2"
                 >
-                  {/* <input
-                    type="number"
-                    disabled
-                    value={service.number}
-                    className="block w-11 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
-                  /> */}
                   <input
                     type="text"
                     name={`service.${index}.serviceName`}
@@ -459,11 +473,11 @@ const Invoice = () => {
 
           <div className="flex justify-center gap-10 mt-6">
             <button
-              className="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
-              onClick={onClickTwo}
+              className="px-8 py-3 leading-5 text-white transition-colors duration-300 transform bg-[#f11900] rounded-md hover:bg-[#bd5d53] focus:outline-none focus:bg-[#D22B2B]"
+              // onClick={onClickTwo}
               type="submit"
             >
-              Preview Invoice
+              Generate Invoice
             </button>
           </div>
         </form>
@@ -474,7 +488,7 @@ const Invoice = () => {
       <Modal
         size="4xl"
         show={showModalX}
-        icon={<X size={30} onClick={onClickTwo} />}
+        icon={<X size={30} onClick={onClickTwo} className="cursor-pointer"/>}
       >
         <Modal.Header>
           {/* <div className="flex justify-between items-center border-b-4 border-gray-500 pb-2"> */}
@@ -496,7 +510,7 @@ const Invoice = () => {
             <div className=" p-2 w-100">
               <p className="modelClientText mb-2 text-base">Bill To:</p>
               <h1 className="modelClientHeadText mb-2 font-semibold text-lg">
-                Webz Poland
+              {formData.to.name}
               </h1>
               <p className="modelClientText mb-2 text-base">
                 (+92) 334 41087865
@@ -560,13 +574,13 @@ const Invoice = () => {
             >
               Generate Invoice
             </button>
-            <button
+            {/* <button
               className="px-4 py-2.5 leading-5 text-black transition-colors duration-300 transform border-solid border-2 border-black bg-white rounded-md hover:bg-[#D22B2B] focus:outline-none "
               onClick={onClickTwo}
               type="submit"
             >
               Download Invoice
-            </button>
+            </button> */}
           </div>
         </Modal.Body>
       </Modal>

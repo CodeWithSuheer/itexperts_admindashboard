@@ -1,6 +1,7 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { TextInput, Tabs } from "keep-react";
-import { MagnifyingGlass, Trash, PencilSimple } from "phosphor-react";
+import { Trash, PencilSimple } from "phosphor-react";
 import { Modal, Button, Tooltip } from "keep-react";
 import { X } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
@@ -9,9 +10,13 @@ import {
   deleteContactFormAsync,
   getAllFormsAsync,
 } from "../../../features/contactFormSlice";
-import { deleteInvoicesAsync, getAllInvoicesAsync } from "../../../features/invoiceSlice";
+import {
+  deleteInvoicesAsync,
+  getAllInvoicesAsync,
+} from "../../../features/invoiceSlice";
 import Icons from "../Icons";
 import "../AdminPanel.css";
+import { Mail, Phone, CreditCard } from "lucide-react";
 
 const AllInvoices = () => {
   const navigate = useNavigate();
@@ -33,7 +38,6 @@ const AllInvoices = () => {
   // console.log("InvoicesData", InvoicesData);
 
   const Modal_id = InvoicesData.filter((data) => data.id === Message);
-
 
   // HANDLE SEARCH FUNCTION
   const handleSearch = (e) => {
@@ -191,7 +195,7 @@ const AllInvoices = () => {
         <div className="-mt-2 relative h-max overflow-auto">
           {/* ------------- CONTACT QUERIES TABLE ------------- */}
           <table className="w-full table-auto text-sm text-left">
-            <thead className="text-[#242435] bg-[#F7F7F7]  font-medium border-b">
+            <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
                 <th className="py-4 px-6 text-lg font-medium pl-3">Name</th>
                 <th className="py-4 px-6 text-lg font-medium">Customer ID</th>
@@ -204,86 +208,81 @@ const AllInvoices = () => {
             </thead>
             <tbody className="text-gray-600 divide-y">
               {InvoicesData.map((data, index) => (
-                <>
-                  <tr key={index} className="cursor-pointer">
-                    {/* ------------- CUSTOMER ID ------------- */}
-                    {data.invoices[0] && (
-                      <>
-                        <td className="gap-x-3 px-6 whitespace-nowrap">
-                          <span className=" text-gray-700 text-lg font-medium">
-                            {data.invoices[0].to.name}
-                          </span>{" "}
-                          <br />
-                          <span className=" text-gray-700 text-md">
-                            {data.invoices[0].to.email}
-                          </span>
-                        </td>
-                      </>
-                    )}
-
-                    <td className="pl-6 py-3 text-lg">{data.customerId}</td>
-
-                    {data.invoices[0] && (
-                      <>
-                        <td className="pl-6 py-3 text-lg">
-                          {data.invoices[0].orderId}
-                        </td>
-                        <td className="pl-6 py-3 text-lg">
-                          ${data.invoices[0].amount}
-                        </td>
-                      </>
-                    )}
-
-                    <td className="pl-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-5 py-2 rounded-full capitalize font-semibold text-sm ${
-                          data.paymentStatus == "unpaid"
-                            ? "text-red-600 bg-red-50"
-                            : "text-blue-600 bg-blue-50"
-                        }`}
-                      >
-                        {data.paymentStatus}
-                      </span>
-                    </td>
-                    {/* ---------- PREVIEW BUTTON ----------  */}
-                    <td
-                      className="pr-6 py-3 text-lg font-semibold underline underline-offset-4 text-[#F11900]"
-                      onClick={() => openModal(data.id)}
+                <React.Fragment key={index}>
+                  {/* Iterate over each invoice */}
+                  {data.invoices.map((invoice, invoiceIndex) => (
+                    <tr
+                      key={`${index}-${invoiceIndex}`}
+                      className="cursor-pointer"
                     >
-                      Preview Invoice
-                    </td>
+                      {/* ------------- CUSTOMER ID ------------- */}
+                      <td className="gap-x-3 px-6 whitespace-nowrap">
+                        <span className="text-gray-700 text-lg font-medium">
+                          {invoice.to.name}
+                        </span>{" "}
+                        <br />
+                        <span className="text-gray-700 text-md">
+                          {invoice.to.email}
+                        </span>
+                      </td>
 
-                    <td className="flex items-center justify-center py-3">
-                      {/* ---------- EDIT BUTTON ----------  */}
-                      <div
-                        className="rounded-full bg-gray-200 text-gray-800 p-2 ms-2.5 transition hover:scale-110"
-                        onClick={() => onClickErrorModal(data.id)}
-                      >
-                        <PencilSimple size={24} />
-                      </div>
+                      <td className="pl-6 py-3 text-lg">{data.customerId}</td>
+                      <td className="pl-6 py-3 text-lg">{invoice.orderId}</td>
+                      <td className="pl-6 py-3 text-lg">${invoice.amount}</td>
 
-                      {/* ---------- DELETE BUTTON ----------  */}
-                      <div
-                        className="trash_button rounded-full bg-red-600 text-white p-2 ms-2.5 transition hover:scale-110"
-                        onClick={() => onClickErrorModal(data.id)}
+                      <td className="pl-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-5 py-2 rounded-full capitalize font-semibold text-sm ${
+                            data.paymentStatus === "unpaid"
+                              ? "text-red-600 bg-red-50"
+                              : data.paymentStatus === "paid"
+                              ? "text-blue-600 bg-blue-50"
+                              : data.paymentStatus === "partiallypaid"
+                              ? "text-yellow-600 bg-yellow-50"
+                              : ""
+                          }`}
+                        >
+                          {data.paymentStatus}
+                        </span>
+                      </td>
+
+                      {/* ---------- PREVIEW BUTTON ----------  */}
+                      <td
+                        className="pr-6 py-3 text-lg font-semibold underline underline-offset-4 text-[#F11900]"
+                        onClick={() => openModal(data.id)}
                       >
-                        <Trash size={24} />
-                      </div>
-                    </td>
-                  </tr>
-                </>
+                        Preview Invoice
+                      </td>
+
+                      <td className="flex items-center justify-center py-3">
+                        {/* ---------- EDIT BUTTON ----------  */}
+                        <div
+                          className="rounded-full bg-gray-200 text-gray-800 p-2 ms-2.5 transition hover:scale-110"
+                          onClick={() => onClickErrorModal(data.id)}
+                        >
+                          <PencilSimple size={24} />
+                        </div>
+
+                        {/* ---------- DELETE BUTTON ----------  */}
+                        <div
+                          className="trash_button rounded-full bg-red-600 text-white p-2 ms-2.5 transition hover:scale-110"
+                          onClick={() => onClickErrorModal(data.id)}
+                        >
+                          <Trash size={24} />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               ))}
-
-              {/* );
-                })
-              ) : (
-                // THIS LINE WILL SHOW IF NO DATA IS AVAILABLE
+              {/* If no data is available */}
+              {InvoicesData.length === 0 && (
                 <tr>
-                  <td className="px-6 py-4 text-2xl text-gray-950">
+                  <td className="px-6 py-4 text-lg text-gray-950">
                     No data available
                   </td>
                 </tr>
-              )} */}
+              )}
             </tbody>
           </table>
         </div>
@@ -374,7 +373,7 @@ const AllInvoices = () => {
         >
           <Modal.Header>
             {/* <div className="flex justify-between items-center border-b-4 border-gray-500 pb-2"> */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mt-2">
               <img
                 src="https://cdn.shopify.com/s/files/1/0704/6378/2946/files/ITEXPERTS_LOGO.png?v=1704170784"
                 alt="keep"
@@ -387,7 +386,9 @@ const AllInvoices = () => {
               </p>
             </div>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body
+          // style={{ minHeight: "40rem" }}
+          >
             <div className=" flex justify-between">
               {data.invoices[0] && (
                 <>
@@ -396,13 +397,16 @@ const AllInvoices = () => {
                     <h1 className="modelClientHeadText mb-2 font-semibold text-lg capitalize">
                       {data.invoices[0].to.name}
                     </h1>
-                    <p className="modelClientText mb-2 text-base">
+                    <p className="modelClientText flex items-center mb-2 text-base">
+                      <Phone size={18} className="mr-1" />
                       {data.invoices[0].to.phone}
                     </p>
-                    <p className="modelClientText mb-2 text-base">
+                    <p className="modelClientText flex items-center mb-2 text-base">
+                      <Mail size={18} className="mr-1" />
                       {data.invoices[0].to.email}
                     </p>
-                    <p className="modelClientText mb-2 text-base">
+                    <p className="modelClientText flex items-center mb-2 text-base">
+                      <CreditCard size={20} className="mr-1" />
                       {data.invoices[0].customerId}
                     </p>
                   </div>
@@ -416,7 +420,9 @@ const AllInvoices = () => {
                 <p className="modelClientText mb-2 text-base">
                   (+92) 334 41087865
                 </p>
-                <p className="modelClientText mb-2 text-base">itexperts@gmail.com</p>
+                <p className="modelClientText mb-2 text-base">
+                  itexperts@gmail.com
+                </p>
                 <p className="modelClientText text-base">
                   3909 Heavner Avenue <br /> Mountain, GA 30083
                 </p>
@@ -425,20 +431,39 @@ const AllInvoices = () => {
             {data.invoices[0] && (
               <>
                 <div className="flex justify-between mx-2 mt-5">
-                  <p className="text-base">Order Id: {data.invoices[0].orderId} </p>
-                  <p className="text-base">{new Date(data.invoices[0].dueDate).toLocaleDateString()}</p>
+                  <data className="left flex flex-col">
+                    <p className="text-base">
+                      <span className="font-semibold">Order Id: </span>
+                      {data.invoices[0].orderId}{" "}
+                    </p>
+                    {data.invoices[0].invoiceType === "half" ? (
+                      <>
+                        <p className="modelClientText flex items-center mb-2 text-base">
+                          <span className="font-semibold mr-2">
+                            Invoice Type:
+                          </span>
+                          Partially Payment
+                        </p>
+                      </>
+                    ) : null}
+                  </data>
+
+                  <p className="text-base">
+                    <span className="font-semibold">Due Date: </span>
+                    {new Date(data.invoices[0].dueDate).toLocaleDateString()}
+                  </p>
                 </div>
               </>
             )}
-            <div className="mt-5 shadow-sm border rounded-lg overflow-x-auto">
+            <div className="mt-5 shadow-sm overflow-x-auto">
               <table className="w-full table-auto text-sm text-left">
                 <thead className="bg-gray-200 text-black font-normal text-lg border-b">
                   <tr>
-                    <th className="py-3 px-6">Description</th>
+                    <th className="py-3 px-6 tracking-wide">Description</th>
                     <th className="py-3 px-6 text-end">SubTotal</th>
                   </tr>
                 </thead>
-                <tbody className="text-gray-600 divide-y">
+                <tbody className="text-gray-600 border-b-2 divide-y">
                   {data.invoices[0].service.map((service, idx) => (
                     <tr key={idx}>
                       <td className="ps-5 py-4 text-lg whitespace-nowrap flex items-end gap-x-6">
@@ -451,25 +476,56 @@ const AllInvoices = () => {
                   ))}
                 </tbody>
               </table>
-              <table className="w-full table-auto text-sm text-left">
-                <thead className="bg-gray-200 text-black text-lg border-b">
+              {/* ------------- INVOICE TOTAL ------------- */}
+              <div className="w-full flex justify-end pr-3 mb-6">
+                <div className="pt-2 flex flex-col text-lg text-right">
+                  {/* SUB TOTAL */}
+                  <div className="invoice_total py-2.5 w-60 font-medium flex justify-end items-center gap-6">
+                    <div className="total_amount text-right mr-3">
+                      Sub Total
+                    </div>
+                    <div className="invoice_heading w-16">
+                      ${data.invoices[0].amount + data.invoices[0].discount}
+                    </div>
+                  </div>
+                  {/* DISCOUNT */}
+                  <div className="invoice_total py-2.5 w-60 font-medium flex justify-end items-center gap-6">
+                    <div className="total_amount text-right mr-3">Discount</div>
+                    <div className="invoice_heading w-16">
+                      ${data.invoices[0].discount}
+                    </div>
+                  </div>
+                  {/* TOTAL AMOUNT */}
+                  <div className="border-t py-2.5 w-60 font-semibold flex justify-end items-center gap-6">
+                    <div className="total_amount text-right mr-3">
+                      Total Amount
+                    </div>
+                    <div className="invoice_heading w-16">
+                      ${data.invoices[0].amount}
+                    </div>
+                  </div>
+                </div>
+
+                {/* <thead className="bg-gray-200 text-black text-lg border-b">
                   <tr>
                     <th className="py-3 px-6 font-bold">Total</th>
-                    <th className="py-3 px-6 text-end">${data.invoices[0].amount}</th>
+                    <th className="py-3 px-6 text-end">
+                      ${data.invoices[0].amount}
+                    </th>
                   </tr>
-                </thead>
-              </table>
+                </thead> */}
+              </div>
             </div>
             <div className="flex justify-center gap-5 mt-5">
-              <button
+              {/* <button
                 className="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
                 onClick={openModal}
                 type="button"
               >
                 Generate Invoice
-              </button>
+              </button> */}
               <button
-                className="px-4 py-2.5 leading-5 text-black transition-colors duration-300 transform border-solid border border-black bg-white rounded-md hover:bg-[#D22B2B] hover:border-[#D22B2B] hover:text-white focus:outline-none "
+                className="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
                 onClick={openModal}
                 type="button"
               >
