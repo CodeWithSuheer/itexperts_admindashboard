@@ -12,6 +12,7 @@ import  MongoDBStore  from "connect-mongodb-session";
 import contactFormRouter from "./routes/contactFormRoutes.js";
 import invoiceRouter from "./routes/invoiceRoutes.js";
 import clientRouter from "./routes/clientRoutes.js";
+import supportRouter from "./routes/supportRoutes.js";
 
 
 
@@ -60,6 +61,7 @@ app.use("/api/user",userRouter);
 app.use("/api/contactForms",contactFormRouter)
 app.use("/api/invoices",invoiceRouter);
 app.use("/api/clients",clientRouter);
+app.use("/api/support",supportRouter);
 
 
 
