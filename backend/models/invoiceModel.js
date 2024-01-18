@@ -62,6 +62,9 @@ const InvoiceSchema = new mongoose.Schema({
         enum: ['full', 'half'],
         default: 'full'
     },
+    number:{
+        type:Number
+    },
     dueDate:{
         type:Date,
     },
@@ -85,7 +88,7 @@ const mainDocumentSchema = new mongoose.Schema({
         type: String,
         required:[true,"Please provide a customerId"]
     },
-    //halfInvoices: [InvoiceSchema],
+
     invoices:[InvoiceSchema]
     
 });
