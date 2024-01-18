@@ -16,7 +16,7 @@ import {
 } from "../../../features/invoiceSlice";
 import Icons from "../Icons";
 import "../AdminPanel.css";
-import { Mail, Phone, CreditCard } from "lucide-react";
+import { Mail, Phone, CreditCard, FileCheck } from "lucide-react";
 
 const AllInvoices = () => {
   const navigate = useNavigate();
@@ -27,6 +27,8 @@ const AllInvoices = () => {
   const [deleteMsgId, setDeleteMsgId] = useState(null);
   const [name, setName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedObjectId, setSelectedObjectId] = useState(null);
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState(null);
 
   // CALL TO GET ALL INVOICES
   useEffect(() => {
@@ -35,9 +37,24 @@ const AllInvoices = () => {
 
   // HERE WE GET DATA USING USESELECTOR FROM STATE
   const InvoicesData = useSelector((state) => state.invoice.allInvoices);
-  // console.log("InvoicesData", InvoicesData);
 
-  const Modal_id = InvoicesData.filter((data) => data.id === Message);
+  // console.log("selectedInvoiceId", selectedInvoiceId);
+
+  const Modal_id = InvoicesData.filter((data) => data.id === selectedObjectId);
+
+  // console.log("Modal_id", Modal_id);
+
+  const selectedData = Modal_id.map((data) => {
+    const invoiceIndex = data.invoices.findIndex(
+      (invoice) => invoice.id === selectedInvoiceId
+    );
+    const isFirstInvoice = invoiceIndex === 0;
+    const isSecondInvoice = invoiceIndex === 1;
+
+    return { ...data, isFirstInvoice, isSecondInvoice };
+  });
+
+  // console.log("Selected Data", selectedData);
 
   // HANDLE SEARCH FUNCTION
   const handleSearch = (e) => {
@@ -71,10 +88,19 @@ const AllInvoices = () => {
   displayedData = searchQuery.length > 1 ? searchData : displayedData;
 
   // VIEW MESSAGE MODAL FUNCTION
-  const openModal = (id) => {
+  const openModal = (objectId, invoiceId) => {
+    // console.log(objectId, invoiceId);
     setShowModalX(!showModalX);
-    setMessage(id);
+    setSelectedObjectId(objectId);
+    setSelectedInvoiceId(invoiceId);
   };
+
+  // {selectedObjectId && selectedInvoiceId && (
+  //   // Filter the data based on selectedObjectId and selectedInvoiceId
+  //   // You may need to adjust this logic based on your data structure
+  //   const selectedData = InvoicesData.find(
+  //     (item) => item.id === selectedObjectId && item.invoices.some((inv) => inv.id === selectedInvoiceId)
+  //   );
 
   // DELETE MESSAGE MODAL FUNCTION
   const onClickErrorModal = (id) => {
@@ -85,15 +111,31 @@ const AllInvoices = () => {
   // HANDLE CREATE INVOICE
   const handleCreateInvoice = (invoice_Id) => {
     navigate(`/adminpanel/invoice/${invoice_Id}`);
-    console.log("invoice_Id", invoice_Id);
+    // console.log("invoice_Id", invoice_Id);
   };
 
-  // HANDLE CREATE INVOICE
+  // HANDLE UPDATE INVOICE
+  const handleUpdateInvoice = (invoice_Id) => {
+    navigate(`/adminpanel/updateInvoice/${invoice_Id}`);
+    // console.log("invoice_Id", invoice_Id);
+  };
+
+  // HANDLE DELETE INVOICE
   const handleDelete = (id) => {
     dispatch(deleteInvoicesAsync(id)).then(() => {
       dispatch(getAllInvoicesAsync());
     });
   };
+
+  const handleInputChange = (event) => {
+    const { name, value, type, checked } = event.target;
+    const newValue = type === 'checkbox' ? checked : value;
+
+    setProduct({
+        ...product,
+        [name]: newValue,
+    });
+};
 
   const tableItems = [
     {
@@ -249,7 +291,7 @@ const AllInvoices = () => {
                       {/* ---------- PREVIEW BUTTON ----------  */}
                       <td
                         className="pr-6 py-3 text-lg font-semibold underline underline-offset-4 text-[#F11900]"
-                        onClick={() => openModal(data.id)}
+                        onClick={() => openModal(data.id, invoice.id)}
                       >
                         Preview Invoice
                       </td>
@@ -258,7 +300,7 @@ const AllInvoices = () => {
                         {/* ---------- EDIT BUTTON ----------  */}
                         <div
                           className="rounded-full bg-gray-200 text-gray-800 p-2 ms-2.5 transition hover:scale-110"
-                          onClick={() => onClickErrorModal(data.id)}
+                          onClick={() => handleUpdateInvoice(data.id)}
                         >
                           <PencilSimple size={24} />
                         </div>
@@ -305,7 +347,7 @@ const AllInvoices = () => {
                     : "hover:bg-gray-600 hover:text-white "
                 } `}
               >
-                Previous
+                Prev
               </button>
             </li>
             <li>
@@ -365,11 +407,17 @@ const AllInvoices = () => {
       ))}
 
       {/* ------------- PREVIEW INVOICE ------------- */}
-      {Modal_id.map((data, index) => (
+      {selectedData.map((data, index) => (
         <Modal
           size="4xl"
           show={showModalX}
-          icon={<X size={28} onClick={openModal} className="cursor-pointer" />}
+          icon={
+            <X
+              size={28}
+              onClick={() => openModal(null, null)}
+              className="cursor-pointer"
+            />
+          }
         >
           <Modal.Header>
             {/* <div className="flex justify-between items-center border-b-4 border-gray-500 pb-2"> */}
@@ -390,7 +438,7 @@ const AllInvoices = () => {
           // style={{ minHeight: "40rem" }}
           >
             <div className=" flex justify-between">
-              {data.invoices[0] && (
+              {data.invoices && (
                 <>
                   <div className=" p-2 w-100">
                     <p className="modelClientText mb-2 text-base">Bill To:</p>
@@ -408,6 +456,10 @@ const AllInvoices = () => {
                     <p className="modelClientText flex items-center mb-2 text-base">
                       <CreditCard size={20} className="mr-1" />
                       {data.invoices[0].customerId}
+                    </p>
+                    <p className="modelClientText flex items-center mb-2 text-base">
+                      <FileCheck size={20} className="mr-1" />
+                      {data.isFirstInvoice ? "Invoice 1" : "Invoice 2"}
                     </p>
                   </div>
                 </>
@@ -431,7 +483,7 @@ const AllInvoices = () => {
             {data.invoices[0] && (
               <>
                 <div className="flex justify-between mx-2 mt-5">
-                  <data className="left flex flex-col">
+                  <div className="left flex flex-col">
                     <p className="text-base">
                       <span className="font-semibold">Order Id: </span>
                       {data.invoices[0].orderId}{" "}
@@ -446,7 +498,7 @@ const AllInvoices = () => {
                         </p>
                       </>
                     ) : null}
-                  </data>
+                  </div>
 
                   <p className="text-base">
                     <span className="font-semibold">Due Date: </span>

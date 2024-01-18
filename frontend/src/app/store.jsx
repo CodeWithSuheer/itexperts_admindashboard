@@ -4,6 +4,7 @@ import adminInfoSlice from "../features/adminInfoSlice";
 import contactFormSlice from "../features/contactFormSlice";
 import invoiceSlice from "../features/invoiceSlice";
 import UsersSlice from "../features/UsersSlice";
+import SupportSlice from "../features/SupportSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     contactForms: contactFormSlice,
     invoice: invoiceSlice,
     users: UsersSlice,
+    support: SupportSlice
   },
 });
 // "021111225229"

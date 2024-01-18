@@ -21,6 +21,8 @@ import AllInvoices from "./components/Admin/Invoice/AllInvoices";
 import AllUsers from "./components/Admin/Users/AllUsers";
 import "./App.css";
 import Projects from "./components/Admin/Projects/Projects";
+import UpdateInvoice from "./components/Admin/Invoice/UpdateInvoice";
+import Support from "./components/Admin/Support/Support";
 
 
 function App() {
@@ -46,11 +48,11 @@ function App() {
             <Route path="approved-requests" element={<ApprovedRequests />} />
             <Route path="invoice" element={<Invoice />} />
             <Route path="all-invoice" element={<AllInvoices />} />
+            <Route path="updateInvoice/:id" element={<UpdateInvoice />} />
             <Route path="projects" element={<Projects />} />
-            {/* <Route path="ongoingprojects" element={<OnGoingProject />} /> */}
-            {/* <Route path="completedprojects" element={<CompletedProjects />} /> */}
             <Route path="projectdetails" element={<OnGoingProjectsDetails />} />
             <Route path="allusers" element={<AllUsers />} />
+            <Route path="support" element={<Support />} />
           </Route>
 
           {/* --------- AUTHENTICATION --------- */}

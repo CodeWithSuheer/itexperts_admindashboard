@@ -16,6 +16,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAsync, reset } from "../../features/authSlice";
 import Icons from "./Icons";
+import { HeartHandshake } from "lucide-react";
 import "./AdminPanel.css";
 
 const AdminBody = () => {
@@ -67,7 +68,7 @@ const AdminBody = () => {
               {/* -------- CONTACT QUERIES --------  */}
               <Link to="/adminpanel">
                 <Sidebar.Item
-                style={{ fontSize: "1.125rem" }}
+                  style={{ fontSize: "1.125rem" }}
                   icon={
                     <Chat
                       size={24}
@@ -102,7 +103,7 @@ const AdminBody = () => {
               {/* -------- ALL INVOICE --------  */}
               <Link to="/adminpanel/all-invoice">
                 <Sidebar.Item
-                style={{ fontSize: "1.125rem" }}
+                  style={{ fontSize: "1.125rem" }}
                   icon={
                     <Files
                       size={24}
@@ -123,11 +124,19 @@ const AdminBody = () => {
                 </Sidebar.Item>
               </Link>
 
-
-               {/* -------- ALL USERS --------  */}
-               <Link to="/adminpanel/projects">
+              {/* -------- PROJECTS --------  */}
+              <Link to="/adminpanel/projects">
                 <Sidebar.Item
-                  icon={ <Browsers size={24} className={` ${ location.pathname === "/adminpanel/projects" ? "text-white" : "" }`} /> }
+                  icon={
+                    <Browsers
+                      size={24}
+                      className={` ${
+                        location.pathname === "/adminpanel/projects"
+                          ? "text-white"
+                          : ""
+                      }`}
+                    />
+                  }
                   className={`my-3 ${
                     location.pathname === "/adminpanel/projects"
                       ? "active-link"
@@ -135,6 +144,29 @@ const AdminBody = () => {
                   }`}
                 >
                   <span className="text-lg">Projects</span>
+                </Sidebar.Item>
+              </Link>
+
+              {/* -------- SUPPORT --------  */}
+              <Link to="/adminpanel/support">
+                <Sidebar.Item
+                  icon={
+                    <HeartHandshake
+                      size={24}
+                      className={` ${
+                        location.pathname === "/adminpanel/support"
+                          ? "text-white"
+                          : ""
+                      }`}
+                    />
+                  }
+                  className={`my-3 ${
+                    location.pathname === "/adminpanel/support"
+                      ? "active-link"
+                      : ""
+                  }`}
+                >
+                  <span className="text-lg">Support</span>
                 </Sidebar.Item>
               </Link>
 
