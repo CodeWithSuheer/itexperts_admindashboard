@@ -41,7 +41,7 @@ export const updateInvoicesAsync = createAsyncThunk( "update/invoices",  async (
   // console.log('updatedFormData', updatedFormData);
     try {
       const response = await axios.post(updateInvoicesUrl, updatedFormData);
-      console.log("this is from backend", response.data);
+      console.log(response.data);
       toast.success(response.data.msg);
       return response.data;
     } catch (error) {

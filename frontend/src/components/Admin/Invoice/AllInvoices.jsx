@@ -14,7 +14,6 @@ import {
   deleteInvoicesAsync,
   getAllInvoicesAsync,
 } from "../../../features/invoiceSlice";
-import Icons from "../Icons";
 import "../AdminPanel.css";
 import { Mail, Phone, CreditCard, FileCheck } from "lucide-react";
 
@@ -37,22 +36,26 @@ const AllInvoices = () => {
 
   // HERE WE GET DATA USING USESELECTOR FROM STATE
   const InvoicesData = useSelector((state) => state.invoice.allInvoices);
-
   // console.log("selectedInvoiceId", selectedInvoiceId);
 
   const Modal_id = InvoicesData.filter((data) => data.id === selectedObjectId);
 
-  // console.log("Modal_id", Modal_id);
-
   const selectedData = Modal_id.map((data) => {
-    const invoiceIndex = data.invoices.findIndex(
+    const selectedInvoice = data.invoices.find(
       (invoice) => invoice.id === selectedInvoiceId
     );
-    const isFirstInvoice = invoiceIndex === 0;
-    const isSecondInvoice = invoiceIndex === 1;
 
-    return { ...data, isFirstInvoice, isSecondInvoice };
-  });
+    if (selectedInvoice) {
+      return {
+        ...data,
+        selectedInvoice,
+        isFirstInvoice: data.invoices.indexOf(selectedInvoice) === 0,
+        isSecondInvoice: data.invoices.indexOf(selectedInvoice) === 1,
+      };
+    }
+
+    return null;
+  }).filter(Boolean);
 
   // console.log("Selected Data", selectedData);
 
@@ -89,7 +92,6 @@ const AllInvoices = () => {
 
   // VIEW MESSAGE MODAL FUNCTION
   const openModal = (objectId, invoiceId) => {
-    // console.log(objectId, invoiceId);
     setShowModalX(!showModalX);
     setSelectedObjectId(objectId);
     setSelectedInvoiceId(invoiceId);
@@ -108,16 +110,9 @@ const AllInvoices = () => {
     setDeleteMsgId(id);
   };
 
-  // HANDLE CREATE INVOICE
-  const handleCreateInvoice = (invoice_Id) => {
-    navigate(`/adminpanel/invoice/${invoice_Id}`);
-    // console.log("invoice_Id", invoice_Id);
-  };
-
   // HANDLE UPDATE INVOICE
-  const handleUpdateInvoice = (invoice_Id) => {
-    navigate(`/adminpanel/updateInvoice/${invoice_Id}`);
-    // console.log("invoice_Id", invoice_Id);
+  const handleUpdateInvoice = (object_id, invoice_Id) => {
+    navigate(`/adminpanel/updateInvoice/${object_id}-${invoice_Id}`);
   };
 
   // HANDLE DELETE INVOICE
@@ -129,13 +124,13 @@ const AllInvoices = () => {
 
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
-    const newValue = type === 'checkbox' ? checked : value;
+    const newValue = type === "checkbox" ? checked : value;
 
     setProduct({
-        ...product,
-        [name]: newValue,
+      ...product,
+      [name]: newValue,
     });
-};
+  };
 
   const tableItems = [
     {
@@ -233,13 +228,14 @@ const AllInvoices = () => {
           </button>
         </div>
 
-        {/* ------------- TABS ------------- */}
+        {/* ------------- TABLE ------------- */}
         <div className="-mt-2 relative h-max overflow-auto">
-          {/* ------------- CONTACT QUERIES TABLE ------------- */}
+          {/* ------------- TABLE ------------- */}
           <table className="w-full table-auto text-sm text-left">
+            {/* ------------- TABLE HEAD ------------- */}
             <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
-                <th className="py-4 px-6 text-lg font-medium pl-3">Name</th>
+                <th className="py-4 px-6 text-lg font-medium">Name</th>
                 <th className="py-4 px-6 text-lg font-medium">Customer ID</th>
                 <th className="py-4 px-6 text-lg font-medium">Order ID</th>
                 <th className="py-4 px-6 text-lg font-medium">Amount</th>
@@ -248,10 +244,10 @@ const AllInvoices = () => {
                 <th className="py-3 pl-14 text-lg font-medium">Actions</th>
               </tr>
             </thead>
+            {/* ------------- TABLE BODY ------------- */}
             <tbody className="text-gray-600 divide-y">
               {InvoicesData.map((data, index) => (
                 <React.Fragment key={index}>
-                  {/* Iterate over each invoice */}
                   {data.invoices.map((invoice, invoiceIndex) => (
                     <tr
                       key={`${index}-${invoiceIndex}`}
@@ -259,7 +255,7 @@ const AllInvoices = () => {
                     >
                       {/* ------------- CUSTOMER ID ------------- */}
                       <td className="gap-x-3 px-6 whitespace-nowrap">
-                        <span className="text-gray-700 text-lg font-medium">
+                        <span className="text-gray-700 text-lg font-medium capitalize">
                           {invoice.to.name}
                         </span>{" "}
                         <br />
@@ -300,7 +296,9 @@ const AllInvoices = () => {
                         {/* ---------- EDIT BUTTON ----------  */}
                         <div
                           className="rounded-full bg-gray-200 text-gray-800 p-2 ms-2.5 transition hover:scale-110"
-                          onClick={() => handleUpdateInvoice(data.id)}
+                          onClick={() =>
+                            handleUpdateInvoice(data.id, invoice.id)
+                          }
                         >
                           <PencilSimple size={24} />
                         </div>
@@ -434,37 +432,33 @@ const AllInvoices = () => {
               </p>
             </div>
           </Modal.Header>
-          <Modal.Body
-          // style={{ minHeight: "40rem" }}
-          >
-            <div className=" flex justify-between">
-              {data.invoices && (
-                <>
-                  <div className=" p-2 w-100">
-                    <p className="modelClientText mb-2 text-base">Bill To:</p>
-                    <h1 className="modelClientHeadText mb-2 font-semibold text-lg capitalize">
-                      {data.invoices[0].to.name}
-                    </h1>
-                    <p className="modelClientText flex items-center mb-2 text-base">
-                      <Phone size={18} className="mr-1" />
-                      {data.invoices[0].to.phone}
-                    </p>
-                    <p className="modelClientText flex items-center mb-2 text-base">
-                      <Mail size={18} className="mr-1" />
-                      {data.invoices[0].to.email}
-                    </p>
-                    <p className="modelClientText flex items-center mb-2 text-base">
-                      <CreditCard size={20} className="mr-1" />
-                      {data.invoices[0].customerId}
-                    </p>
-                    <p className="modelClientText flex items-center mb-2 text-base">
-                      <FileCheck size={20} className="mr-1" />
-                      {data.isFirstInvoice ? "Invoice 1" : "Invoice 2"}
-                    </p>
-                  </div>
-                </>
-              )}
-              <div className=" p-2 w-100">
+          <Modal.Body>
+            <div className="flex justify-between">
+              {selectedData.map((data) => (
+                <div className="p-2 w-100" key={data.id}>
+                  <p className="modelClientText mb-2 text-base">Bill To:</p>
+                  <h1 className="modelClientHeadText mb-2 font-semibold text-lg capitalize">
+                    {data.selectedInvoice.to.name}
+                  </h1>
+                  <p className="modelClientText flex items-center mb-2 text-base">
+                    <Phone size={18} className="mr-1" />
+                    {data.selectedInvoice.to.phone}
+                  </p>
+                  <p className="modelClientText flex items-center mb-2 text-base">
+                    <Mail size={18} className="mr-1" />
+                    {data.selectedInvoice.to.email}
+                  </p>
+                  <p className="modelClientText flex items-center mb-2 text-base">
+                    <CreditCard size={20} className="mr-1" />
+                    {data.selectedInvoice.customerId}
+                  </p>
+                  <p className="modelClientText flex items-center mb-2 text-base">
+                    <FileCheck size={20} className="mr-1" />
+                    {data.isFirstInvoice ? "Invoice 1" : "Invoice 2"}
+                  </p>
+                </div>
+              ))}
+              <div className="p-2 w-100">
                 <p className="modelClientText mb-2 text-base">From:</p>
                 <h1 className="modelClientHeadText mb-2 font-semibold text-lg">
                   IT EXPERTS
@@ -480,104 +474,123 @@ const AllInvoices = () => {
                 </p>
               </div>
             </div>
-            {data.invoices[0] && (
-              <>
+
+            {selectedData.map((data) => (
+              <div key={data.id}>
                 <div className="flex justify-between mx-2 mt-5">
                   <div className="left flex flex-col">
                     <p className="text-base">
                       <span className="font-semibold">Order Id: </span>
-                      {data.invoices[0].orderId}{" "}
+                      {data.selectedInvoice.orderId}
                     </p>
-                    {data.invoices[0].invoiceType === "half" ? (
-                      <>
-                        <p className="modelClientText flex items-center mb-2 text-base">
-                          <span className="font-semibold mr-2">
-                            Invoice Type:
-                          </span>
-                          Partially Payment
-                        </p>
-                      </>
-                    ) : null}
+                    {data.selectedInvoice.invoiceType === "half" && (
+                      <p className="modelClientText flex items-center mb-2 text-base">
+                        <span className="font-semibold mr-2">
+                          Invoice Type:
+                        </span>
+                        Partially Payment
+                      </p>
+                    )}
                   </div>
 
                   <p className="text-base">
                     <span className="font-semibold">Due Date: </span>
-                    {new Date(data.invoices[0].dueDate).toLocaleDateString()}
+                    {new Date(
+                      data.selectedInvoice.dueDate
+                    ).toLocaleDateString()}
                   </p>
                 </div>
-              </>
-            )}
-            <div className="mt-5 shadow-sm overflow-x-auto">
-              <table className="w-full table-auto text-sm text-left">
-                <thead className="bg-gray-200 text-black font-normal text-lg border-b">
-                  <tr>
-                    <th className="py-3 px-6 tracking-wide">Description</th>
-                    <th className="py-3 px-6 text-end">SubTotal</th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-600 border-b-2 divide-y">
-                  {data.invoices[0].service.map((service, idx) => (
-                    <tr key={idx}>
-                      <td className="ps-5 py-4 text-lg whitespace-nowrap flex items-end gap-x-6">
-                        {service.serviceName} <br />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-end text-lg">
-                        ${service.price}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {/* ------------- INVOICE TOTAL ------------- */}
-              <div className="w-full flex justify-end pr-3 mb-6">
-                <div className="pt-2 flex flex-col text-lg text-right">
-                  {/* SUB TOTAL */}
-                  <div className="invoice_total py-2.5 w-60 font-medium flex justify-end items-center gap-6">
-                    <div className="total_amount text-right mr-3">
-                      Sub Total
-                    </div>
-                    <div className="invoice_heading w-16">
-                      ${data.invoices[0].amount + data.invoices[0].discount}
-                    </div>
-                  </div>
-                  {/* DISCOUNT */}
-                  <div className="invoice_total py-2.5 w-60 font-medium flex justify-end items-center gap-6">
-                    <div className="total_amount text-right mr-3">Discount</div>
-                    <div className="invoice_heading w-16">
-                      ${data.invoices[0].discount}
-                    </div>
-                  </div>
-                  {/* TOTAL AMOUNT */}
-                  <div className="border-t py-2.5 w-60 font-semibold flex justify-end items-center gap-6">
-                    <div className="total_amount text-right mr-3">
-                      Total Amount
-                    </div>
-                    <div className="invoice_heading w-16">
-                      ${data.invoices[0].amount}
+
+                <div className="mt-5 shadow-sm overflow-x-auto">
+                  <table className="w-full table-auto text-sm text-left">
+                    <thead className="bg-gray-200 text-black font-normal text-lg border-b">
+                      <tr>
+                        <th className="py-3 px-6 tracking-wide">Description</th>
+                        <th className="py-3 px-6 text-end">SubTotal</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-gray-600 border-b-2 divide-y">
+                      {data.selectedInvoice.service.map((service, idx) => (
+                        <tr key={idx}>
+                          <td className="ps-5 py-4 text-lg whitespace-nowrap flex items-end gap-x-6">
+                            {service.serviceName} <br />
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-end text-lg">
+                            ${service.price}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  <div className="w-full flex justify-end pr-3 mb-6">
+                    <div className="pt-2 flex flex-col text-lg text-right">
+                      {/* SUB TOTAL */}
+                      <div className="invoice_total py-2.5 w-72 font-medium flex justify-end items-center gap-6">
+                        <div className="total_amount text-right mr-3">
+                          Sub Total
+                        </div>
+                        <div className="invoice_heading w-16">
+                          $
+                          {data.selectedInvoice.amount +
+                            data.selectedInvoice.discount}
+                        </div>
+                      </div>
+                      {/* DISCOUNT */}
+                      <div className="invoice_total py-2.5 w-72 font-medium flex justify-end items-center gap-6">
+                        <div className="total_amount text-right mr-3">
+                          Discount
+                        </div>
+                        <div className="invoice_heading w-16">
+                          ${data.selectedInvoice.discount}
+                        </div>
+                      </div>
+                      {/* TOTAL AMOUNT */}
+                      <div className="border-t py-2.5 w-72 font-semibold flex justify-end items-center gap-6">
+                        <div className="total_amount text-right mr-3">
+                          Total Amount
+                        </div>
+                        <div className="invoice_heading w-16">
+                          ${data.selectedInvoice.amount}
+                        </div>
+                      </div>
+                      {/* --------- FOR PARTIALLY PAID CLIENTS */}
+                      {/* {data.selectedInvoice.invoiceType === "half" ? (
+                        <>
+                          {data.isFirstInvoice ? (
+                            <>
+                              <div className="border-t py-2.5 w-72 font-semibold flex justify-end items-center gap-6">
+                                <div className="total_amount text-right mr-3">
+                                  First Half Payable
+                                </div>
+                                <div className="invoice_heading w-16">
+                                  ${data.selectedInvoice.amount / 2}
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="border-t py-2.5 w-72 font-semibold flex justify-end items-center gap-6">
+                                <div className="total_amount text-right mr-3">
+                                  Second Half Payable
+                                </div>
+                                <div className="invoice_heading w-16">
+                                  ${data.selectedInvoice.amount / 2}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </>
+                      ) : null} */}
                     </div>
                   </div>
                 </div>
-
-                {/* <thead className="bg-gray-200 text-black text-lg border-b">
-                  <tr>
-                    <th className="py-3 px-6 font-bold">Total</th>
-                    <th className="py-3 px-6 text-end">
-                      ${data.invoices[0].amount}
-                    </th>
-                  </tr>
-                </thead> */}
               </div>
-            </div>
+            ))}
+
             <div className="flex justify-center gap-5 mt-5">
-              {/* <button
-                className="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
-                onClick={openModal}
-                type="button"
-              >
-                Generate Invoice
-              </button> */}
               <button
-                className="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                className="px-6 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#f11900] rounded-md hover:bg-[#f11900] focus:outline-none focus:bg-[#D22B2B]"
                 onClick={openModal}
                 type="button"
               >

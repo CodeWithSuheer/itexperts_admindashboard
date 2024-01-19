@@ -18,7 +18,7 @@ const Support = () => {
   const allSupportRequests = useSelector(
     (state) => state.support.allSupportReq
   );
-  console.log("allSupportRequests", allSupportRequests);
+  // console.log("allSupportRequests", allSupportRequests);
 
   // HERE WE CALL THE FUNCTION TO GET SUPPORT DATA
   useEffect(() => {
@@ -62,6 +62,7 @@ const Support = () => {
     setMessage(id);
   };
 
+  // MESSEGES FOR MODAL ARE FILTERED HERE
   const filteredId = allSupportRequests.filter(
     (data) => data.support.id === Message
   );
@@ -83,7 +84,7 @@ const Support = () => {
           </div>
           <div className="mt-3 mr-10 md:mt-0 flex gap-8">
             {/* ------------- SEARCH BAR ------------- */}
-            <div className="search_bar">
+            {/* <div className="search_bar">
               <div class="relative mt-4 md:mt-0">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                   <svg
@@ -109,7 +110,7 @@ const Support = () => {
                   placeholder="Search by name"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="mt-12 relative h-max overflow-x-auto">
@@ -130,31 +131,57 @@ const Support = () => {
             <tbody className="text-gray-600 divide-y">
               {displayedData.length > 0 ? (
                 displayedData.map((data, idx) => (
-                    <tr key={idx} className="cursor-pointer">
-                    <td className="pr-3 py-3 text-lg pl-3">{idx + 1}</td>
+                  <tr key={idx} className="cursor-pointer">
+                    <td className="pr-3 py-4 text-lg pl-3">{idx + 1}</td>
                     <td className="gap-x-3 px-6 whitespace-nowrap">
                       <span className="text-gray-700 text-lg font-medium capitalize">
-                        {`${data.client?.firstName || ''} ${data.client?.lastName || ''}`}
+                        {`${data.client?.firstName || ""} ${
+                          data.client?.lastName || ""
+                        }`}
                       </span>{" "}
                       <br />
-                      <span className="text-gray-700 text-md">{data.client?.email || ''}</span>
+                      <span className="text-gray-700 text-md">
+                        {data.client?.email || ""}
+                      </span>
                     </td>
                     <td className="pr-3 py-3 text-lg pl-6">7/7/7</td>
-                    <td className="pr-3 py-3 text-lg pl-6">{data.support?.ticketNumber || ''}</td>
-                    <td className="pr-6 py-3 text-lg pl-6">{data.client?.customerId || ''}</td>
-                    <td className="pr-6 py-3 text-lg pl-6">{data.support?.departmentName || ''}</td>
-                    <td className="pr-1 py-3 text-lg pl-6 font-semibold underline underline-offset-4 text-[#F11900]"
-                      onClick={() => onClickTwo(data.support?.id)}>
+                    <td className="pr-3 py-3 text-lg pl-6">
+                      {data.support?.ticketNumber || ""}
+                    </td>
+                    <td className="pr-6 py-3 text-lg pl-6">
+                      {data.client?.customerId || ""}
+                    </td>
+                    <td className="pr-6 py-3 text-lg pl-6">
+                      {data.support?.departmentName || ""}
+                    </td>
+                    <td
+                      className="pr-1 py-3 text-lg pl-6 font-semibold underline underline-offset-4 text-[#F11900]"
+                      onClick={() => onClickTwo(data.support?.id)}
+                    >
                       View Now
                     </td>
                     <td className="pr-3 py-3 text-lg pl-3">
                       {data.support?.file ? (
+                        // <a
+                        //   href={data.support.file.downloadURL}
+                        //   download={data.support.file.name}
+                        //   className="px-3 py-2 text-sm rounded-md bg-gray-700 text-white"
+                        // >
+                        //   Download
+                        // </a>
                         <a
                           href={data.support.file.downloadURL}
                           download={data.support.file.name}
-                          className="px-3 py-2 text-sm rounded-md bg-gray-700 text-white"
+                          class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium text-sm py-2 px-4 rounded inline-flex items-center"
                         >
-                          Download
+                          <svg
+                            class="fill-current w-4 h-4 mr-2"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+                          </svg>
+                          <span>Download</span>
                         </a>
                       ) : (
                         <span className="text-gray-500">No file available</span>
@@ -173,7 +200,7 @@ const Support = () => {
           </table>
         </div>
       </div>
-      <div className=" flex justify-center mt-5 mb-5">
+      {/* <div className=" flex justify-center mt-5 mb-5">
         <nav aria-label="Page navigation example">
           <ul className="inline-flex -space-x-px text-lg">
             <li>
@@ -215,7 +242,7 @@ const Support = () => {
             </li>
           </ul>
         </nav>
-      </div>
+      </div> */}
 
       {/* ------------- VIEW MESSAGE MODAL ------------- */}
       {filteredId.map((data, idx) => (

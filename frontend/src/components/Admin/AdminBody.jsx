@@ -85,7 +85,7 @@ const AdminBody = () => {
                 </Sidebar.Item>
               </Link>
 
-              {/* -------- ALL USERS --------  */}
+              {/* -------- ALL USERS / CLIENTS --------  */}
               <Link to="/adminpanel/allusers">
                 <Sidebar.Item
                   // icon={ <Files size={24} className={` ${ location.pathname === "/adminpanel/allusers" ? "text-white" : "" }`} /> }
@@ -96,7 +96,7 @@ const AdminBody = () => {
                       : ""
                   }`}
                 >
-                  <span className="text-lg">Users</span>
+                  <span className="text-lg">Clients</span>
                 </Sidebar.Item>
               </Link>
 

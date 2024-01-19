@@ -50,18 +50,18 @@ const AllUsers = () => {
   ];
 
   const clientsData = useSelector((state) => state.users.clientsData);
-  // console.log("clientsData", clientsData);
+  console.log("clientsData", clientsData);
 
   useEffect(() => {
     dispatch(getAllClientsDataAsync())
   }, []);
 
   return (
-    <div className="py-10 px-4 md:px-8 rounded-md bg-white">
+    <div className="py-10 px-2 md:px-5 rounded-md bg-white">
       <div className="items-start justify-between md:flex">
         <div className="max-w-2xl">
           <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
-            USERS{" "}
+            CLIENTS{" "}
             <span className="text-lg font-normal">
                 ({clientsData.length})
               </span>
@@ -69,57 +69,45 @@ const AllUsers = () => {
         </div>
         <div className="mt-3 md:mt-0">
           {/* ------------- SEARCH BAR ------------- */}
-          <input
+          {/* <input
             type="text"
             placeholder="Search..."
             className=" ml-4 border text-black border-gray-500 w-72 rounded-lg px-4 py-2 focus:outline-none"
-            // value={searchQuery}
-            // onChange={handleSearch}
-          />
+          /> */}
         </div>
       </div>
       <div className="mt-12 shadow-sm rounded-lg overflow-x-auto">
         <table className="w-full table-auto text-md text-left">
           <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
             <tr>
-              <th className="py-4 px-6 text-lg font-medium">Username</th>
+              <th className="py-4 px-2 text-lg font-medium">Sr. </th>
+              <th className="py-4 px-6 text-lg font-medium">Name</th>
+              <th className="py-4 px-6 text-lg font-medium">Date</th>
+              <th className="py-4 px-6 text-lg font-medium">Customer Id</th>
+              <th className="py-4 px-6 text-lg font-medium">Company</th>
               <th className="py-4 px-6 text-lg font-medium">Phone</th>
-              <th className="py-4 px-6 text-lg font-medium">Position</th>
-              <th className="py-4 px-6 text-lg font-medium">Salary</th>
+              <th className="py-4 px-6 text-lg font-medium">City</th>
+              <th className="py-4 px-6 text-lg font-medium">Postal Code</th>
               <th className="py-4 px-6 text-lg font-medium"></th>
             </tr>
           </thead>
           <tbody className="text-gray-600 divide-y">
-            {clientsData.map((item, idx) => (
+            {clientsData.map((data, idx) => (
               <tr key={idx}>
-                <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
-                  <img src="https://cdn.shopify.com/s/files/1/0704/6378/2946/files/profile-pic.png?v=1704625675" className="w-10 h-10 rounded-full" />
-                  <div>
-                    <span className="block text-gray-700 text-md font-medium">
-                      {item.name}
-                    </span>
-                    <span className="block text-gray-700 text-sm">
-                      {item.email}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">03324700802</td>
-                <td className="px-6 py-4 whitespace-nowrap">Developer</td>
-                <td className="px-6 py-4 whitespace-nowrap">6541653</td>
-                {/* <td className="text-right px-6 whitespace-nowrap">
-                  <a
-                    href="javascript:void()"
-                    className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
-                  >
-                    Edit
-                  </a>
-                  <button
-                    href="javascript:void()"
-                    className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
-                  >
-                    Delete
-                  </button>
-                </td> */}
+                    <td td className="pr-3 py-4 text-lg pl-3">{idx + 1}</td>
+                    <td className="gap-x-3 px-6 whitespace-nowrap">
+                      <span className="text-gray-700 text-md font-medium capitalize">
+                        {`${data.firstName || ''} ${data?.lastName || ''}`}
+                      </span>{" "}
+                      <br />
+                      <span className="text-gray-700 text-sm">{data?.email || ''}</span>
+                    </td>
+                    <td className="pr-3 py-3 text-lg pl-6">{new Date(data.createdAt).toLocaleDateString()}</td>
+                    <td className="pr-3 py-3 text-lg pl-6">{data?.customerId || ''}</td>
+                    <td className="pr-6 py-3 text-lg pl-6">{data?.companyName || ''}</td>
+                    <td className="pr-6 py-3 text-lg pl-6">{data?.phoneNumber || ''}</td>
+                    <td className="pr-6 py-3 text-lg pl-6">{data?.city || ''}</td>
+                    <td className="pr-6 py-3 text-lg pl-6">{data?.postalCode || ''}</td>
               </tr>
             ))}
           </tbody>

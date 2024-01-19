@@ -34,23 +34,27 @@ const Dashboard = () => {
   } else {
     filterdData = DashboardData;
   }
-  const [limit, setLimit] = useState(8);
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(filterdData.length / limit);
-  const disabled = currentPage === totalPages;
-  const disabled2 = currentPage === 1;
 
-  // Calculate the index range for the currently displayed data
-  const startIndex = (currentPage - 1) * limit;
+  let searchData = []; // Move the declaration here
 
-  const endIndex = startIndex + limit;
-  let displayedData = filterdData.slice(startIndex, endIndex);
-  let searchData = [];
   if (searchQuery) {
     searchData = DashboardData.filter((data) =>
       data.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }
+
+  const [limit, setLimit] = useState(8);
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(
+    (searchQuery.length > 1 ? searchData.length : filterdData.length) / limit
+  );
+  const disabled = currentPage === totalPages;
+  const disabled2 = currentPage === 1;
+
+  // Calculate the index range for the currently displayed data
+  const startIndex = (currentPage - 1) * limit;
+  const endIndex = startIndex + limit;
+  let displayedData = filterdData.slice(startIndex, endIndex);
   displayedData = searchQuery.length > 1 ? searchData : displayedData;
 
   useEffect(() => {
@@ -104,7 +108,7 @@ const Dashboard = () => {
           <div className="mt-3 md:mt-0 flex gap-8">
             {/* ------------- SEARCH BAR ------------- */}
 
-            <div className="search_bar">
+            <div className="search_bar mr-10">
               <div class="relative mt-4 md:mt-0">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                   <svg
@@ -132,17 +136,19 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <button className="inline-block rounded bg-[#f11900] px-8 py-3 text-sm font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-red-500">
+            {/* <button className="inline-block rounded bg-[#f11900] px-8 py-3 text-sm font-medium text-white transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring active:bg-red-500">
               Export CSV
-            </button>
+            </button> */}
           </div>
         </div>
+
         <div className="mt-12 relative h-max overflow-x-auto">
           {/* ------------- CONTACT QUERIES TABLE ------------- */}
           <table className="contact_table w-full table-auto text-sm text-left overflow-x-auto">
             <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
-                <th className="py-4 px-6 text-lg font-medium pl-3">Name</th>
+                <th className="py-4 px-2 text-lg font-medium">Sr. </th>
+                <th className="py-4 px-6 text-lg font-medium">Name</th>
                 <th className="py-4 px-6 text-lg font-medium">Date</th>
                 <th className="py-4 px-6 text-lg font-medium">Ref Number</th>
                 <th className="py-4 px-6 text-lg font-medium">Phone</th>
@@ -157,23 +163,30 @@ const Dashboard = () => {
                 displayedData.map((data, idx) => {
                   return (
                     <>
-                      <tr key={idx} className="cursor-pointer">
-                        <td className="pr-3 py-3 text-lg pl-3">{data.name}</td>
-                        <td className="pr-3 py-3 text-lg">
+                      <tr key={startIndex + idx} className="cursor-pointer">
+                        <td className="pr-3 py-3 text-lg pl-3">
+                          {startIndex + idx + 1}
+                        </td>
+                        <td className="pr-3 py-3 text-lg pl-6">{data.name}</td>
+                        <td className="pr-3 py-3 text-lg pl-6">
                           {new Date(data.createdAt).toLocaleDateString()}
                         </td>
-                        <td className="pr-6 py-3 text-lg">{data.refNumber}</td>
-                        <td className="pr-6 py-3 text-lg">{data.phone}</td>
-                        <td className="pr-6 py-3 text-lg">{data.email}</td>
-                        <td className="pr-6 py-3 text-lg">{data.company}</td>
+                        <td className="pr-6 py-3 text-lg pl-6">
+                          {data.refNumber}
+                        </td>
+                        <td className="pr-6 py-3 text-lg pl-6">{data.phone}</td>
+                        <td className="pr-6 py-3 text-lg pl-6">{data.email}</td>
+                        <td className="pr-6 py-3 text-lg pl-6">
+                          {data.company}
+                        </td>
                         <td
-                          className="pr-1 py-3 text-lg font-semibold underline underline-offset-4 text-[#F11900]"
+                          className="pr-1 py-3 pl-6 text-lg font-semibold underline underline-offset-4 text-[#F11900]"
                           onClick={() => onClickTwo(data.id)}
                         >
                           View Now
                         </td>
 
-                        <td className="flex items-center justify-center py-3">
+                        <td className="pr-10 flex items-center justify-center py-3">
                           {/* ---------- HANDLE CREATE INVOICE BUTTON ----------  */}
                           <div
                             onClick={() => onClickErrorModal(data.id)}
@@ -205,7 +218,7 @@ const Dashboard = () => {
                 })
               ) : (
                 <tr>
-                  <td className="px-6 py-4 text-2xl text-gray-950">
+                  <td className="px-6 py-4 text-lg text-gray-950">
                     No data available
                   </td>
                 </tr>
@@ -214,6 +227,7 @@ const Dashboard = () => {
           </table>
         </div>
       </div>
+      {/* -------------- PAGINATION -------------- */}
       <div className=" flex justify-center mt-5 mb-5">
         <nav aria-label="Page navigation example">
           <ul className="inline-flex -space-x-px text-lg">

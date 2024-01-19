@@ -19,10 +19,13 @@ const UpdateInvoice = () => {
     { number: 1, name: "", amount: "" },
   ]);
 
+  // HERE WE EXTRACT OBJECT ID AND INVOICE ID
+  const [object_id, invoice_id] = id.split("-");
+  // console.log(object_id, invoice_id);
+
   const InvoicesData = useSelector((state) => state.invoice.allInvoices);
 
-  const updateInvoiceData = InvoicesData.filter((data) => data.id === id);
-  console.log("updateInvoiceData", updateInvoiceData);
+  const updateInvoiceData = InvoicesData.filter((data) => data.id === object_id);
 
   const [formData, setFormData] = useState({
     to: {
@@ -48,7 +51,6 @@ const UpdateInvoice = () => {
   });
 
   useEffect(() => {
-    console.log("Inside useEffect");
     if (updateInvoiceData.length > 0) {
       updateFormData();
     }
@@ -57,34 +59,35 @@ const UpdateInvoice = () => {
   // Function to update form data based on selected invoice data
   const updateFormData = () => {
     if (updateInvoiceData.length > 0) {
-      const invoice = updateInvoiceData[0].invoices[0];
-      setFormData({
-        to: {
-          name: invoice.to.name || "",
-          phone: invoice.to.phone || "",
-          email: invoice.to.email || "",
-          company: invoice.to.company || "",
-        },
-        service: [
-          {
-            serviceName: invoice.service[0].serviceName || "",
-            price: invoice.service[0].price || 0,
+      const selectedInvoice = updateInvoiceData[0].invoices.find((invoice) => invoice.id === invoice_id);
+
+      if (selectedInvoice) {
+        setFormData({
+          to: {
+            name: selectedInvoice.to.name || "",
+            phone: selectedInvoice.to.phone || "",
+            email: selectedInvoice.to.email || "",
+            company: selectedInvoice.to.company || "",
           },
-        ],
-        paymentStatus: invoice.status || "unpaid",
-        amount: invoice.amount || "",
-        discount: invoice.discount || "",
-        customerId: invoice.customerId || "",
-        orderId: invoice.orderId || "",
-        invoiceType: invoice.invoiceType || "full",
-        dueDate: invoice.dueDate || "",
-        secondInvoiceDueDate: invoice.secondInvoiceDueDate || "",
-      });
+          service: [
+            {
+              serviceName: selectedInvoice.service[0].serviceName || "",
+              price: selectedInvoice.service[0].price || 0,
+            },
+          ],
+          paymentStatus: selectedInvoice.status || "unpaid",
+          amount: selectedInvoice.amount || "",
+          discount: selectedInvoice.discount || "",
+          customerId: selectedInvoice.customerId || "",
+          orderId: selectedInvoice.orderId || "",
+          invoiceType: selectedInvoice.invoiceType || "full",
+          dueDate: selectedInvoice.dueDate || "",
+          secondInvoiceDueDate: selectedInvoice.secondInvoiceDueDate || "",
+        });
+      }
     }
   };
-
-  // console.log("formData", formData);
-
+  
   // HANDLE FORM CHANGE
   const handleFormChange = (index, field, value) => {
     const updatedServices = [...formData.services];
@@ -113,38 +116,6 @@ const UpdateInvoice = () => {
   };
 
   // HANDLE INPUT CHANGE
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-
-  //   if (!name) {
-  //     console.error("Input field name is undefined");
-  //     return;
-  //   }
-
-  //   const [category, index, fieldName] = name.split(".");
-
-  //   if (category === "to") {
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       to: {
-  //         ...prevData.to,
-  //         [fieldName]: value,
-  //       },
-  //     }));
-  //   } else if (category === "service") {
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       service: prevData.service.map((s, i) =>
-  //         i === parseInt(index) ? { ...s, [fieldName]: value } : s
-  //       ),
-  //     }));
-  //   } else {
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       [name]: value,
-  //     }));
-  //   }
-  // };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -182,7 +153,6 @@ const UpdateInvoice = () => {
 
   // Function to format date to "yyyy-MM-dd"
   const formatDate = (dateString) => {
-    // Extract the date part "yyyy-MM-dd"
     const formattedDate = dateString.split("T")[0];
     return formattedDate;
   };
@@ -255,8 +225,72 @@ const UpdateInvoice = () => {
   ];
 
   // HANDLE FORM SUBMIT FUNCTION
-  const handleFormSubmit = (e) => {
+  // const handleFormSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   // Calculate the total amount based on service prices
+  //   const totalAmount = formData.service.reduce(
+  //     (total, service) => total + Number(service.price),
+  //     0
+  //   );
+
+  //   // Get the discount value
+  //   const discountValue = Number(
+  //     document.querySelector('[name="discount"]').value
+  //   );
+
+  //   // Calculate the discounted amount
+  //   const discountedAmount = totalAmount - discountValue;
+
+  //   // Update the total amount field
+  //   document.querySelector('[name="amount"]').value =
+  //     discountedAmount.toFixed(2);
+
+  //   const invoiceType = toggle ? "half" : "full";
+  //   const includeSecondDueDate = toggle;
+
+  //   const finalData = {
+  //     to: {
+  //       name: document.querySelector('[name="name"]').value,
+  //       phone: document.querySelector('[name="phone"]').value,
+  //       email: document.querySelector('[name="email"]').value,
+  //       company: document.querySelector('[name="company"]').value,
+  //     },
+  //     service: formData.service.map((s, index) => ({
+  //       serviceName: document.querySelector(
+  //         `[name="service.${index}.serviceName"]`
+  //       ).value,
+  //       price: Number(
+  //         document.querySelector(`[name="service.${index}.price"]`).value
+  //       ),
+  //     })),
+  //     paymentStatus: "unpaid",
+  //     amount: discountedAmount,
+  //     discount: document.querySelector('[name="discount"]').value,
+  //     customerId: document.querySelector('[name="customerId"]').value,
+  //     orderId: document.querySelector('[name="orderId"]').value,
+  //     invoiceType: invoiceType,
+  //     dueDate: document.querySelector('[name="dueDate"]').value,
+  //     secondInvoiceDueDate: includeSecondDueDate
+  //       ? document.querySelector('[name="secondInvoiceDueDate"]').value || ""
+  //       : "",
+  //   };
+
+  //   console.log(finalData);
+  //   dispatch(createInvoicesAsync(finalData));
+  // };
+
+  // HANDLE UPDATE INVOICE
+  const handleUpdateInvoice = (e) => {
     e.preventDefault();
+
+    const { id, invoices } = updateInvoiceData[0];
+    const invoiceId = invoices.find((invoice) => invoice.id === invoice_id)?.id;
+
+    if (!invoiceId) {
+      console.error("Invoice not found.");
+      return;
+    }
 
     // Calculate the total amount based on service prices
     const totalAmount = formData.service.reduce(
@@ -264,65 +298,19 @@ const UpdateInvoice = () => {
       0
     );
 
-    // Get the discount value
-    const discountValue = Number(
-      document.querySelector('[name="discount"]').value
-    );
-
-    // Calculate the discounted amount
+    const discountValue = Number(formData.discount || 0);
     const discountedAmount = totalAmount - discountValue;
-
-    // Update the total amount field
-    document.querySelector('[name="amount"]').value =
-      discountedAmount.toFixed(2);
-
-    const invoiceType = toggle ? "half" : "full";
-    const includeSecondDueDate = toggle;
-
-    const finalData = {
-      to: {
-        name: document.querySelector('[name="name"]').value,
-        phone: document.querySelector('[name="phone"]').value,
-        email: document.querySelector('[name="email"]').value,
-        company: document.querySelector('[name="company"]').value,
-      },
-      service: formData.service.map((s, index) => ({
-        serviceName: document.querySelector(
-          `[name="service.${index}.serviceName"]`
-        ).value,
-        price: Number(
-          document.querySelector(`[name="service.${index}.price"]`).value
-        ),
-      })),
-      paymentStatus: "unpaid",
-      amount: discountedAmount,
-      discount: document.querySelector('[name="discount"]').value,
-      customerId: document.querySelector('[name="customerId"]').value,
-      orderId: document.querySelector('[name="orderId"]').value,
-      invoiceType: invoiceType,
-      dueDate: document.querySelector('[name="dueDate"]').value,
-      secondInvoiceDueDate: includeSecondDueDate
-        ? document.querySelector('[name="secondInvoiceDueDate"]').value || ""
-        : "",
-    };
-
-    console.log(finalData);
-    dispatch(createInvoicesAsync(finalData));
-  };
-
-  // HANDLE UPDATE INVOICE
-  const handleUpdateInvoice = (e) => {
-    e.preventDefault();
-
-    const { id, invoices } = updateInvoiceData[0];
-    const invoiceId = invoices[0].id;
 
     const updatedFormData = {
       ...formData,
       id,
       invoiceId,
+      amount: discountedAmount,
     };
 
+    console.log("updatedFormData", updatedFormData);
+
+    // Dispatch the updated data to the backend
     dispatch(updateInvoicesAsync(updatedFormData)).then(() => {
       dispatch(getAllInvoicesAsync());
       navigate(`/adminpanel/all-invoice`);
@@ -338,7 +326,7 @@ const UpdateInvoice = () => {
           </h2>
 
           {/* -------------- TOGGLE BUTTON --------------  */}
-          <div className="flex items-center gap-4 mr-11">
+          {/* <div className="flex items-center gap-4 mr-11">
             <label
               className="text-gray-700 font-medium text-xl"
               htmlFor="emailAddress"
@@ -352,10 +340,10 @@ const UpdateInvoice = () => {
               <input id="switch-2" type="checkbox" className="peer sr-only" />
               <label htmlFor="switch-2" className="hidden"></label>
               <div
-                className={`peer h-4 w-11 rounded-full border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-300 peer-checked:after:translate-x-full peer-focus:ring-green-300`}
+                className={`peer h-4 w-11 rounded-full border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-red-500 peer-checked:after:translate-x-full peer-focus:ring-red-300`}
               ></div>
             </label>
-          </div>
+          </div> */}
         </div>
 
         {/* {invoiceData.map((data) => ( */}
@@ -515,7 +503,6 @@ const UpdateInvoice = () => {
                 value={formatDate(formData.dueDate)}
                 onChange={handleOtherFieldChange}
                 className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
-                required
               />
             </div>
 
@@ -534,7 +521,6 @@ const UpdateInvoice = () => {
                   value={formatDate(formData.secondInvoiceDueDate)}
                   onChange={handleOtherFieldChange}
                   className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
-                  required
                 />
               </div>
             ) : (
@@ -576,7 +562,7 @@ const UpdateInvoice = () => {
                   />
 
                   <button
-                    className="h-10 w-24 text-xl text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                    className="h-10 w-24 text-xl text-white transition-colors duration-300 transform bg-[#f11900] rounded-md hover:bg-[#f11900] focus:outline-none focus:bg-[#f11900]"
                     onClick={() => handleDeleteService(index)}
                     type="button"
                   >
@@ -586,7 +572,7 @@ const UpdateInvoice = () => {
               ))}
 
               <button
-                className="mt-3 px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                className="mt-3 px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#f11900] rounded-md hover:bg-[#f11900] focus:outline-none focus:bg-[#f11900]"
                 onClick={handleAddService}
                 type="button"
               >
