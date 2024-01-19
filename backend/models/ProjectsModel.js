@@ -2,6 +2,17 @@
 
 import mongoose from "mongoose";
 
+const ProjectProgressSchema = new mongoose.Schema({
+    title: {
+      type: String,
+      required: [true, 'Title is required.'],
+    },
+    description: {
+      type: String,
+      required: [true, 'Description is required.'],
+    },
+  });
+
 const ProjectSchema = new mongoose.Schema({
   projectTitle: {
     type: String,
@@ -48,16 +59,7 @@ const ProjectSchema = new mongoose.Schema({
     type:Boolean,
     default:false
   },
-  projectProgress:{
-    title:{
-        type:String,
-        required: [true, 'Title is required.'],
-    },
-    description:{
-        type:String,
-        required: [true, 'Description is required.'],
-    }
-  }
+  projectProgress:[ProjectProgressSchema]
 });
 
 export const Projects = mongoose.model('Projects', ProjectSchema);
