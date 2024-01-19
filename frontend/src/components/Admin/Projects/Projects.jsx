@@ -1,32 +1,20 @@
-import React, { useState } from "react";
-import { Modal, Button } from "keep-react";
-import { Trash } from "phosphor-react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { getAllProjectsAsync } from "../../../features/ProjectSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Projects = () => {
   const navigate = useNavigate();
-  const [showErrorModalX, setShowErrorModalX] = useState(false);
-  const [deleteMsgId, setDeleteMsgId] = useState(null);
-  const tableItems = [
-    {
-      id: 1,
-      name: "Dummy Client",
-      email: "suheer@gmail.com",
-      order_id: "43543654",
-      service: "Landing Page Services",
-      invoice_status: "unpaid",
-      project_status: "In Progress",
-    },
-    
-  ];
+  const dispatch = useDispatch();
 
-  // DELETE MESSAGE MODAL FUNCTION
-  const onClickErrorModal = (id) => {
-    setShowErrorModalX(!showErrorModalX);
-    setDeleteMsgId(id);
-  };
+  // CALL TO GET ALL INVOICES
+  useEffect(() => {
+    dispatch(getAllProjectsAsync());
+  }, [dispatch]);
 
-  const delete_MsgId = tableItems.filter((data) => data.id === deleteMsgId);
+  // HERE WE GET DATA USING USESELECTOR FROM STATE
+  const ProjectsData = useSelector((state) => state.project.allProjects);
+  // console.log("ProjectsData", ProjectsData);
 
   return (
     <>
@@ -34,13 +22,18 @@ const Projects = () => {
         <div className="items-start justify-between md:flex">
           <div className="max-w-4xl">
             <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl">
-              ONGOING PROJECTS{" "}
-              <span className="text-lg font-normal">({tableItems.length})</span>
+              ALL PROJECTS{" "}
+              <span className="text-lg font-normal">
+                ({ProjectsData.length})
+              </span>
             </h3>
-            {/* <p className="text-gray-700 text-lg mt-4">
-              Here you can view and manage all ongoing projects.
-            </p> */}
           </div>
+          <Link
+            to="/adminpanel/addProjects"
+            className="block py-2.5 px-4 text-white font-medium bg-[#f11900] duration-150 hover:bg-[#f11900] active:bg-red-700 rounded-lg shadow-lg hover:shadow-none"
+          >
+            Add Project
+          </Link>
         </div>
 
         {/* ------------- TABS ------------- */}
@@ -69,94 +62,51 @@ const Projects = () => {
           <table className="w-full table-auto text-md text-left overflow-auto">
             <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
-                <th className="py-4 px-6 text-lg font-medium">Order Id</th>
-                <th className="py-4 px-6 text-lg font-medium">Client</th>
-                <th className="py-4 px-6 text-lg font-medium">Service</th>
+                <th className="py-4 px-6 text-lg font-medium">Sr. </th>
+                <th className="py-4 px-6 text-lg font-medium">Project Name</th>
+                <th className="py-4 px-6 text-lg font-medium">Customer ID</th>
+                <th className="py-4 px-6 text-lg font-medium">Project Progress</th>
+                <th className="py-4 px-6 text-lg font-medium">Date</th>
+                <th className="py-4 px-6 text-lg font-medium">Deadline</th>
+                <th className="py-4 px-6 text-lg font-medium">Amount</th>
                 <th className="py-4 px-6 text-lg font-medium">Invoice Status</th>
-                <th className="py-4 px-6 text-lg font-medium">Project Status</th>
-                <th className="py-4 px-6 text-lg font-medium">Details</th>
+                <th className="py-4 px-6 text-lg font-medium">View Details</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
-              {tableItems.map((item, idx) => (
+              {ProjectsData.map((data, idx) => (
                 <tr key={idx}>
-                  <td className="flex items-center gap-x-3 py-3 px-6 whitespace-nowrap">
-                    <div>
-                      <span className="block text-gray-700 text-md font-medium">
-                        {item.name}
-                      </span>
-                      <span className="block text-gray-700 text-sm">
-                        {item.email}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.order_id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{item.service}</td>
-                  <td className="pr-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`mx-4 px-3 py-2 rounded-full font-semibold text-sm capitalize ${
-                        item.invoice_status == "Active"
-                          ? "text-green-600 bg-green-50"
-                          : "text-blue-600 bg-blue-50"
-                      }`}
-                    >
-                      {item.invoice_status}
-                    </span>
-                  </td>
-                  <td className="pr-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`mx-4 px-3 py-2 rounded-full font-semibold text-sm capitalize ${
-                        item.invoice_status == "Active"
-                          ? "text-green-600 bg-green-50"
-                          : "text-green-600 bg-green-50"
-                      }`}
-                    >
-                      {item.project_status}
-                    </span>
-                  </td>
-                  <td className="pr-0 py-4 text-lg ">
-                    <Button
-                      size="sm"
-                      type="outlineGray"
-                      className="bg-[#f11900] text-white border-[#f11900] hover:bg-[#f11900] hover:text-white"
-                      onClick={() => navigate("/adminpanel/projectdetails")}
-                    >
+                  <td className="px-6 py-4 ">{idx + 1}</td>
+                  <td className="px-6 py-4 ">{data.projectTitle}</td>
+                  <td className="px-6 py-4  text-red-600">{data.customerId}</td>
+                  <td className="px-6 py-4 ">{data.projectProgress.title}</td>
+                  <td className="px-6 py-4 text-md">{new Date(data.startDate).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 ">{new Date(data.Deadline).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 ">{data.amount}</td>
+                  <td className="pl-6 py-4">
+                    <span className={`px-5 py-2 rounded-full capitalize font-semibold text-sm ${
+                      data.paymentStatus === "unpaid"
+                        ? "text-red-600 bg-red-50"
+                        : data.paymentStatus === "paid"
+                        ? "text-blue-600 bg-blue-50"
+                        : data.paymentStatus === "partially paid"
+                        ? "text-yellow-600 bg-yellow-50"
+                        : ""
+                        }`}>
+                        {data.paymentStatus}
+                    </span>     
+                      </td>
+                  <td className="px-6 py-4">
+                    <Link to={`/adminpanel/projectdetails/${data.id}`} className="bg-[#f11900] text-white px-4 py-2.5 rounded-lg">
                       View Details
-                    </Button>
+                    </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-
         </div>
       </div>
-      {/* ------------- DELETE MESSAGE MODAL ------------- */}
-      {delete_MsgId.map((data, idx) => (
-        <Modal
-          icon={<Trash size={28} color="#E92215" />}
-          size="lg"
-          show={showErrorModalX}
-          onClose={onClickErrorModal}
-        >
-          <Modal.Header>Do you want to delete this request?</Modal.Header>
-          <Modal.Body>
-            <div className="space-y-6">
-              <p className="text-lg leading-relaxed text-metal-500">
-                This action will permanently remove the request.
-              </p>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button type="outlineGray" onClick={onClickErrorModal}>
-              Cancel
-            </Button>
-            <Button type="primary" color="error" onClick={onClickErrorModal}>
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      ))}
     </>
   );
 };

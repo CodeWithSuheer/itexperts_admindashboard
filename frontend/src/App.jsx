@@ -14,15 +14,14 @@ import { useEffect } from "react";
 import { authUserAsync } from "./features/authSlice";
 import { useDispatch } from "react-redux";
 import { AdminProtected, LoginProtected } from "./components/ProtectedRoutes/ProtectedRoutes";
-import OnGoingProject from "./components/Admin/Projects/OnGoingProject";
-import CompletedProjects from "./components/Admin/Projects/CompletedProjects";
-import OnGoingProjectsDetails from "./components/Admin/Projects/OnGoingProjectsDetails";
 import AllInvoices from "./components/Admin/Invoice/AllInvoices";
 import AllUsers from "./components/Admin/Users/AllUsers";
-import "./App.css";
 import Projects from "./components/Admin/Projects/Projects";
 import UpdateInvoice from "./components/Admin/Invoice/UpdateInvoice";
 import Support from "./components/Admin/Support/Support";
+import AddProjects from "./components/Admin/Projects/AddProjects";
+import ProjectsDetails from "./components/Admin/Projects/ProjectsDetails";
+import "./App.css";
 
 
 function App() {
@@ -44,15 +43,21 @@ function App() {
           {/* --------- DASHBOARD --------- */}
           <Route path="/adminpanel" element={<AdminProtected><AdminPanel /></AdminProtected>}>
             <Route index element={<Dashboard />} />
-            <Route path="pending-requests" element={<PendingRequests />} />
-            <Route path="approved-requests" element={<ApprovedRequests />} />
+            {/* USERS */}
+            <Route path="allusers" element={<AllUsers />} />
+            {/* INVOICES */}
             <Route path="invoice" element={<Invoice />} />
             <Route path="all-invoice" element={<AllInvoices />} />
             <Route path="updateInvoice/:id" element={<UpdateInvoice />} />
+            {/* PROJECTS */}
             <Route path="projects" element={<Projects />} />
-            <Route path="projectdetails" element={<OnGoingProjectsDetails />} />
-            <Route path="allusers" element={<AllUsers />} />
+            <Route path="addProjects" element={<AddProjects />} />
+            <Route path="projectdetails/:id" element={<ProjectsDetails />} />
+            {/* SUPPORTS */}
             <Route path="support" element={<Support />} />
+            {/* ADMIN - REQUESTS */}
+            <Route path="pending-requests" element={<PendingRequests />} />
+            <Route path="approved-requests" element={<ApprovedRequests />} />
           </Route>
 
           {/* --------- AUTHENTICATION --------- */}
