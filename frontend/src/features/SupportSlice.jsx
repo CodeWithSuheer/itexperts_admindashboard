@@ -3,8 +3,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 //API URL
-const getAllSupportReq = "http://localhost:8080/api/contactForms/getAllForms";
-const deleteContactForm = "http://localhost:8080/api/contactForms/deleteContactForm";
+const getAllSupportReq = "http://localhost:8080/api/support/getAllSupports";
+// const deleteContactForm = "http://localhost:8080/api/contactForms/deleteContactForm";
 
 
 

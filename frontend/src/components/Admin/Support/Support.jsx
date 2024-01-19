@@ -5,20 +5,13 @@ import { Modal, Button } from "keep-react";
 import { CloudArrowUp } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteContactFormAsync,
-  getAllFormsAsync,
-} from "../../../features/contactFormSlice";
 import { getAllSupportReqAsync } from "../../../features/SupportSlice";
 
 const Support = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showModalX, setShowModalX] = useState(false);
-  const [showErrorModalX, setShowErrorModalX] = useState(false);
   const [Message, setMessage] = useState(null);
-  const [deleteMsgId, setDeleteMsgId] = useState(null);
-
   const [name, setName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -27,6 +20,12 @@ const Support = () => {
   );
   console.log("allSupportRequests", allSupportRequests);
 
+  // HERE WE CALL THE FUNCTION TO GET SUPPORT DATA
+  useEffect(() => {
+    dispatch(getAllSupportReqAsync());
+  }, [dispatch]);
+
+  //   HANDLE SEARCH
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -56,40 +55,16 @@ const Support = () => {
   }
   displayedData = searchQuery.length > 1 ? searchData : displayedData;
 
-  useEffect(() => {
-    dispatch(getAllSupportReqAsync());
-  }, [dispatch]);
-
   // VIEW MESSAGE MODAL FUNCTION
   const onClickTwo = (id) => {
-    console.log(id);
+    console.log("message ", id);
     setShowModalX(!showModalX);
     setMessage(id);
   };
 
-  // DELETE MESSAGE MODAL FUNCTION
-  const onClickErrorModal = (id) => {
-    setShowErrorModalX(!showErrorModalX);
-    setDeleteMsgId(id);
-  };
-
-  // HANDLE CREATE INVOICE
-  const handleCreateInvoice = (invoice_Id) => {
-    navigate(`/adminpanel/invoice/${invoice_Id}`);
-    console.log("invoice_Id", invoice_Id);
-  };
-
-  const filteredId = allSupportRequests.filter((data) => data.id === Message);
-  const delete_MsgId = allSupportRequests.filter(
-    (data) => data.id === deleteMsgId
+  const filteredId = allSupportRequests.filter(
+    (data) => data.support.id === Message
   );
-
-  // HANDLE CREATE INVOICE
-  const handleDelete = (id) => {
-    dispatch(deleteContactFormAsync(id)).then(() => {
-      dispatch(getAllFormsAsync());
-    });
-  };
 
   return (
     <>
@@ -142,69 +117,51 @@ const Support = () => {
           <table className="contact_table w-full table-auto text-sm text-left overflow-x-auto">
             <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
-                <th className="py-4 px-4 text-lg font-medium pl-3">Sr.</th>
+                <th className="py-4 px-2 text-lg font-medium pl-3">Sr.</th>
                 <th className="py-4 px-6 text-lg font-medium pl-3">Name</th>
-                <th className="py-4 px-6 text-lg font-medium">Date</th>
-                <th className="py-4 px-6 text-lg font-medium">Ref Number</th>
-                <th className="py-4 px-6 text-lg font-medium">Phone</th>
-                <th className="py-4 px-6 text-lg font-medium">Email</th>
-                <th className="py-4 px-6 text-lg font-medium">Company</th>
-                <th className="py-4 px-6 text-lg font-medium">Message</th>
-                <th className="py-4 px-6 text-lg font-medium">Actions</th>
+                <th className="py-4 px-6 text-lg font-medium pl-3">Date</th>
+                <th className="py-4 px-4 text-lg font-medium">Ticket No</th>
+                <th className="py-4 px-4 text-lg font-medium">Customer ID</th>
+                <th className="py-4 px-4 text-lg font-medium">Department</th>
+                <th className="py-4 px-4 text-lg font-medium">Message</th>
+                <th className="py-4 px-4 text-lg font-medium">Download</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
               {displayedData.length > 0 ? (
-                displayedData.map((data, idx) => {
-                  return (
-                    <>
-                      <tr key={idx} className="cursor-pointer">
-                        <td className="pr-3 py-3 text-lg pl-3">{idx + 1}</td>
-                        <td className="pr-3 py-3 text-lg pl-3">{data.name}</td>
-                        <td className="pr-3 py-3 text-lg">
-                          {new Date(data.createdAt).toLocaleDateString()}
-                        </td>
-                        <td className="pr-6 py-3 text-lg">{data.refNumber}</td>
-                        <td className="pr-6 py-3 text-lg">{data.phone}</td>
-                        <td className="pr-6 py-3 text-lg">{data.email}</td>
-                        <td className="pr-6 py-3 text-lg">{data.company}</td>
-                        <td
-                          className="pr-1 py-3 text-lg font-semibold underline underline-offset-4 text-[#F11900]"
-                          onClick={() => onClickTwo(data.id)}
+                displayedData.map((data, idx) => (
+                    <tr key={idx} className="cursor-pointer">
+                    <td className="pr-3 py-3 text-lg pl-3">{idx + 1}</td>
+                    <td className="gap-x-3 px-6 whitespace-nowrap">
+                      <span className="text-gray-700 text-lg font-medium capitalize">
+                        {`${data.client?.firstName || ''} ${data.client?.lastName || ''}`}
+                      </span>{" "}
+                      <br />
+                      <span className="text-gray-700 text-md">{data.client?.email || ''}</span>
+                    </td>
+                    <td className="pr-3 py-3 text-lg pl-6">7/7/7</td>
+                    <td className="pr-3 py-3 text-lg pl-6">{data.support?.ticketNumber || ''}</td>
+                    <td className="pr-6 py-3 text-lg pl-6">{data.client?.customerId || ''}</td>
+                    <td className="pr-6 py-3 text-lg pl-6">{data.support?.departmentName || ''}</td>
+                    <td className="pr-1 py-3 text-lg pl-6 font-semibold underline underline-offset-4 text-[#F11900]"
+                      onClick={() => onClickTwo(data.support?.id)}>
+                      View Now
+                    </td>
+                    <td className="pr-3 py-3 text-lg pl-3">
+                      {data.support?.file ? (
+                        <a
+                          href={data.support.file.downloadURL}
+                          download={data.support.file.name}
+                          className="px-3 py-2 text-sm rounded-md bg-gray-700 text-white"
                         >
-                          View Now
-                        </td>
-
-                        <td className="flex items-center justify-center py-3">
-                          {/* ---------- HANDLE CREATE INVOICE BUTTON ----------  */}
-                          <div
-                            onClick={() => onClickErrorModal(data.id)}
-                            className="trash_button rounded-full bg-[#F7F7F7] text-black p-2 ms-2.5 transition hover:scale-110"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              class="lucide lucide-trash-2"
-                            >
-                              <path d="M3 6h18" />
-                              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                              <line x1="10" x2="10" y1="11" y2="17" />
-                              <line x1="14" x2="14" y1="11" y2="17" />
-                            </svg>
-                          </div>
-                        </td>
-                      </tr>
-                    </>
-                  );
-                })
+                          Download
+                        </a>
+                      ) : (
+                        <span className="text-gray-500">No file available</span>
+                      )}
+                    </td>
+                  </tr>
+                ))
               ) : (
                 <tr>
                   <td className="px-6 py-4 text-2xl text-gray-950">
@@ -272,41 +229,10 @@ const Support = () => {
           <Modal.Body>
             <div className="space-y-6">
               <p className="text-xl leading-relaxed text-metal-500">
-                {data.message}
+                {data.support.message}
               </p>
             </div>
           </Modal.Body>
-        </Modal>
-      ))}
-
-      {/* ------------- DELETE MESSAGE MODAL ------------- */}
-      {delete_MsgId.map((data, idx) => (
-        <Modal
-          icon={<Trash size={28} color="#E92215" />}
-          size="lg"
-          show={showErrorModalX}
-          onClose={onClickErrorModal}
-        >
-          <Modal.Header>Do you want to delete this file?</Modal.Header>
-          <Modal.Body>
-            <div className="space-y-6">
-              <p className="text-lg leading-relaxed text-metal-500">
-                This action will permanently remove the query.
-              </p>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button type="outlineGray" onClick={onClickErrorModal}>
-              Cancel
-            </Button>
-            <Button
-              type="primary"
-              color="error"
-              onClick={() => handleDelete(data.id)}
-            >
-              Delete
-            </Button>
-          </Modal.Footer>
         </Modal>
       ))}
     </>
