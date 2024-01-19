@@ -13,6 +13,8 @@ import contactFormRouter from "./routes/contactFormRoutes.js";
 import invoiceRouter from "./routes/invoiceRoutes.js";
 import clientRouter from "./routes/clientRoutes.js";
 import supportRouter from "./routes/supportRoutes.js";
+import ProjectOrderRouter from "./routes/ProjectOrderRoutes.js";
+import projectsRouter from "./routes/projectsRoutes.js";
 
 
 
@@ -62,6 +64,8 @@ app.use("/api/contactForms",contactFormRouter)
 app.use("/api/invoices",invoiceRouter);
 app.use("/api/clients",clientRouter);
 app.use("/api/support",supportRouter);
+app.use('/api/ProjectOrder', ProjectOrderRouter);
+app.use('/api/projects', projectsRouter);
 
 
 
