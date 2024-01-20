@@ -187,7 +187,7 @@ export const authUser = async (req, res , next) => {
 
 export const getAllUsers = async (req ,res ,next) => {
   try {
-      const users = await User.find()
+      const users = await User.find().sort({createdAt: -1})
       setMongoose();
       res.status(200).json({ msg: "Got All Users", users });
   } catch (error) {

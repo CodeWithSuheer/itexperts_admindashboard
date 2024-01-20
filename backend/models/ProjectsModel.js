@@ -61,11 +61,9 @@ const ProjectSchema = new mongoose.Schema({
   },
   customerName:{
     type:String,
-    //required: [true, 'Client Name is required.']
   },
   customerEmail:{
     type:String,
-    //required: [true, 'Client Name is required.']
   },
   projectProgress:[ProjectProgressSchema]
 });

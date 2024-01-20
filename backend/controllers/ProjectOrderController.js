@@ -66,7 +66,7 @@ export const createProjectOrder = async (req, res) => {
 
 export const getAllProjectOrders = async (req, res) => {
   try {
-    const projects = await ProjectOrders.find();
+    const projects = await ProjectOrders.find().sort({createdAt: -1});
     //setMongooseid();
     res.json({ data: projects });
   } catch (error) {

@@ -41,4 +41,4 @@ const ProjectSchema = new mongoose.Schema({
   }
 });
 
-export const ProjectOrders = mongoose.model('ProjectOrders', ProjectSchema);
+export const ProjectOrders = mongoose.model('Project Orders', ProjectSchema);
