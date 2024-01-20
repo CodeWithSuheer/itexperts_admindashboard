@@ -224,7 +224,8 @@ const Invoice = () => {
     };
 
     console.log(finalData);
-    dispatch(createInvoicesAsync(finalData));
+    dispatch(createInvoicesAsync(finalData))
+    navigate("/adminpanel/all-invoice")
   };
 
   return (
@@ -452,7 +453,7 @@ const Invoice = () => {
                   />
 
                   <button
-                    className="h-10 w-24 text-xl text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                    className="h-10 w-24 text-xl text-white transition-colors duration-300 transform bg-[#f11900] rounded-md hover:bg-[#f11900] focus:outline-none focus:bg-[#D22B2B]"
                     onClick={() => handleDeleteService(index)}
                     type="button"
                   >
@@ -462,7 +463,7 @@ const Invoice = () => {
               ))}
 
               <button
-                className="mt-3 px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#D22B2B] rounded-md hover:bg-[#D22B2B] focus:outline-none focus:bg-[#D22B2B]"
+                className="mt-3 px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-[#f11900] rounded-md hover:bg-[#f11900] focus:outline-none focus:bg-[#D22B2B]"
                 onClick={handleAddService}
                 type="button"
               >
@@ -473,8 +474,7 @@ const Invoice = () => {
 
           <div className="flex justify-center gap-10 mt-6">
             <button
-              className="px-8 py-3 leading-5 text-white transition-colors duration-300 transform bg-[#f11900] rounded-md hover:bg-[#bd5d53] focus:outline-none focus:bg-[#D22B2B]"
-              // onClick={onClickTwo}
+              className="px-8 py-3 leading-5 text-white transition-colors duration-300 transform bg-[#f11900] rounded-md hover:bg-[#f11900] focus:outline-none focus:bg-[#D22B2B]"
               type="submit"
             >
               Generate Invoice

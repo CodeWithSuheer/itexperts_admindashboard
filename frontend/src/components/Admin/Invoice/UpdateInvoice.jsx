@@ -25,7 +25,9 @@ const UpdateInvoice = () => {
 
   const InvoicesData = useSelector((state) => state.invoice.allInvoices);
 
-  const updateInvoiceData = InvoicesData.filter((data) => data.id === object_id);
+  const updateInvoiceData = InvoicesData.filter(
+    (data) => data.id === object_id
+  );
 
   const [formData, setFormData] = useState({
     to: {
@@ -59,7 +61,9 @@ const UpdateInvoice = () => {
   // Function to update form data based on selected invoice data
   const updateFormData = () => {
     if (updateInvoiceData.length > 0) {
-      const selectedInvoice = updateInvoiceData[0].invoices.find((invoice) => invoice.id === invoice_id);
+      const selectedInvoice = updateInvoiceData[0].invoices.find(
+        (invoice) => invoice.id === invoice_id
+      );
 
       if (selectedInvoice) {
         setFormData({
@@ -69,12 +73,10 @@ const UpdateInvoice = () => {
             email: selectedInvoice.to.email || "",
             company: selectedInvoice.to.company || "",
           },
-          service: [
-            {
-              serviceName: selectedInvoice.service[0].serviceName || "",
-              price: selectedInvoice.service[0].price || 0,
-            },
-          ],
+          service: selectedInvoice.service.map((service) => ({
+            serviceName: service.serviceName || "",
+            price: service.price || 0,
+          })),
           paymentStatus: selectedInvoice.status || "unpaid",
           amount: selectedInvoice.amount || "",
           discount: selectedInvoice.discount || "",
@@ -87,7 +89,7 @@ const UpdateInvoice = () => {
       }
     }
   };
-  
+
   // HANDLE FORM CHANGE
   const handleFormChange = (index, field, value) => {
     const updatedServices = [...formData.services];

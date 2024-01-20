@@ -18,7 +18,6 @@ import { logoutUserAsync, reset } from "../../features/authSlice";
 import Icons from "./Icons";
 import { HeartHandshake } from "lucide-react";
 import "./AdminPanel.css";
-import { getAllClientsDataAsync } from "../../features/UsersSlice";
 
 const AdminBody = () => {
   const dispatch = useDispatch();
@@ -52,10 +51,6 @@ const AdminBody = () => {
       <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" />
     </svg>
   );
-
-  useEffect(() => {
-    dispatch(getAllClientsDataAsync())
-  }, []);
 
   const admin = useSelector((state) => state.auth.user);
 

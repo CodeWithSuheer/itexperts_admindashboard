@@ -22,6 +22,7 @@ import Support from "./components/Admin/Support/Support";
 import AddProjects from "./components/Admin/Projects/AddProjects";
 import ProjectsDetails from "./components/Admin/Projects/ProjectsDetails";
 import "./App.css";
+import UpdateProjects from "./components/Admin/Projects/UpdateProjects";
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
             <Route path="projects" element={<Projects />} />
             <Route path="addProjects" element={<AddProjects />} />
             <Route path="projectdetails/:id" element={<ProjectsDetails />} />
+            <Route path="updateproject/:id" element={<UpdateProjects />} />
             {/* SUPPORTS */}
             <Route path="support" element={<Support />} />
             {/* ADMIN - REQUESTS */}

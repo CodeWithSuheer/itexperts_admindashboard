@@ -235,6 +235,7 @@ const AllInvoices = () => {
             {/* ------------- TABLE HEAD ------------- */}
             <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
+                <th className="py-4 pl-4 text-lg font-medium">Sr. </th>
                 <th className="py-4 px-6 text-lg font-medium">Name</th>
                 <th className="py-4 px-6 text-lg font-medium">Customer ID</th>
                 <th className="py-4 px-6 text-lg font-medium">Order ID</th>
@@ -253,7 +254,7 @@ const AllInvoices = () => {
                       key={`${index}-${invoiceIndex}`}
                       className="cursor-pointer"
                     >
-                      {/* ------------- CUSTOMER ID ------------- */}
+                      <td className="pl-4 py-3 text-lg">{index + 1}</td>
                       <td className="gap-x-3 px-6 whitespace-nowrap">
                         <span className="text-gray-700 text-lg font-medium capitalize">
                           {invoice.to.name}
@@ -270,12 +271,12 @@ const AllInvoices = () => {
 
                       <td className="pl-6 py-4 whitespace-nowrap">
                         <span
-                          className={`px-5 py-2 rounded-full capitalize font-semibold text-sm ${
+                          className={`px-4 py-1.5 rounded-full capitalize font-semibold text-xs ${
                             data.paymentStatus === "unpaid"
                               ? "text-red-600 bg-red-50"
-                              : data.paymentStatus === "paid"
-                              ? "text-blue-600 bg-blue-50"
-                              : data.paymentStatus === "partiallypaid"
+                              : data.paymentStatus === "Paid"
+                              ? "text-green-600 bg-green-50"
+                              : data.paymentStatus === "Partially Paid"
                               ? "text-yellow-600 bg-yellow-50"
                               : ""
                           }`}
@@ -495,9 +496,19 @@ const AllInvoices = () => {
 
                   <p className="text-base">
                     <span className="font-semibold">Due Date: </span>
-                    {new Date(
-                      data.selectedInvoice.dueDate
-                    ).toLocaleDateString()}
+                    {data.isFirstInvoice ? (
+                      <>
+                        {new Date(
+                          data.selectedInvoice.dueDate
+                        ).toLocaleDateString()}
+                      </>
+                    ) : (
+                      <>
+                        {new Date(
+                          data.selectedInvoice.secondInvoiceDueDate
+                        ).toLocaleDateString()}
+                      </>
+                    )}
                   </p>
                 </div>
 
@@ -525,63 +536,151 @@ const AllInvoices = () => {
 
                   <div className="w-full flex justify-end pr-3 mb-6">
                     <div className="pt-2 flex flex-col text-lg text-right">
-                      {/* SUB TOTAL */}
-                      <div className="invoice_total py-2.5 w-72 font-medium flex justify-end items-center gap-6">
-                        <div className="total_amount text-right mr-3">
-                          Sub Total
-                        </div>
-                        <div className="invoice_heading w-16">
-                          $
-                          {data.selectedInvoice.amount +
-                            data.selectedInvoice.discount}
-                        </div>
-                      </div>
-                      {/* DISCOUNT */}
-                      <div className="invoice_total py-2.5 w-72 font-medium flex justify-end items-center gap-6">
-                        <div className="total_amount text-right mr-3">
-                          Discount
-                        </div>
-                        <div className="invoice_heading w-16">
-                          ${data.selectedInvoice.discount}
-                        </div>
-                      </div>
-                      {/* TOTAL AMOUNT */}
-                      <div className="border-t py-2.5 w-72 font-semibold flex justify-end items-center gap-6">
-                        <div className="total_amount text-right mr-3">
-                          Total Amount
-                        </div>
-                        <div className="invoice_heading w-16">
-                          ${data.selectedInvoice.amount}
-                        </div>
-                      </div>
-                      {/* --------- FOR PARTIALLY PAID CLIENTS */}
-                      {/* {data.selectedInvoice.invoiceType === "half" ? (
+                      {data.selectedInvoice.invoiceType === "full" ? (
+                        <>
+                          {/* SUB TOTAL */}
+                          <div className="invoice_total py-2.5 font-medium flex justify-end items-center gap-6">
+                            <div className="total_amount text-right mr-3">
+                              Sub Total
+                            </div>
+                            <div className="invoice_heading w-24">
+                              $
+                              {data.selectedInvoice.amount +
+                                data.selectedInvoice.discount}
+                            </div>
+                          </div>
+                          {/* DISCOUNT */}
+                          <div className="invoice_total py-2.5 font-medium flex justify-end items-center gap-6">
+                            <div className="total_amount text-right mr-3">
+                              Discount
+                            </div>
+                            <div className="invoice_heading w-24">
+                              ${data.selectedInvoice.discount}
+                            </div>
+                          </div>
+                          {/* TOTAL AMOUNT */}
+                          <div className="border-t py-2.5 font-semibold flex justify-end items-center gap-6">
+                            <div className="total_amount text-right mr-3">
+                              Total Amount
+                            </div>
+                            <div className="invoice_heading w-24">
+                              ${data.selectedInvoice.amount}
+                            </div>
+                          </div>
+                        </>
+                      ) : (
                         <>
                           {data.isFirstInvoice ? (
                             <>
-                              <div className="border-t py-2.5 w-72 font-semibold flex justify-end items-center gap-6">
+                              {/* SUB TOTAL */}
+                              <div className="invoice_total py-2.5 font-medium flex justify-end items-center gap-6">
                                 <div className="total_amount text-right mr-3">
-                                  First Half Payable
+                                  Sub Total
                                 </div>
-                                <div className="invoice_heading w-16">
-                                  ${data.selectedInvoice.amount / 2}
+                                <div className="invoice_heading w-24">
+                                  {data.selectedInvoice.invoiceType ===
+                                  "full" ? (
+                                    <>
+                                      $
+                                      {data.selectedInvoice.amount +
+                                        data.selectedInvoice.discount}
+                                    </>
+                                  ) : (
+                                    <>
+                                      $
+                                      {data.selectedInvoice.amount * 2 +
+                                        data.selectedInvoice.discount}
+                                    </>
+                                  )}
                                 </div>
                               </div>
+
+                              {/* DISCOUNT */}
+                              <div className="invoice_total py-2.5 font-medium flex justify-end items-center gap-6">
+                                <div className="total_amount text-right mr-3">
+                                  Discount
+                                </div>
+                                <div className="invoice_heading w-24">
+                                  ${data.selectedInvoice.discount}
+                                </div>
+                              </div>
+
+                              {/* TOTAL AMOUNT */}
+                              <div className="border-t py-2.5 font-semibold flex justify-end items-center gap-6">
+                                <div className="total_amount text-right mr-3">
+                                  Total Amount
+                                </div>
+                                <div className="invoice_heading w-24">
+                                  ${data.selectedInvoice.amount}
+                                </div>
+                              </div>
+
+                              {/* <div className="border-t py-2.5 font-semibold flex justify-end items-center gap-6">
+                                <div className="total_amount text-right mr-3">
+                                  First Invoice
+                                </div>
+                                <div className="invoice_heading w-24">
+                                  ${data.selectedInvoice.amount}
+                                </div>
+                              </div> */}
                             </>
                           ) : (
                             <>
-                              <div className="border-t py-2.5 w-72 font-semibold flex justify-end items-center gap-6">
+                              {/* SUB TOTAL */}
+                              <div className="invoice_total py-2.5 font-medium flex justify-end items-center gap-6">
                                 <div className="total_amount text-right mr-3">
-                                  Second Half Payable
+                                  Sub Total
                                 </div>
-                                <div className="invoice_heading w-16">
-                                  ${data.selectedInvoice.amount / 2}
+                                <div className="invoice_heading w-24">
+                                  {data.selectedInvoice.invoiceType ===
+                                  "full" ? (
+                                    <>
+                                      $
+                                      {data.selectedInvoice.amount +
+                                        data.selectedInvoice.discount}
+                                    </>
+                                  ) : (
+                                    <>
+                                      $
+                                      {data.selectedInvoice.amount * 2 +
+                                        data.selectedInvoice.discount}
+                                    </>
+                                  )}
                                 </div>
                               </div>
+
+                              {/* DISCOUNT */}
+                              <div className="invoice_total py-2.5 font-medium flex justify-end items-center gap-6">
+                                <div className="total_amount text-right mr-3">
+                                  Discount
+                                </div>
+                                <div className="invoice_heading w-24">
+                                  ${data.selectedInvoice.discount}
+                                </div>
+                              </div>
+
+                              {/* TOTAL AMOUNT */}
+                              <div className="border-t py-2.5 font-semibold flex justify-end items-center gap-6">
+                                <div className="total_amount text-right mr-3">
+                                  Total Amount
+                                </div>
+                                <div className="invoice_heading w-24">
+                                  ${data.selectedInvoice.amount}
+                                </div>
+                              </div>
+
+                              {/* <div className="border-t py-2.5 font-semibold flex justify-end items-center gap-6">
+                                <div className="total_amount text-right mr-3">
+                                  Second Invoice
+                                </div>
+                                <div className="invoice_heading w-24">
+                                  ${data.selectedInvoice.amount}
+                                </div>
+                              </div> */}
                             </>
                           )}
                         </>
-                      ) : null} */}
+                      )}
                     </div>
                   </div>
                 </div>

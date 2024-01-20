@@ -63,7 +63,7 @@ const Dashboard = () => {
 
   // VIEW MESSAGE MODAL FUNCTION
   const onClickTwo = (id) => {
-    console.log(id);
+    // console.log(id);
     setShowModalX(!showModalX);
     setMessage(id);
   };

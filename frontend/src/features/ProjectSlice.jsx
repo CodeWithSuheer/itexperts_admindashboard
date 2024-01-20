@@ -3,10 +3,30 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 //API URL
+const createProjects = "http://localhost:8080/api/projects/createProject";
 const getAllProjects = "http://localhost:8080/api/projects/getAllProjects";
 
+// CREATE PROJECTS
+export const createProjectsAsync = createAsyncThunk(
+  "createProjects/Projects",
+  async (formData) => {
+    try {
+      const response = await axios.post(createProjects, formData);
+      console.log(response.data);
+      toast.success(response.data.msg);
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data.msg);
+      toast.error(error.response.data.msg);
+      throw error;
+    }
+  }
+);
+
 //GET ALL PROJECTS
-export const getAllProjectsAsync = createAsyncThunk( "getAllProjects/Projects", async () => {
+export const getAllProjectsAsync = createAsyncThunk(
+  "getAllProjects/Projects",
+  async () => {
     try {
       const response = await axios.post(getAllProjects);
       console.log(response.data);
@@ -35,6 +55,7 @@ export const deleteContactFormAsync = createAsyncThunk(
 
 // INITIAL STATE
 const initialState = {
+  createProject: null,
   allProjects: [],
   loading: false,
 };
@@ -45,6 +66,15 @@ const ProjectSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // CREATE PROJECTS
+      .addCase(createProjectsAsync.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(createProjectsAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.createProject = action.payload;
+      })
+
       // GET ALL PROJECTS
       .addCase(getAllProjectsAsync.pending, (state, action) => {
         state.loading = true;

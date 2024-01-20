@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Modal, Button } from "keep-react";
+import { CloudArrowUp } from "phosphor-react";
 import {
   User,
   EnvelopeSimple,
@@ -10,9 +12,9 @@ import {
   Check,
 } from "phosphor-react";
 import "./OnGoingProjectsDetails.css";
-import OnGoingProjectsDetailsData from "./OnGoingProjectsDetailsData";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { FormInput } from "lucide-react";
 
 const ProjectsDetails = () => {
   const { id } = useParams();
@@ -21,6 +23,11 @@ const ProjectsDetails = () => {
     stepsItems: ["Planning", "Development", "Testing", "Completion"],
     currentStep: 1,
   });
+  const [showModalX, setShowModalX] = useState(false);
+
+  const Projects = useSelector((state) => state.project.allProjects);
+  const ProjectsData = Projects.filter((data) => data.id === id);
+  // console.log("ProjectsData", ProjectsData);
 
   const people = [
     {
@@ -33,13 +40,7 @@ const ProjectsDetails = () => {
         "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80",
     },
   ];
-
   const ProjectStatus = "Testing";
-
-  const clientsData = useSelector((state) => state.users.clientsData);
-  console.log("clientsData", clientsData);
-  const ProjectsData = useSelector((state) => state.project.allProjects);
-  console.log("ProjectsData", ProjectsData);
 
   useEffect(() => {
     switch (ProjectStatus) {
@@ -57,94 +58,77 @@ const ProjectsDetails = () => {
     }
   }, [ProjectStatus]);
 
+  const onClickTwo = () => {
+    setShowModalX(!showModalX);
+  };
+
   return (
     <>
-      <div className="py-14 px-32 md:px-28 rounded-md bg-white">
-        <h1 className="text-gray-800 text-2xl mb-10 font-semibold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
-          PROJECT STATUS
-        </h1>
+      <div className="py-14 px-14 md:px-16 rounded-md bg-white">
+        {ProjectsData.map((data, index) => (
+          <React.Fragment key={data.id}>
+            <div className="flex justify-between">
+              <h1 className="text-gray-800 text-2xl ml-10 mb-10 font-semibold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
+                PROJECT DETAILS
+              </h1>
+              <div className="button">
+                <Link to={`/adminpanel/updateproject/${data.id}`}
+                  className="block py-2.5 px-4 text-white font-medium bg-[#f11900] duration-150 hover:bg-[#f11900] active:bg-red-700 rounded-lg shadow-lg hover:shadow-none"
+                >
+                  Update Project
+                </Link>
+              </div>
+            </div>
 
-        {/* <-------Client and Service Detail--------> */}
-        {/* <div className="flex justify-between mt-10">
-          <div className=" p-5 w-100 ">
-            <p className="text-red-500 font-bold mb-3 text-3xl">
-              Client Details:
-            </p>
-            <p className="mb-3 text-2xl">
-              Ref No: <span className="text-gray-400">ITE-51413</span>
-            </p>
-            <p className="mb-3 text-2xl">
-              Client Name:<span className="text-gray-400"> Dummy Client</span>
-            </p>
-            <p className="mb-3 text-2xl">
-              Client Email:<span className="text-gray-400"> abc@gmail.com</span>
-            </p>
-            <p className="mb-3 text-2xl">
-              Client Company Name:<span className="text-gray-400"> XYZ</span>
-            </p>
-          </div>
-          <div className=" p-5 w-100">
-            <p className="text-red-500 font-bold mb-3 text-3xl">
-              Service Details:
-            </p>
-            <p className="mb-3 text-2xl">
-              Service:<span className="text-gray-400"> Landing Page</span>
-            </p>
-            <p className="mb-3 text-2xl">
-              Starting Date:<span className="text-gray-400"> 01-01-24</span>
-            </p>
-            <p className="mb-3 text-2xl">
-              Deadline:<span className="text-gray-400"> 15-01-24</span>
-            </p>
-            <p className="mb-3 text-2xl">
-              Invoice Status:<span className="text-gray-400"> Unpaid</span>
-            </p>
-            <p className="mb-3 text-2xl">
-              Project Status:
-              <span className="text-gray-400"> {ProjectStatus}</span>
-            </p>
-          </div>
-        </div> */}
-        {ProjectsData.map((data) => (
-          <>
-            {/* <-------Client and Service Detail--------> */}
-            <section className="flex justify-between mx-8 mt-16">
+            {/* <------- CLIENTS AND SERVICE DETAILS --------> */}
+            <section className="flex justify-between mx-1 mt-16">
               {/* ---------------- DETAILS-LEFT ---------------- */}
-              <div className="details_left font-normal rounded-3xl shadow-xl text-white bg-gray-800">
-                <h2>Client Details</h2>
+              <div
+                className="details_left font-normal rounded-3xl text-gray-700"
+                style={{
+                  boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                }}
+              >
+                <h2 className="tracking-wide">Client Details</h2>
                 <div className="detail_line flex mt-3">
                   <span>
                     <EnvelopeSimple size={24} className="mt-1 mr-2" />
                   </span>
-                  <span className="detail_line_title">Ref No: </span>
-                  <span>ITE-51413</span>
+                  <span className="detail_line_title">Customer Id: </span>
+                  <span>{data.customerId}</span>
                 </div>
                 <div className="detail_line flex">
                   <span>
                     <User size={24} className="mt-1 mr-2" />
                   </span>
                   <span className=" detail_line_title">Name: </span>
-                  <span>Dummy Client</span>
+                  <span>{data.customerName}</span>
                 </div>
                 <div className="detail_line flex">
                   <span>
                     <EnvelopeSimple size={24} className="mt-1 mr-2" />
                   </span>
                   <span className="detail_line_title">Email: </span>
-                  <span>abc@gmail.com</span>
+                  <span>{data.customerEmail}</span>
                 </div>
                 <div className="detail_line flex">
                   <span>
                     <Buildings size={24} className="mt-1 mr-2" />
                   </span>
                   <span className="detail_line_title">Company Name: </span>
-                  <span>XYZ</span>
+                  <span>{data.companyName}</span>
                 </div>
               </div>
 
               {/* ---------------- DETAILS-RIGHT ---------------- */}
-              <div className="details_right font-normal rounded-3xl shadow-xl text-white bg-gray-800">
-                <h2>Service Details</h2>
+              <div
+                className="details_right font-normal rounded-3xl text-gray-700"
+                style={{
+                  boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                }}
+              >
+                <h2 className="tracking-wide">Service Details</h2>
+                {/* PROJECTS */}
                 <div className="detail_line flex mt-3">
                   <span>
                     <Buildings size={24} className="mt-1 mr-2" />
@@ -152,20 +136,31 @@ const ProjectsDetails = () => {
                   <span className="detail_line_title">Project: </span>
                   <span>{data.projectTitle}</span>
                 </div>
+                {/* ORDER ID */}
+                <div className="detail_line flex">
+                  <span>
+                    <FormInput size={24} className="mt-1 mr-2" />
+                  </span>
+                  <span className="detail_line_title">Order ID: </span>
+                  <span>{data.orderId}</span>
+                </div>
+                {/* STARTING DATE */}
                 <div className="detail_line flex">
                   <span>
                     <CalendarBlank size={24} className="mt-1 mr-2" />
                   </span>
                   <span className="detail_line_title">Starting: </span>
-                  <span>{data.startDate}</span>
+                  <span>{new Date(data.startDate).toLocaleDateString()}</span>
                 </div>
+                {/* DEADLINE */}
                 <div className="detail_line flex">
                   <span>
                     <CalendarX size={24} className="mt-1 mr-2" />
                   </span>
                   <span className="detail_line_title">Deadline: </span>
-                  <span>{data.Deadline}</span>
+                  <span>{new Date(data.Deadline).toLocaleDateString()}</span>
                 </div>
+                {/* INVOICE STATUS */}
                 <div className="detail_line flex">
                   <span>
                     <Money size={24} className="mt-1 mr-2" />
@@ -173,149 +168,58 @@ const ProjectsDetails = () => {
                   <span className="detail_line_title">Invoice Status: </span>
                   <span>{data.paymentStatus}</span>
                 </div>
-                <div className="detail_line flex">
-                  <span>
-                    <TrendUp size={24} className="mt-1 mr-2" />
-                  </span>
-                  <span className="detail_line_title">Project Status: </span>
-                  <span>{data.projectProgress.title}</span>
-                </div>
               </div>
             </section>
 
-            {/* ---------------- STEPS ----------------  */}
-            {/* <div className="max-w-4xl my-20 mx-auto px-4 md:px-0">
-          <ul
-            aria-label="Steps"
-            className="items-center text-gray-600 font-medium md:flex"
-          >
-            {steps.stepsItems.map((item, idx) => (
-              <li
-                aria-current={steps.currentStep === idx + 1 ? "step" : false}
-                className="flex-1 last:flex-none flex gap-x-2 md:items-center"
-                key={idx}
-              >
-                <div className="flex items-center flex-col gap-x-2">
-                  <div
-                    className={`w-8 h-8 rounded-full border-2 flex-none flex items-center justify-center ${
-                      steps.currentStep >= idx + 1
-                        ? "bg-red-600 border-red-600"
-                        : ""
-                    }`}
-                  >
-                    {steps.currentStep > idx + 1 ||
-                    ProjectStatus === "Delivered" ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5 text-white"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M4.5 12.75l6 6 9-13.5"
-                        />
-                      </svg>
-                    ) : (
-                      <span
-                        className={`${
-                          steps.currentStep >= idx + 1
-                            ? "bg-red-600 border-red-600 text-white"
-                            : ""
-                        }`}
-                      >
-                        {idx + 1}
-                      </span>
-                    )}
-                  </div>
-                  <hr
-                    className={`h-12 border md:hidden ${
-                      idx + 1 === steps.stepsItems.length
-                        ? "hidden"
-                        : "" || steps.currentStep > idx + 1
-                        ? "border-red-600"
-                        : ""
-                    }`}
-                  />
-                </div>
-                <div className="h-8 flex items-center md:h-auto">
-                  <h3
-                    className={` text-lg ${
-                      steps.currentStep === idx + 1 ? "text-red-600" : ""
-                    }`}
-                  >
-                    {item}
-                  </h3>
-                </div>
-                <hr
-                  className={`hidden mr-2 w-full border md:block ${
-                    idx + 1 === steps.stepsItems.length
-                      ? "hidden"
-                      : "" || steps.currentStep > idx + 1
-                      ? "border-red-600"
-                      : ""
-                  }`}
-                />
-              </li>
-            ))}
-          </ul>
-        </div> */}
+            <section className="my-14">
+              <h2 className="text-gray-700 block mb-2 ml-10 font-semibold tracking-wide text-3xl">
+                Description
+              </h2>
+              <p className="ml-10 my-4 text-md tracking-wide leading-7">
+                {data.projectDescription}
+              </p>
+            </section>
 
             {/* ---------------- STEPS ----------------  */}
-            <section className="text-gray-600 my-20">
+            <section className="text-gray-700 my-20">
               <h2 className="text-gray-800 block text-lg mb-2 ml-10 font-semibold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
-                PROJECT STEPS
+                PROJECT PROGRESS
               </h2>
 
               <div class="flex items-center justify-start bg-white px-6 md:px-10 my-10">
                 <div class="space-y-6 border-l-2 border-collapse">
-                  <div class="relative w-full">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 rounded-full text-red-500"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    <div class="ml-6">
-                      <h4 class="font-bold text-red-500 text-lg">
-                        {data.projectProgress.title}
-                      </h4>
-                      <p class="mt-2 max-w-screen-sm text-md text-gray-500">
-                        {data.projectProgress.description}
-                      </p>
+                  {data.projectProgress.map((progress) => (
+                    <div class="relative w-full">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 rounded-full text-red-500"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <div class="ml-6">
+                        <h4 class="font-bold text-red-500 text-lg">
+                          {progress.title}
+                        </h4>
+                        <p class="mt-2 max-w-screen-xl text-md text-gray-500">
+                          {progress.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="input_add_next_step mb-4 flex justify-end">
-                <label
-                  htmlFor="UserEmail"
-                  className="relative block overflow-hidden rounded-md border border-gray-500 px-3 pt-3 shadow-sm focus-within:border-red-600 focus-within:ring-1 focus-within:ring-red-600"
+              <div className="pl-10 flex justify-start">
+                <button
+                  onClick={onClickTwo}
+                  className="px-4 py-2.5 text-white text-sm bg-gray-800 rounded-lg shadow-md focus:shadow-none duration-100 ring-offset-2 focus:ring-none"
                 >
-                  <input
-                    type="email"
-                    id="UserEmail"
-                    placeholder="Email"
-                    className="peer h-8 w-56 border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
-                  />
-
-                  <span className="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
-                    Next Step
-                  </span>
-                </label>
-              </div>
-              <div className="add_next_step_button flex justify-end">
-                <button className="px-5 py-2.5 text-white bg-gray-800 rounded-lg shadow-md focus:shadow-none duration-100 ring-offset-2 focus:ring-none">
                   Add Next Step
                 </button>
               </div>
@@ -330,7 +234,7 @@ const ProjectsDetails = () => {
                   <li>
                     <div>
                       <label
-                        for="dropzone-file"
+                        htmlFor="dropzone-file"
                         className="flex flex-col items-center justify-center w-full h-72 max-w-lg p-5 mx-auto mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer rounded-xl"
                       >
                         <svg
@@ -373,103 +277,84 @@ const ProjectsDetails = () => {
                   </li>
                   {/* ---------------- FILE UPLOAD TEXT ----------------  */}
                   <li>
-                    <h2 className="text-4xl font-semibold text-gray-600">
+                    <h2 className="text-4xl font-semibold text-gray-700">
                       Upload Project Zip File Here:
                     </h2>
                   </li>
                 </ul>
               </div>
             </section>
-
-            <section className="my-20">
-              {fileUploaded ? (
-                <>
-                  <table className="min-w-full divide-y divide-gray-200 border">
-                    <thead className="bg-gray-50">
-                      <tr className="divide-x divide-gray-200">
-                        <th
-                          scope="col"
-                          className="px-4 py-3.5 text-left text-lg font-semibold text-gray-800"
-                        >
-                          <span>Project</span>
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-12 py-3.5 text-left text-lg font-semibold text-gray-800"
-                        >
-                          Title
-                        </th>
-
-                        <th
-                          scope="col"
-                          className="px-4 py-3.5 text-left text-lg font-semibold text-gray-800"
-                        >
-                          Status
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-4 py-3.5 text-center text-lg font-semibold text-gray-800"
-                        >
-                          Download
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 bg-white">
-                      {people.map((person) => (
-                        <tr
-                          key={person.name}
-                          className="divide-x divide-gray-200"
-                        >
-                          <td className="whitespace-nowrap px-4 py-4">
-                            <div className="flex items-center">
-                              <div className="h-10 w-10 flex-shrink-0">
-                                <img
-                                  className="h-10 w-10 rounded-full object-cover"
-                                  src={person.image}
-                                  alt=""
-                                />
-                              </div>
-                              <div className="ml-4">
-                                <div className="text-sm font-medium text-gray-900">
-                                  {person.name}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                  {person.email}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-12 py-4">
-                            <div className="text-sm text-gray-900">
-                              {person.title}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {person.department}
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-4 py-4">
-                            <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                              Complete
-                            </span>
-                          </td>
-                          <td className="whitespace-nowrap px-4 py-4 text-center text-sm font-medium">
-                            <button
-                              type="button"
-                              className="rounded-md bg-gray-800 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                            >
-                              Download File
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </>
-              ) : null}
-            </section>
-          </>
+          </React.Fragment>
         ))}
       </div>
+
+      {/* --------------- ADD NEW STEP --------------- */}
+      <Modal
+        icon={<CloudArrowUp size={28} color="#f11900" />}
+        size="3xl"
+        show={showModalX}
+        onClose={onClickTwo}
+      >
+        <Modal.Header>Add Next Steps</Modal.Header>
+        <Modal.Body>
+          <div className="">
+            <div class="pb-2">
+              <div class="mt-1 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-4">
+                {/* --------------- TITLE --------------- */}
+                <div class="sm:col-span-3">
+                  <label
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    for="first-name"
+                  >
+                    Title
+                  </label>
+                  <div class="mt-1">
+                    <input
+                      type="text"
+                      name="first-name"
+                      id="first-name"
+                      placeholder="Title"
+                      autocomplete="given-name"
+                      class="block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                {/* --------------- DESCRIPTION --------------- */}
+                <div class="col-span-full">
+                  <label
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    for="about"
+                  >
+                    Description
+                  </label>
+                  <div class="mt-1">
+                    <textarea
+                      id="about"
+                      name="about"
+                      placeholder="Write the project description"
+                      rows="3"
+                      class="block py-3 px-3 w-full rounded-md border text-gray-900 shadow-sm focus:outline-none placeholder:text-gray-400 placeholder:text-md"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button type="outlineGray" onClick={onClickTwo}>
+            Cancel
+          </Button>
+          <Button
+            type="primary"
+            color="error"
+            className="bg-[#f11900]"
+            onClick={onClickTwo}
+          >
+            Add Next Step
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

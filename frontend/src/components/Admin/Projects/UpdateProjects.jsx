@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createProjectsAsync } from "../../../features/ProjectSlice";
+import { useParams } from "react-router-dom";
 
-const AddProjects = () => {
+const UpdateProjects = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const Projects = useSelector((state) => state.project.allProjects);
+  const ProjectsData = Projects.filter((data) => data.id === id);
+  console.log("ProjectsData", ProjectsData);
 
   const initialFormData = {
     projectTitle: "",
@@ -67,7 +73,7 @@ const AddProjects = () => {
         <div className="items-start justify-between md:flex">
           <div className="max-w-4xl">
             <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl">
-              ADD PROJECTS
+              UPDATE PROJECT DETAILS
             </h3>
           </div>
         </div>
@@ -251,4 +257,4 @@ const AddProjects = () => {
   );
 };
 
-export default AddProjects;
+export default UpdateProjects;

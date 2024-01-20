@@ -14,7 +14,7 @@ const Projects = () => {
 
   // HERE WE GET DATA USING USESELECTOR FROM STATE
   const ProjectsData = useSelector((state) => state.project.allProjects);
-  // console.log("ProjectsData", ProjectsData);
+  console.log("ProjectsData", ProjectsData);
 
   return (
     <>
@@ -63,9 +63,9 @@ const Projects = () => {
             <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
               <tr>
                 <th className="py-4 px-6 text-lg font-medium">Sr. </th>
-                <th className="py-4 px-6 text-lg font-medium">Project Name</th>
+                <th className="py-4 px-6 text-lg font-medium">Name</th>
+                <th className="py-4 px-6 text-lg font-medium">Project Title</th>
                 <th className="py-4 px-6 text-lg font-medium">Customer ID</th>
-                <th className="py-4 px-6 text-lg font-medium">Project Progress</th>
                 <th className="py-4 px-6 text-lg font-medium">Date</th>
                 <th className="py-4 px-6 text-lg font-medium">Deadline</th>
                 <th className="py-4 px-6 text-lg font-medium">Amount</th>
@@ -77,9 +77,9 @@ const Projects = () => {
               {ProjectsData.map((data, idx) => (
                 <tr key={idx}>
                   <td className="px-6 py-4 ">{idx + 1}</td>
-                  <td className="px-6 py-4 ">{data.projectTitle}</td>
+                  <td className="px-6 py-4 ">{data.customerName}</td>
+                  <td className="px-6 py-4  text-red-600">{data.projectTitle}</td>
                   <td className="px-6 py-4  text-red-600">{data.customerId}</td>
-                  <td className="px-6 py-4 ">{data.projectProgress.title}</td>
                   <td className="px-6 py-4 text-md">{new Date(data.startDate).toLocaleDateString()}</td>
                   <td className="px-6 py-4 ">{new Date(data.Deadline).toLocaleDateString()}</td>
                   <td className="px-6 py-4 ">{data.amount}</td>
@@ -97,7 +97,7 @@ const Projects = () => {
                     </span>     
                       </td>
                   <td className="px-6 py-4">
-                    <Link to={`/adminpanel/projectdetails/${data.id}`} className="bg-[#f11900] text-white px-4 py-2.5 rounded-lg">
+                    <Link to={`/adminpanel/projectdetails/${data.id}`} onClick={()=>window.scroll(0,0)} className="bg-[#f11900] text-white px-4 py-2.5 rounded-lg">
                       View Details
                     </Link>
                   </td>
