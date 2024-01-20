@@ -31,15 +31,15 @@ export const createProject = async (req, res) => {
       };
     };
 
-    const paymentStatusDataPromise = MainDocument.findOne({ orderId: orderId }).exec();
-    const customerDataPromise = Clients.findOne({ customerId: customerId }).exec();
+    const paymentStatusData = await MainDocument.findOne({ orderId: orderId }).exec();
+    const customerData = await Clients.findOne({ customerId: customerId }).exec();
+    if(!customerData) {
+      return res.status(404).json({msg:"User not Found"})
+    };
 
-    const [paymentStatusData,customerdata] = await Promise.all([paymentStatusDataPromise,customerDataPromise]);
-    const paymentStatus = paymentStatusData ? paymentStatusData.paymentStatus : "No Data";
-    const customerName = customerdata ? customerdata.firstName : "No Data";
-    const customerEmail = customerdata ? customerdata.email : "No Data";
-    
-  
+    if(!paymentStatusData) {
+      return res.status(404).json({msg:"Invalid Order Id"})
+    };
 
     const projectData = await Projects.create({
       projectTitle,
@@ -50,12 +50,12 @@ export const createProject = async (req, res) => {
       customerId,
       orderId,
       amount,
-      paymentStatus,
+      paymentStatus:paymentStatusData.paymentStatus,
       projectDescription,
       completed,
       projectProgress,
-      customerName,
-      customerEmail,
+      customerName:customerData.firstName,
+      customerEmail:customerData.email,
     });
 
     return res.status(201).json({ msg: "Project created successfully", projectData });
@@ -72,3 +72,7 @@ export const getAllProjects = async (req,res) => {
     res.status(400).json({msg:error.message})
   }
 };
+
+export const updateProjects = async (req,res) => {
+
+}
