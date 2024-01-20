@@ -30,7 +30,7 @@ export const createProject = async (req, res) => {
       };
     };
 
-    const paymentStatusData = await MainDocument.find({customerId:customerId}).exec();
+    const paymentStatusData = await MainDocument.find({orderId:orderId}).exec();
     
 
     const projectData = await Projects.create({
