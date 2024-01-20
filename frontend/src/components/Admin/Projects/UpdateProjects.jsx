@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createProjectsAsync } from "../../../features/ProjectSlice";
-import { useParams } from "react-router-dom";
+import {
+  createProjectsAsync,
+  getAllProjectsAsync,
+  updateProjectsAsync,
+} from "../../../features/ProjectSlice";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 const UpdateProjects = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -26,9 +31,34 @@ const UpdateProjects = () => {
       },
     ],
     orderId: "",
+    id: id || "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
+
+  useEffect(() => {
+    if (ProjectsData.length > 0) {
+      const projectData = ProjectsData[0];
+
+      setFormData({
+        projectTitle: projectData.projectTitle || "",
+        companyName: projectData.companyName || "",
+        startDate: projectData.startDate || "",
+        Deadline: projectData.Deadline || "",
+        customerId: projectData.customerId || "",
+        amount: projectData.amount || 0,
+        projectDescription: projectData.projectDescription || "",
+        projectProgress: projectData.projectProgress || [
+          {
+            title: "",
+            description: "",
+          },
+        ],
+        orderId: projectData.orderId || "",
+        id: projectData.id || "",
+      });
+    }
+  }, []);
 
   // Update form data on input change
   const handleChange = (e) => {
@@ -48,7 +78,9 @@ const UpdateProjects = () => {
           newData[parent][0] = {};
         }
 
+        // Update the specific field in the projectProgress array
         newData[parent][0][field] = value;
+
         return { ...newData };
       });
     } else {
@@ -59,11 +91,51 @@ const UpdateProjects = () => {
     }
   };
 
+  const handleProjectProgressChange = (index, field, value) => {
+    setFormData((prevData) => {
+      const newData = { ...prevData };
+
+      if (!newData.projectProgress) {
+        newData.projectProgress = [];
+      }
+
+      if (!newData.projectProgress[index]) {
+        newData.projectProgress[index] = {};
+      }
+
+      // Update the specific field in the projectProgress array using immutability
+      const updatedProjectProgress = newData.projectProgress.map(
+        (progress, i) => {
+          if (i === index) {
+            return {
+              ...progress,
+              [field]: value,
+            };
+          }
+          return progress;
+        }
+      );
+
+      newData.projectProgress = updatedProjectProgress;
+
+      return newData;
+    });
+  };
+
+  // Function to format date to "yyyy-MM-dd"
+  const formatDate = (dateString) => {
+    const formattedDate = dateString.split("T")[0];
+    return formattedDate;
+  };
+
   // HANDLE SUBMIT FUNCIION
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("formData", formData);
-    dispatch(createProjectsAsync(formData));
+    dispatch(updateProjectsAsync(formData)).then((res) => {
+      dispatch(getAllProjectsAsync());
+      navigate(`/adminpanel/projectdetails/${formData.id}`);
+    });
   };
 
   return (
@@ -88,9 +160,10 @@ const UpdateProjects = () => {
                     type="text"
                     name="companyName"
                     placeholder="Company Name"
+                    value={formData.companyName}
                     onChange={handleChange}
                     autoComplete="given-name"
-                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
                   />
                 </div>
               </div>
@@ -100,9 +173,10 @@ const UpdateProjects = () => {
                     type="text"
                     name="projectTitle"
                     placeholder="Project Title"
+                    value={formData.projectTitle}
                     onChange={handleChange}
                     autoComplete="given-name"
-                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
                   />
                 </div>
               </div>
@@ -112,9 +186,10 @@ const UpdateProjects = () => {
                     type="number"
                     name="amount"
                     placeholder="Amount"
+                    value={formData.amount}
                     onChange={handleChange}
                     autoComplete="given-name"
-                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
                   />
                 </div>
               </div>
@@ -128,9 +203,10 @@ const UpdateProjects = () => {
                     type="text"
                     name="customerId"
                     placeholder="Customer ID"
+                    value={formData.customerId}
                     onChange={handleChange}
                     autoComplete="given-name"
-                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
                   />
                 </div>
               </div>
@@ -140,9 +216,10 @@ const UpdateProjects = () => {
                     type="text"
                     name="orderId"
                     placeholder="Order ID"
+                    value={formData.orderId}
                     onChange={handleChange}
                     autoComplete="given-name"
-                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
                   />
                 </div>
               </div>
@@ -162,9 +239,10 @@ const UpdateProjects = () => {
                     type="date"
                     name="startDate"
                     placeholder="Company Name"
+                    value={formatDate(formData.startDate)}
                     onChange={handleChange}
                     autoComplete="given-name"
-                    className="block w-full mt-1 pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                    className="block w-full mt-1 pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
                   />
                 </div>
               </div>
@@ -180,9 +258,10 @@ const UpdateProjects = () => {
                     type="date"
                     name="Deadline"
                     placeholder="Project Title"
+                    value={formatDate(formData.Deadline)}
                     onChange={handleChange}
                     autoComplete="given-name"
-                    className="block w-full mt-1 pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                    className="block w-full mt-1 pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
                   />
                 </div>
               </div>
@@ -190,40 +269,60 @@ const UpdateProjects = () => {
 
             {/* --------------- FORTH ROW --------------- */}
             <div className="mb-4 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
-              <div>
-                <div className="mt-1.5">
-                  <label
-                    className="text-gray-700 ml-1 font-medium text-lg"
-                    htmlFor="password"
-                  >
-                    Project Progress
-                  </label>
-                  <input
-                    type="text"
-                    name="projectProgress.title"
-                    placeholder="Project Title"
-                    onChange={handleChange}
-                    autoComplete="given-name"
-                    className="block mt-1 w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
-                  />
-                </div>
-              </div>
-              <div class="sm:col-span-2">
-                <div className="mt-1.5">
-                  <label
-                    className="text-gray-700 ml-1 font-medium text-lg"
-                    htmlFor="password"
-                  ></label>
-                  <input
-                    type="text"
-                    name="projectProgress.description"
-                    placeholder="Description"
-                    onChange={handleChange}
-                    autoComplete="given-name"
-                    className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
-                  />
-                </div>
-              </div>
+              {formData.projectProgress.map((progress, index) => (
+                <React.Fragment key={index}>
+                  <div>
+                    <div className="mt-1.5">
+                      <label
+                        className="text-gray-700 ml-1 font-medium text-lg"
+                        htmlFor="Title"
+                      >
+                        Project Title
+                      </label>
+                      <input
+                        type="text"
+                        name={`projectProgress[${index}].title`}
+                        placeholder="Project Title"
+                        value={progress.title}
+                        onChange={(e) =>
+                          handleProjectProgressChange(
+                            index,
+                            "title",
+                            e.target.value
+                          )
+                        }
+                        autoComplete="given-name"
+                        className="block mt-1 w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                      />
+                    </div>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <div className="mt-1.5">
+                      <label
+                        className="text-gray-700 ml-1 font-medium text-lg"
+                        htmlFor="Title"
+                      >
+                        Description
+                      </label>
+                      <input
+                        type="text"
+                        name={`projectProgress[${index}].description`}
+                        placeholder="Description"
+                        value={progress.description}
+                        onChange={(e) =>
+                          handleProjectProgressChange(
+                            index,
+                            "description",
+                            e.target.value
+                          )
+                        }
+                        autoComplete="given-name"
+                        className="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                      />
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))}
             </div>
 
             {/* --------------- FIFTH ROW --------------- */}
@@ -233,10 +332,11 @@ const UpdateProjects = () => {
                   <textarea
                     id="about"
                     name="projectDescription"
+                    value={formData.projectDescription}
                     onChange={handleChange}
                     placeholder="Write the project details"
-                    rows="3"
-                    class="block w-full pl-5 pr-3 py-3 text-lg font-normal placeholder:text-gray-500 placeholder:text-lg text-gray-500 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                    rows="8"
+                    class="block w-full pl-5 pr-3 py-4 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
                   ></textarea>
                 </div>
               </div>
@@ -247,7 +347,7 @@ const UpdateProjects = () => {
                 className="block py-2.5 px-6 text-white font-medium bg-[#f11900] duration-150 hover:bg-[#f11900] active:bg-red-700 rounded-lg shadow-lg hover:shadow-none"
                 type="submit"
               >
-                Add Project
+                Update Project
               </button>
             </div>
           </form>

@@ -1,261 +1,301 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllFormAsync } from "../../features/formSlice";
-import { getAllUsersAsync } from "../../features/authSlice";
-import "./Dashboard.css";
+import React, { useState } from "react";
+import { MdOutlineFileUpload } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
+import { useTheme } from "../../Theme/ThemeContext";
+import "./Support.css";
+import { useSupportSendMutation } from "../../Services/Support";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
-const Dashboard = () => {
-  const dispatch = useDispatch();
-  const [isOpen1, setIsOpen1] = useState(false);
-  const [name, setName] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const slips = useSelector((state) => state.form.getAllForm);
-  const names = useSelector((state) => state.auth.allUsers)
-    .filter((data) => data.isApproved === true)
-    .map((data) => data.name);
+const Support = ({ openSupportModal, setSupportModal }) => {
+  const { isDarkTheme } = useTheme();
+  const [support, setSupport] = useState({
+    
+    AdditionalFile: null,
+  
+  });
+  
+ 
+  
 
-  useEffect(() => {
-    dispatch(getAllFormAsync());
-    dispatch(getAllUsersAsync());
-  }, [dispatch]);
-
-  const toggleDropdown1 = () => {
-    setIsOpen1(!isOpen1);
+  const handleChange = (e, fieldName) => {
+    if (e.target.type === "file") {
+      setSupport({
+        ...support,
+        [fieldName]: e.target.files[0],
+      });
+    } 
   };
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
+  const Output = async (e) => {
+    e.preventDefault();
+    if (support.AdditionalFile) {
+      // Show loading toast message
+      var loadingToastId = toast.loading("Uploading");
+    }
+    const formData = new FormData();
+    formData.append("filename", support.AdditionalFile);
+    formData.append("customerId", user.customerId);
+
+    try {
+      // Display a toast notification for progress
+
+      // Axios instance with progress event listener
+      const response = await axios.post(
+        "http://localhost:8080/api/support/createSupport",
+        formData
+      );
+
+      console.log("response", response);
+
+      // Dismiss the progress toast on success
+
+      if (
+        response?.data?.data &&
+        response?.data?.msg === "Successfully Submitted"
+      ) {
+        toast.dismiss(loadingToastId);
+        setSuccess(true);
+        setTicket(response?.data?.data?.ticketNumber);
+        setSupport({
+          Service: "",
+          AdditionalFile: null,
+          Message: "",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  let filterdData;
-  if (name) {
-    filterdData = slips.filter((item) => item.reference === name);
-  } else {
-    filterdData = slips;
-  }
-  const [limit, setLimit] = useState(50);
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(filterdData.length / limit);
-  const disabled = currentPage === totalPages;
-  const disabled2 = currentPage === 1;
-
-  // Calculate the index range for the currently displayed data
-  const startIndex = (currentPage - 1) * limit;
-  const endIndex = startIndex + limit;
-  let displayedData = filterdData.slice(startIndex, endIndex);
-  let searchData = [];
-  if (searchQuery) {
-    searchData = slips.filter((data) =>
-      data.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }
-  displayedData = searchQuery.length > 1 ? searchData : displayedData;
+  const CloseModal = () => {
+    openSupportModal();
+    setSuccess(success);
+  };
 
   return (
     <>
-      <section className="dashboard text-gray-100 body-font py-10" style={{}}>
-        <h1 className="sm:text-4xl lg:text-5xl font-medium title-font text-center mb-2">
-          Slips Record
-        </h1>
-
-        <div className=" mx-5 text-center mt-5">
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <div className="relative z-0 w-full mb-3 group text-start">
-              <button
-                onClick={toggleDropdown1}
-                className="dropdown-setting text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-md py-3 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
-              >
-                {name || "HR Names"}
-                <svg
-                  className="w-2.5 h-2.5 ml-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
-              {/ Search Bar /}
-              <input
-                type="text"
-                placeholder="Search..."
-                className=" ml-4 border text-black border-none rounded-lg px-6 py-3 focus:outline-none"
-                value={searchQuery}
-                onChange={handleSearch}
-              />
-
-              <div
-                className={`z-10 absolute left-0 mt-2 ${
-                  isOpen1 ? "" : "hidden"
-                }  bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dropdown-menu-setting-one`}
-              >
-                <ul
-                  className="py-2 text-lg text-gray-700 dark:text-gray-200 "
-                  aria-labelledby="dropdownDefaultButton"
-                >
-                  {names.map((data) => (
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setName(data);
-                          toggleDropdown1();
-                        }}
-                      >
-                        {data}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+      <div
+        className={"modal OrderModalBox"}
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backdropFilter: "blur(5px)",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100vh",
+          overflow: "auto",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div
+          className="modelSupportBox"
+          style={{ backgroundColor: isDarkTheme ? "#242435" : "#F7F7F7" }}
+        >
+          <h1 className="closeOrderModel" onClick={openSupportModal}>
+            <RxCross2 />
+          </h1>
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <div className="image-section">
+              <img src="/Dashboard/Suppot_page_image.png" />
             </div>
+            <form
+              className="content-section d-flex flex-column SupportContent "
+              onSubmit={Output}
+            >
+              <h1
+                className=" ModelOrderHead"
+                style={{
+                  color: isDarkTheme ? "#fff" : "#242435",
+                }}
+              >
+                Get Support?
+              </h1>
+              <p
+                className="supportHead_pera"
+                style={{
+                  color: isDarkTheme ? "#fff" : "#242435",
+                }}
+              >
+                Lorem ipsum dolor sit amet consectetur. Tincidunt ut et arcu vel
+                tincpurus
+              </p>
+              <select
+                className="SelectField"
+                value={setSupport.Service}
+                onChange={(e) => handleChange(e, "Service")}
+                style={{
+                  backgroundColor: isDarkTheme ? "#242435" : "#F7F7F7",
+                  color: isDarkTheme ? "#868686" : "#242435",
+                  border: `1px solid ${isDarkTheme ? "#474759" : "#D9D9D9"}`,
+                }}
+                required
+              >
+                <option
+                  value=""
+                  style={{
+                    backgroundColor: isDarkTheme ? "#242435" : "#F7F7F7",
+                    color: isDarkTheme ? "#868686" : "#242435",
+                  }}
+                >
+                  Select the Service
+                </option>
+                <option
+                  value="Finance"
+                  style={{
+                    backgroundColor: isDarkTheme ? "#242435" : "#F7F7F7",
+                    color: isDarkTheme ? "#868686" : "#242435",
+                  }}
+                >
+                  Finance
+                </option>
+                <option
+                  value="Product Development/Engineering"
+                  style={{
+                    backgroundColor: isDarkTheme ? "#242435" : "#F7F7F7",
+                    color: isDarkTheme ? "#868686" : "#242435",
+                  }}
+                >
+                  Product Development/Engineering
+                </option>
+                <option
+                  value="Customer Support"
+                  style={{
+                    backgroundColor: isDarkTheme ? "#242435" : "#F7F7F7",
+                    color: isDarkTheme ? "#868686" : "#242435",
+                  }}
+                >
+                  Customer Support
+                </option>
+                <option
+                  value="Sales and Marketing"
+                  style={{
+                    backgroundColor: isDarkTheme ? "#242435" : "#F7F7F7",
+                    color: isDarkTheme ? "#868686" : "#242435",
+                  }}
+                >
+                  Sales and Marketing
+                </option>
+              </select>
 
-            {/ TABLE /}
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
-              <thead className="text-md tracking-wider text-gray-100 uppercase  bg-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-3 py-5 ">
-                    <div className="flex items-center">Sr#</div>
-                  </th>
-                  <th scope="col" className="px-3 mx-0 py-3">
-                    Name
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Email
-                  </th>
-                  <th scope="col" className="px-3 py-3">
-                    Created At
-                  </th>
-                  <th scope="col" className="px-3 py-3">
-                    Phone
-                  </th>
-                  <th scope="col" className="px-3 py-3">
-                    Hr Name
-                  </th>
-                  <th scope="col" className="px-3 py-3">
-                    Designation
-                  </th>
-                  <th scope="col" className="px-3 py-3">
-                    Company Name
-                  </th>
+              <div className="FileSupportContainer">
+                <label
+                  className="FileInputLabelSUpport"
+                  htmlFor="logoFile"
+                  style={{
+                    backgroundColor: isDarkTheme ? "#242435" : "#F7F7F7",
+                    border: `1px solid ${isDarkTheme ? "#474759" : "#D9D9D9"}`,
+                    "::placeholder": {
+                      color: isDarkTheme ? "#868686" : "#242435",
+                    },
+                  }}
+                >
+                  <input
+                    type="file"
+                    id="logoFile"
+                    value={setSupport.AdditionalFile}
+                    onChange={(e) => handleChange(e, "AdditionalFile")}
+                    className="ModelFileDropFieldSupport"
+                  />
+                  <div className="FileInputIcon">
+                    <img
+                      className="uploadIcon"
+                      src="/Dashboard/upload_file.png"
+                    />
+                    <span
+                      style={{ color: isDarkTheme ? "#868686" : "#242435" }}
+                    >
+                      {support.AdditionalFile
+                        ? support.AdditionalFile.name
+                        : "Upload Additional Attachment"}
+                    </span>
+                  </div>
+                </label>
+              </div>
 
-                  <th scope="col" className="px-3 py-3">
-                    Location
-                  </th>
-                  <th scope="col" className="px-3 py-3">
-                    Paid Amount
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayedData.length > 0 ? (
-                  displayedData.map((data, index) => {
-                    const date = new Date(data.createdAt);
-                    const formattedDate = date.toLocaleDateString();
-                    const formattedTime = date.toLocaleTimeString();
-                    return (
-                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td className="px-3 py-4 border-r  text-gray-950 ">
-                          {index + 1}
-                        </td>
-                        <td className="px-3 py-4 border-r text-gray-950 ">
-                          {data.name}
-                        </td>
-                        <td className="px-3 py-4 border-r text-gray-950 ">
-                          {data.email}
-                        </td>
-                        <td className="px-3 py-4 border-r text-gray-950 ">
-                          <span> Date:{formattedDate}</span>
-                          <span> Time:{formattedTime}</span>
-                        </td>
-                        <td className="px-3 py-4 border-r text-gray-950 ">
-                          {data.phone}
-                        </td>
-                        <td className="px-3 py-4 border-r text-gray-950 ">
-                          {data.reference}
-                        </td>
-                        <td className="px-3 py-4 border-r text-gray-950 ">
-                          {data.designation.name}
-                        </td>
-                        <td className="px-3 py-4 border-r text-gray-950 ">
-                          {data.companyName}
-                        </td>
-                        <td className="px-3 py-4 border-r text-gray-950 ">
-                          {data.location}
-                        </td>
-                        <td className="px-3 py-4 border-r text-gray-950 ">
-                          {data.paidAmount}
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <tr>
-                    <td className="px-6 py-4 text-2xl   text-gray-950">
-                      No data available
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+              <textarea
+                className="NoteFieldSupport"
+                placeholder="Message"
+                rows="4"
+                value={setSupport.Message}
+                required
+                onChange={(e) => handleChange(e, "Message")}
+                style={{
+                  backgroundColor: isDarkTheme ? "#242435" : "#F7F7F7",
+                  color: isDarkTheme ? "#fff" : "#242435",
+                  border: `1px solid ${isDarkTheme ? "#474759" : "#D9D9D9"}`,
+                  "::placeholder": {
+                    color: isDarkTheme ? "#fff" : "#242435",
+                  },
+                }}
+              ></textarea>
+              <button className="ModelSupportBtn mt-3" type="submit">
+                Submit
+              </button>
+            </form>
           </div>
         </div>
-      </section>
-      <div className=" flex justify-center mt-5 mb-5">
-        <nav aria-label="Page navigation example">
-          <ul className="inline-flex -space-x-px text-sm">
-            <li>
-              <button
-                onClick={() => {
-                  setCurrentPage((prev) => Math.max(prev - 1, 1));
-                  window.scroll({ top: 0, behavior: "smooth" });
-                }}
-                disabled={disabled2}
-                className={`flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg ${
-                  disabled2
-                    ? "cursor-not-allowed bg-[#CCCCCC] text-black "
-                    : "hover:bg-[#5D62B5] hover:text-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                } `}
-              >
-                Previous
-              </button>
-            </li>
-            <li>
-              <span className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                {currentPage} / {totalPages}
-              </span>
-            </li>
-            <li>
-              <button
-                onClick={() => {
-                  setCurrentPage((prev) => prev + 1);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                disabled={disabled}
-                className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg ${
-                  disabled
-                    ? "cursor-not-allowed bg-[#CCCCCC] text-black "
-                    : "hover:bg-[#5D62B5] hover:text-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                }`}
-              >
-                Next
-              </button>
-            </li>
-          </ul>
-        </nav>
       </div>
+      {success && (
+        <div
+          className={"modal SuccessModalBox"}
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backdropFilter: "blur(5px)",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100vh",
+            overflow: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div className="SuccessBox">
+            <div className="successHeader">
+              <svg
+                className="successSVG"
+                viewBox="0 0 26 26"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  fill="none"
+                  fillRule="evenodd"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path
+                    class="circle"
+                    d="M13 1C6.372583 1 1 6.372583 1 13s5.372583 12 12 12 12-5.372583 12-12S19.627417 1 13 1z"
+                  />
+                  <path
+                    className="tick"
+                    d="M6.5 13.5L10 17 l8.808621-8.308621"
+                  />
+                </g>
+              </svg>
+            </div>
+            <h1 className="SuccessHeading">Success!</h1>
+            <p className="SuccessText pt-0">Your Ticket Number: {ticket}</p>
+            <p className="SuccessText pt-0">
+              Our Support team will shortly contact you. Thank You.
+            </p>
+            <button className="SuccessOkBtn" onClick={CloseModal}>
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
 
-export default Dashboard;
+export default Support;

@@ -5,11 +5,10 @@ import toast from "react-hot-toast";
 //API URL
 const createProjects = "http://localhost:8080/api/projects/createProject";
 const getAllProjects = "http://localhost:8080/api/projects/getAllProjects";
+const updateProjects = "http://localhost:8080/api/projects/updateProject";
 
 // CREATE PROJECTS
-export const createProjectsAsync = createAsyncThunk(
-  "createProjects/Projects",
-  async (formData) => {
+export const createProjectsAsync = createAsyncThunk("createProjects/Projects", async (formData) => {
     try {
       const response = await axios.post(createProjects, formData);
       console.log(response.data);
@@ -24,12 +23,10 @@ export const createProjectsAsync = createAsyncThunk(
 );
 
 //GET ALL PROJECTS
-export const getAllProjectsAsync = createAsyncThunk(
-  "getAllProjects/Projects",
-  async () => {
+export const getAllProjectsAsync = createAsyncThunk("getAllProjects/Projects", async () => {
     try {
       const response = await axios.post(getAllProjects);
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (error) {
       console.log(error.response.data.msg);
@@ -37,6 +34,22 @@ export const getAllProjectsAsync = createAsyncThunk(
     }
   }
 );
+
+// UPDATE PROJECTS
+export const updateProjectsAsync = createAsyncThunk("updateProjects/Projects", async (formData) => {
+    try {
+      const response = await axios.post(updateProjects, formData);
+      console.log(response.data);
+      toast.success(response.data.msg);
+      return response.data;
+    } catch (error) {
+      console.log(error.response.data.msg);
+      throw error;
+    }
+  }
+);
+
+
 
 //PENDING REQUESTS ASYNC THUNK
 export const deleteContactFormAsync = createAsyncThunk(

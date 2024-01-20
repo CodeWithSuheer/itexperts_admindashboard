@@ -14,7 +14,7 @@ const Projects = () => {
 
   // HERE WE GET DATA USING USESELECTOR FROM STATE
   const ProjectsData = useSelector((state) => state.project.allProjects);
-  console.log("ProjectsData", ProjectsData);
+  // console.log("ProjectsData", ProjectsData);
 
   return (
     <>

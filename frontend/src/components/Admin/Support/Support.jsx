@@ -120,7 +120,6 @@ const Support = () => {
               <tr>
                 <th className="py-4 px-2 text-lg font-medium pl-3">Sr.</th>
                 <th className="py-4 px-6 text-lg font-medium pl-3">Name</th>
-                <th className="py-4 px-6 text-lg font-medium pl-3">Date</th>
                 <th className="py-4 px-4 text-lg font-medium">Ticket No</th>
                 <th className="py-4 px-4 text-lg font-medium">Customer ID</th>
                 <th className="py-4 px-4 text-lg font-medium">Department</th>
@@ -144,7 +143,6 @@ const Support = () => {
                         {data.client?.email || ""}
                       </span>
                     </td>
-                    <td className="pr-3 py-3 text-lg pl-6">7/7/7</td>
                     <td className="pr-3 py-3 text-lg pl-6">
                       {data.support?.ticketNumber || ""}
                     </td>

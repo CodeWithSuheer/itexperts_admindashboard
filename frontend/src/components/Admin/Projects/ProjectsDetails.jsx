@@ -13,21 +13,32 @@ import {
 } from "phosphor-react";
 import "./OnGoingProjectsDetails.css";
 import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FormInput } from "lucide-react";
+import {
+  getAllProjectsAsync,
+  updateProjectsAsync,
+} from "../../../features/ProjectSlice";
 
 const ProjectsDetails = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
+  const [projectId, setProjectId] = useState(id);
   const fileUploaded = true;
   const [steps, setStep] = useState({
     stepsItems: ["Planning", "Development", "Testing", "Completion"],
     currentStep: 1,
   });
   const [showModalX, setShowModalX] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [newProgress, setNewProgress] = useState({
+    title: "",
+    description: "",
+  });
 
   const Projects = useSelector((state) => state.project.allProjects);
   const ProjectsData = Projects.filter((data) => data.id === id);
-  // console.log("ProjectsData", ProjectsData);
+  console.log("ProjectsData", ProjectsData);
 
   const people = [
     {
@@ -62,6 +73,40 @@ const ProjectsDetails = () => {
     setShowModalX(!showModalX);
   };
 
+  // const handleUpdateProgress = async () => {
+  //   if (!projectId) {
+  //     console.error("Project ID is missing.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const updatedFormData = { ...ProjectsData[0] }; 
+  //     if (!updatedFormData.projectProgress) {
+  //       updatedFormData.projectProgress = [];
+  //     }
+
+  //     const enhancedNewProgress = {
+  //       ...newProgress,
+  //       id: projectId, 
+  //     };
+
+  //     updatedFormData.projectProgress.push(enhancedNewProgress);
+
+  //     await dispatch(updateProjectsAsync(updatedFormData));
+
+  //     await dispatch(getAllProjectsAsync());
+
+  //     setNewProgress({
+  //       title: "",
+  //       description: "",
+  //     });
+
+  //     setShowModalX(false);
+  //   } catch (error) {
+  //     console.error("Error updating project progress:", error);
+  //   }
+  // };
+
   return (
     <>
       <div className="py-14 px-14 md:px-16 rounded-md bg-white">
@@ -72,7 +117,8 @@ const ProjectsDetails = () => {
                 PROJECT DETAILS
               </h1>
               <div className="button">
-                <Link to={`/adminpanel/updateproject/${data.id}`}
+                <Link
+                  to={`/adminpanel/updateproject/${data.id}`}
                   className="block py-2.5 px-4 text-white font-medium bg-[#f11900] duration-150 hover:bg-[#f11900] active:bg-red-700 rounded-lg shadow-lg hover:shadow-none"
                 >
                   Update Project
@@ -188,8 +234,8 @@ const ProjectsDetails = () => {
 
               <div class="flex items-center justify-start bg-white px-6 md:px-10 my-10">
                 <div class="space-y-6 border-l-2 border-collapse">
-                  {data.projectProgress.map((progress) => (
-                    <div class="relative w-full">
+                  {ProjectsData[0]?.projectProgress?.map((progress) => (
+                    <div class="relative w-full" key={progress.id}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -300,40 +346,52 @@ const ProjectsDetails = () => {
           <div className="">
             <div class="pb-2">
               <div class="mt-1 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-4">
-                {/* --------------- TITLE --------------- */}
+                {/* TITLE */}
                 <div class="sm:col-span-3">
                   <label
                     class="block text-sm font-medium leading-6 text-gray-900"
-                    for="first-name"
+                    for="title"
                   >
                     Title
                   </label>
                   <div class="mt-1">
                     <input
                       type="text"
-                      name="first-name"
-                      id="first-name"
+                      id="title"
                       placeholder="Title"
-                      autocomplete="given-name"
+                      autoComplete="given-name"
                       class="block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
+                      value={newProgress.title}
+                      onChange={(e) =>
+                        setNewProgress({
+                          ...newProgress,
+                          title: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
-                {/* --------------- DESCRIPTION --------------- */}
+                {/* DESCRIPTION */}
                 <div class="col-span-full">
                   <label
                     class="block text-sm font-medium leading-6 text-gray-900"
-                    for="about"
+                    for="description"
                   >
                     Description
                   </label>
                   <div class="mt-1">
                     <textarea
-                      id="about"
-                      name="about"
+                      id="description"
                       placeholder="Write the project description"
                       rows="3"
                       class="block py-3 px-3 w-full rounded-md border text-gray-900 shadow-sm focus:outline-none placeholder:text-gray-400 placeholder:text-md"
+                      value={newProgress.description}
+                      onChange={(e) =>
+                        setNewProgress({
+                          ...newProgress,
+                          description: e.target.value,
+                        })
+                      }
                     ></textarea>
                   </div>
                 </div>
@@ -349,7 +407,7 @@ const ProjectsDetails = () => {
             type="primary"
             color="error"
             className="bg-[#f11900]"
-            onClick={onClickTwo}
+            // onClick={handleUpdateProgress}
           >
             Add Next Step
           </Button>
