@@ -123,6 +123,29 @@ const AdminBody = () => {
                   <span className="text-lg">Invoices</span>
                 </Sidebar.Item>
               </Link>
+              {/* -------- ALL INVOICE --------  */}
+              <Link to="/adminpanel/projectsOrders">
+                <Sidebar.Item
+                  style={{ fontSize: "1.125rem" }}
+                  icon={
+                    <Files
+                      size={24}
+                      className={` ${
+                        location.pathname === "/adminpanel/projectsOrders"
+                          ? "text-white"
+                          : ""
+                      }`}
+                    />
+                  }
+                  className={`my-3 ${
+                    location.pathname === "/adminpanel/projectsOrders"
+                      ? "active-link"
+                      : ""
+                  }`}
+                >
+                  <span className="text-lg">Projects Order</span>
+                </Sidebar.Item>
+              </Link>
 
               {/* -------- PROJECTS --------  */}
               <Link to="/adminpanel/projects">
