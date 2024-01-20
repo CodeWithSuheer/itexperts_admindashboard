@@ -59,6 +59,12 @@ const ProjectSchema = new mongoose.Schema({
     type:Boolean,
     default:false
   },
+  customerName:{
+    type:String,
+  },
+  customerEmail:{
+    type:String,
+  },
   projectProgress:[ProjectProgressSchema]
 });
 

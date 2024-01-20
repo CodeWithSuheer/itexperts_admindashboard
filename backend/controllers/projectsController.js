@@ -1,6 +1,7 @@
 
 import { uploadFileToFirebase } from "../assets/firebase.js";
 import { Projects } from "../models/ProjectsModel.js";
+import { Clients } from "../models/clientModel.js";
 import { MainDocument } from "../models/invoiceModel.js";
 
 export const createProject = async (req, res) => {
@@ -15,7 +16,7 @@ export const createProject = async (req, res) => {
       projectDescription,
       orderId,
       projectProgress,
-      completed,
+      completed
     } = req.body;
 
     const file = req.file;
@@ -30,8 +31,15 @@ export const createProject = async (req, res) => {
       };
     };
 
-    const paymentStatusData = await MainDocument.find({orderId:orderId}).exec();
+    const paymentStatusDataPromise = MainDocument.findOne({ orderId: orderId }).exec();
+    const customerDataPromise = Clients.findOne({ customerId: customerId }).exec();
+
+    const [paymentStatusData,customerdata] = await Promise.all([paymentStatusDataPromise,customerDataPromise]);
+    const paymentStatus = paymentStatusData ? paymentStatusData.paymentStatus : "No Data";
+    const customerName = customerdata ? customerdata.firstName : "No Data";
+    const customerEmail = customerdata ? customerdata.email : "No Data";
     
+  
 
     const projectData = await Projects.create({
       projectTitle,
@@ -42,10 +50,12 @@ export const createProject = async (req, res) => {
       customerId,
       orderId,
       amount,
-      paymentStatus:paymentStatusData.paymentStatus || "unpaid",
+      paymentStatus,
       projectDescription,
       completed,
-      projectProgress
+      projectProgress,
+      customerName,
+      customerEmail,
     });
 
     return res.status(201).json({ msg: "Project created successfully", projectData });
