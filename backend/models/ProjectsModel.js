@@ -41,7 +41,7 @@ const ProjectSchema = new mongoose.Schema({
   },
   orderId:{
     type:String,
-    unique:true
+    required: [true, 'Order Id is required.'],
   },
   amount:{
     type:Number,
@@ -53,7 +53,7 @@ const ProjectSchema = new mongoose.Schema({
   },
   projectDescription:{
     type:String,
-    required: [true, 'Amount is required.'],
+    required: [true, 'projectDescription is required.'],
   },
   completed:{
     type:Boolean,
