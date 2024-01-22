@@ -274,9 +274,9 @@ const AllInvoices = () => {
                           className={`px-4 py-1.5 rounded-full capitalize font-semibold text-xs ${
                             data.paymentStatus === "unpaid"
                               ? "text-red-600 bg-red-50"
-                              : data.paymentStatus === "Paid"
+                              : data.paymentStatus === "paid"
                               ? "text-green-600 bg-green-50"
-                              : data.paymentStatus === "Partially Paid"
+                              : data.paymentStatus === "partially paid"
                               ? "text-yellow-600 bg-yellow-50"
                               : ""
                           }`}

@@ -12,6 +12,7 @@ const Support = () => {
   const dispatch = useDispatch();
   const [showModalX, setShowModalX] = useState(false);
   const [Message, setMessage] = useState(null);
+
   const [name, setName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -25,7 +26,6 @@ const Support = () => {
     dispatch(getAllSupportReqAsync());
   }, [dispatch]);
 
-  //   HANDLE SEARCH
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -36,23 +36,29 @@ const Support = () => {
   } else {
     filterdData = allSupportRequests;
   }
-  const [limit, setLimit] = useState(8);
+
+  let searchData = [];
+
+  if (searchQuery) {
+    searchData = allSupportRequests.filter((data) => {
+      // Check if data.name is present and not undefined
+      const dataName = data.name || "";
+      return dataName.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  }
+
+  const [limit, setLimit] = useState(18);
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(filterdData.length / limit);
+  const totalPages = Math.ceil(
+    (searchQuery.length > 1 ? searchData.length : filterdData.length) / limit
+  );
   const disabled = currentPage === totalPages;
   const disabled2 = currentPage === 1;
 
   // Calculate the index range for the currently displayed data
   const startIndex = (currentPage - 1) * limit;
-
   const endIndex = startIndex + limit;
   let displayedData = filterdData.slice(startIndex, endIndex);
-  let searchData = [];
-  if (searchQuery) {
-    searchData = allSupportRequests.filter((data) =>
-      data.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }
   displayedData = searchQuery.length > 1 ? searchData : displayedData;
 
   // VIEW MESSAGE MODAL FUNCTION
@@ -84,7 +90,7 @@ const Support = () => {
           </div>
           <div className="mt-3 mr-10 md:mt-0 flex gap-8">
             {/* ------------- SEARCH BAR ------------- */}
-            {/* <div className="search_bar">
+            <div className="search_bar mr-10">
               <div class="relative mt-4 md:mt-0">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                   <svg
@@ -95,9 +101,9 @@ const Support = () => {
                     <path
                       d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     ></path>
                   </svg>
                 </span>
@@ -107,10 +113,10 @@ const Support = () => {
                   value={searchQuery}
                   onChange={handleSearch}
                   class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-[#D9D9D9] rounded-lg focus:border-red-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-red-300"
-                  placeholder="Search by name"
+                  placeholder="Search name & email"
                 />
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
         <div className="mt-12 relative h-max overflow-x-auto">
@@ -133,7 +139,7 @@ const Support = () => {
                   <tr key={idx} className="cursor-pointer">
                     <td className="pr-3 py-4 text-lg pl-3">{idx + 1}</td>
                     <td className="gap-x-3 px-6 whitespace-nowrap">
-                      <span className="text-gray-700 text-lg font-medium capitalize">
+                      <span className="text-gray-700 text-lg font-medium">
                         {`${data.client?.firstName || ""} ${
                           data.client?.lastName || ""
                         }`}
