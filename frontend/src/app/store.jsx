@@ -6,6 +6,7 @@ import invoiceSlice from "../features/invoiceSlice";
 import UsersSlice from "../features/UsersSlice";
 import SupportSlice from "../features/SupportSlice";
 import ProjectSlice from "../features/ProjectSlice";
+import projectorderSlice from "../features/projectorderSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     users: UsersSlice,
     support: SupportSlice,
     project: ProjectSlice,
+    projectorder: projectorderSlice,
   },
 });
 // "021111225229"

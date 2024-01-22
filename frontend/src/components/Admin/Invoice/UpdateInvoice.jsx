@@ -197,15 +197,9 @@ const UpdateInvoice = () => {
 
   // HANDLE DELETE SERVICE
   const handleDeleteService = (index) => {
-    const updatedServices = [...services];
+    const updatedServices = [...formData.service];
     updatedServices.splice(index, 1);
-
-    // Update service numbers after deletion
-    updatedServices.forEach((service, i) => {
-      service.number = i + 1;
-    });
-
-    setServices(updatedServices);
+    setFormData({ ...formData, service: updatedServices });
   };
 
   const tableItems = [
@@ -562,7 +556,6 @@ const UpdateInvoice = () => {
                     }
                     className="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-[#D22B2B] focus:ring-[#D22B2B] focus:ring-opacity-40 focus:outline-none focus:ring"
                   />
-
                   <button
                     className="h-10 w-24 text-xl text-white transition-colors duration-300 transform bg-[#f11900] rounded-md hover:bg-[#f11900] focus:outline-none focus:bg-[#f11900]"
                     onClick={() => handleDeleteService(index)}
