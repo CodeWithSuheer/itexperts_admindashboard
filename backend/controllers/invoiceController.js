@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Invoices, MainDocument } from "../models/invoiceModel.js";
+import { sendEmail } from "../assets/nodemailer.js";
 
 function setMongoose() {
   return mongoose.set("toJSON", {
@@ -62,7 +63,7 @@ export const createInvoice = async (req, res, next) => {
       });
       await mainDocument.save();
     }
-
+    await sendEmail({email:invoiceData.to.email,emailType:"INVOICEGENERATED",orderId})
     res.status(201).json({ msg: "Invoice Generated" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
