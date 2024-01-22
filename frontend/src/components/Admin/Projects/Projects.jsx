@@ -46,14 +46,48 @@ const Projects = () => {
               </span>
             </h3>
           </div>
+          <div className="flex flex-col">
           <Link
             to="/adminpanel/addProjects"
             className="block py-2.5 px-4 text-white font-medium bg-[#f11900] duration-150 hover:bg-[#f11900] active:bg-red-700 rounded-lg shadow-lg hover:shadow-none"
           >
             Add Project
           </Link>
+          <div className="mt-3 py-10 mr-10 md:mt-0 flex gap-8">
+            {/* ------------- SEARCH BAR ------------- */}
+            <div className="search_bar mr-10">
+              <div class="relative mt-4 md:mt-0">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                  <svg
+                    class="w-5 h-5 text-red-600"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    ></path>
+                  </svg>
+                </span>
+
+                <input
+                  type="text"
+                  //value={searchQuery}
+                  //onChange={handleSearch}
+                  class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-[#D9D9D9] rounded-lg focus:border-red-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-red-300"
+                  placeholder="Search name & email"
+                />
+              </div>
+            </div>
+          </div>
+          </div>
+          
         </div>
 
+        
         {/* ------------- TABS ------------- */}
         <div className="my-10 flex justify-start items-center">
           <button
@@ -87,7 +121,7 @@ const Projects = () => {
                 <th className="py-4 px-6 text-lg font-medium">Name</th>
                 <th className="py-4 px-6 text-lg font-medium">Project Title</th>
                 <th className="py-4 px-6 text-lg font-medium">Customer ID</th>
-                <th className="py-4 px-6 text-lg font-medium">Date</th>
+                <th className="py-4 px-6 text-lg font-medium">Order Id</th>
                 <th className="py-4 px-6 text-lg font-medium">Deadline</th>
                 <th className="py-4 px-6 text-lg font-medium">Amount</th>
                 <th className="py-4 px-6 text-lg font-medium">Invoice Status</th>
@@ -101,7 +135,7 @@ const Projects = () => {
                   <td className="px-6 py-4 ">{data.customerName}</td>
                   <td className="px-6 py-4  text-red-600">{data.projectTitle}</td>
                   <td className="px-6 py-4  text-red-600">{data.customerId}</td>
-                  <td className="px-6 py-4 text-md">{new Date(data.startDate).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 text-md">{data.orderId}</td>
                   <td className="px-6 py-4 ">{new Date(data.Deadline).toLocaleDateString()}</td>
                   <td className="px-6 py-4 ">{data.amount}</td>
                   <td className="pl-6 py-4">
