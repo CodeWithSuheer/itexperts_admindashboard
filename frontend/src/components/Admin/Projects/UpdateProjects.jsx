@@ -327,8 +327,8 @@ const UpdateProjects = () => {
 
             {/* --------------- FIFTH ROW --------------- */}
             <div className="mb-4 pt-2 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-1">
-              <div class="col-span-full">
-                <div class="mt-1">
+              <div className="col-span-full">
+                <div className="mt-1">
                   <textarea
                     id="about"
                     name="projectDescription"
@@ -336,7 +336,7 @@ const UpdateProjects = () => {
                     onChange={handleChange}
                     placeholder="Write the project details"
                     rows="8"
-                    class="block w-full pl-5 pr-3 py-4 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
+                    className="block w-full pl-5 pr-3 py-4 text-lg font-normal placeholder:text-gray-600 placeholder:text-lg text-gray-600 bg-gray-100 outline-none focus:border-gray-600 shadow-sm rounded-lg"
                   ></textarea>
                 </div>
               </div>

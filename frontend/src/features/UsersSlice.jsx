@@ -10,7 +10,7 @@ const getAllClientsUrl = "http://localhost:8080/api/clients/getAllClients";
 export const getAllClientsDataAsync = createAsyncThunk("clients/getAllClientsData", async () => {
     try {
         const response = await axios.post(getAllClientsUrl);
-        console.log(response.data);
+        // console.log(response.data);
         return response.data;
     } catch (error) {
       throw error

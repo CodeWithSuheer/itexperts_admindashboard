@@ -271,15 +271,15 @@ const ProjectsDetails = () => {
                 PROJECT PROGRESS
               </h2>
 
-              <div class="flex items-center justify-start bg-white px-6 md:px-10 my-10">
-                <div class="space-y-6 border-l-2 border-collapse">
+              <div className="flex items-center justify-start bg-white px-6 md:px-10 my-10">
+                <div className="space-y-6 border-l-2 border-collapse">
                   {ProjectsData[0]?.projectProgress?.map((progress) => (
-                    <div class="relative w-full" key={progress.id}>
+                    <div className="relative w-full" key={progress.id}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 rounded-full text-red-500"
+                        className="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 rounded-full text-red-500"
                       >
                         <path
                           fillRule="evenodd"
@@ -287,11 +287,11 @@ const ProjectsDetails = () => {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <div class="ml-6">
-                        <h4 class="font-bold text-red-500 text-lg">
+                      <div className="ml-6">
+                        <h4 className="font-bold text-red-500 text-lg">
                           {progress.title}
                         </h4>
-                        <p class="mt-2 max-w-screen-xl text-md text-gray-500">
+                        <p className="mt-2 max-w-screen-xl text-md text-gray-500">
                           {progress.description}
                         </p>
                       </div>
@@ -325,13 +325,13 @@ const ProjectsDetails = () => {
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
-                          stroke-width="1.5"
+                          strokeWidth="1.5"
                           stroke="currentColor"
                           className="w-8 h-8 text-gray-500"
                         >
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
                           />
                         </svg>
@@ -405,23 +405,23 @@ const ProjectsDetails = () => {
         <Modal.Header>Add Next Steps</Modal.Header>
         <Modal.Body>
           <div className="">
-            <div class="pb-2">
-              <div class="mt-1 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-4">
+            <div className="pb-2">
+              <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-4">
                 {/* TITLE */}
-                <div class="sm:col-span-3">
+                <div className="sm:col-span-3">
                   <label
-                    class="block text-sm font-medium leading-6 text-gray-900"
+                    className="block text-sm font-medium leading-6 text-gray-900"
                     for="title"
                   >
                     Title
                   </label>
-                  <div class="mt-1">
+                  <div className="mt-1">
                     <input
                       type="text"
                       id="title"
                       placeholder="Title"
                       autoComplete="given-name"
-                      class="block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm focus:outline-none ring-1 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6"
                       value={newProgress.title}
                       onChange={(e) =>
                         setNewProgress({
@@ -433,19 +433,19 @@ const ProjectsDetails = () => {
                   </div>
                 </div>
                 {/* DESCRIPTION */}
-                <div class="col-span-full">
+                <div className="col-span-full">
                   <label
-                    class="block text-sm font-medium leading-6 text-gray-900"
+                    className="block text-sm font-medium leading-6 text-gray-900"
                     for="description"
                   >
                     Description
                   </label>
-                  <div class="mt-1">
+                  <div className="mt-1">
                     <textarea
                       id="description"
                       placeholder="Write the project description"
                       rows="3"
-                      class="block py-3 px-3 w-full rounded-md border text-gray-900 shadow-sm focus:outline-none placeholder:text-gray-400 placeholder:text-md"
+                      className="block py-3 px-3 w-full rounded-md border text-gray-900 shadow-sm focus:outline-none placeholder:text-gray-400 placeholder:text-md"
                       value={newProgress.description}
                       onChange={(e) =>
                         setNewProgress({

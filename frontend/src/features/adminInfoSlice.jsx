@@ -31,7 +31,7 @@ export const authorizeUserAsync = createAsyncThunk("admininfo/authenticateUser",
 export const getAllUsersAsync = createAsyncThunk("user/getAllUser", async () => {
   try {
       const response = await axios.post(getUserUrl);
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
   } catch (error) {
     throw error

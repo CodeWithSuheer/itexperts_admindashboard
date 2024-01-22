@@ -13,7 +13,7 @@ const ProjectsOrder = () => {
     (state) => state.projectorder.AllProjectOrder
   );
 
-  console.log("ProjectOrders", ProjectOrders);
+  // console.log("ProjectOrders", ProjectOrders);
 
   useEffect(() => {
     dispatch(getAllProjectOrderAsync());

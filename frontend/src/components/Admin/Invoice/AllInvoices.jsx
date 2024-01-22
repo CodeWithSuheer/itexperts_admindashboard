@@ -57,7 +57,7 @@ const AllInvoices = () => {
     return null;
   }).filter(Boolean);
 
-  // console.log("Selected Data", selectedData);
+  console.log("Selected Data", selectedData);
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -183,19 +183,19 @@ const AllInvoices = () => {
           <div className="mt-3 md:mt-0 flex gap-8">
             {/* ------------- SEARCH BAR ------------- */}
             <div className="search_bar mr-10">
-              <div class="relative mt-4 md:mt-0">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <div className="relative mt-4 md:mt-0">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <svg
-                    class="w-5 h-5 text-red-600"
+                    className="w-5 h-5 text-red-600"
                     viewBox="0 0 24 24"
                     fill="none"
                   >
                     <path
                       d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     ></path>
                   </svg>
                 </span>
@@ -204,7 +204,7 @@ const AllInvoices = () => {
                   type="text"
                   value={searchQuery}
                   onChange={handleSearch}
-                  class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-[#D9D9D9] rounded-lg focus:border-red-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-red-300"
+                  className="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-[#D9D9D9] rounded-lg focus:border-red-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-red-300"
                   placeholder="Search name & email"
                 />
               </div>
@@ -471,6 +471,7 @@ const AllInvoices = () => {
                   </p>
                 </div>
               ))}
+
               <div className="p-2 w-100">
                 <p className="modelClientText mb-2 text-base">From:</p>
                 <h1 className="modelClientHeadText mb-2 font-semibold text-lg">

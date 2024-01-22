@@ -10,10 +10,10 @@ export const getAllProjectOrderAsync = createAsyncThunk(
   async () => {
     try {
       const response = await axios.post(getAllProjectsOrder);
-      console.log(response.data.data);
+      // console.log(response.data.data);
       return response.data.data;
     } catch (error) {
-      console.log(error.response.data.msg);
+      // console.log(error.response.data.msg);
       throw error;
     }
   }

@@ -44,18 +44,18 @@ export const forgetuserAsync = createAsyncThunk(
   async (email) => {
     try {
       const response = await axios.post(forgotPasswordUrl, email);
-      console.log(response.data);
+      // console.log(response.data);
       toast.success("Reset Password link sent");
       return response.data;
     } catch (error) {
-      console.log("forget password failed", error.response);
+      // console.log("forget password failed", error.response);
       toast.error("forget password failed", error.response);
     }
   }
 );
 
 // RESET PASSWORD ASYNC THUNK
-export const resetpasswordAsync = createAsyncThunk(
+export const resetpasswordAsync = createAsyncThunk( 
   "user/resetPassword",
   async ({ newPassword, confirmPassword, resetToken }) => {
     try {
@@ -65,10 +65,10 @@ export const resetpasswordAsync = createAsyncThunk(
         resetToken,
       });
       toast.success(response.data.msg);
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.msg);
+      // console.log(error.response.data.msg);
       toast.error(error.response.data.msg);
     }
   }

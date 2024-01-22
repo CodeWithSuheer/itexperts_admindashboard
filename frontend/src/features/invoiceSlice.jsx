@@ -14,11 +14,11 @@ export const createInvoicesAsync = createAsyncThunk( "create/invoices",  async (
     console.log('formData',formData);
     try {
       const response = await axios.post(createInvoicesUrl, formData);
-      console.log(response.data);
+      // console.log(response.data);
       toast.success(response.data.msg);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.msg);
+      // console.log(error.response.data.msg);
       toast.success(error.response.data.msg);
     }
   }
@@ -28,10 +28,10 @@ export const createInvoicesAsync = createAsyncThunk( "create/invoices",  async (
 export const getAllInvoicesAsync = createAsyncThunk( "allinvoice/invoices",  async () => {
     try {
       const response = await axios.post(getAllInvoicesUrl);
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.msg);
+      // console.log(error.response.data.msg);
     }
   }
 );
@@ -41,11 +41,11 @@ export const updateInvoicesAsync = createAsyncThunk( "update/invoices",  async (
   // console.log('updatedFormData', updatedFormData);
     try {
       const response = await axios.post(updateInvoicesUrl, updatedFormData);
-      console.log(response.data);
+      // console.log(response.data);
       toast.success(response.data.msg);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.msg);
+      // console.log(error.response.data.msg);
       toast.success(error.response.data.msg);
     }
   }
@@ -55,10 +55,10 @@ export const updateInvoicesAsync = createAsyncThunk( "update/invoices",  async (
 export const deleteInvoicesAsync = createAsyncThunk( "delete/invoices",  async (id) => {
     try {
       const response = await axios.post(deleteInvoicesUrl, {id});
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.msg);
+      // console.log(error.response.data.msg);
     }
   }
 );

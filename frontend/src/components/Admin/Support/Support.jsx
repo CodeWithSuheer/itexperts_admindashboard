@@ -98,10 +98,10 @@ const Support = () => {
           <div className="mt-3 mr-10 md:mt-0 flex gap-8">
             {/* ------------- SEARCH BAR ------------- */}
             <div className="search_bar mr-10">
-              <div class="relative mt-4 md:mt-0">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <div className="relative mt-4 md:mt-0">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <svg
-                    class="w-5 h-5 text-red-600"
+                    className="w-5 h-5 text-red-600"
                     viewBox="0 0 24 24"
                     fill="none"
                   >
@@ -119,7 +119,7 @@ const Support = () => {
                   type="text"
                   value={searchQuery}
                   onChange={handleSearch}
-                  class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-[#D9D9D9] rounded-lg focus:border-red-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-red-300"
+                  className="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-[#D9D9D9] rounded-lg focus:border-red-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-red-300"
                   placeholder="Search name & email"
                 />
               </div>
@@ -185,10 +185,10 @@ const Support = () => {
                         <a
                           href={data.support.file.downloadURL}
                           download={data.support.file.name}
-                          class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium text-sm py-2 px-4 rounded inline-flex items-center"
+                          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium text-sm py-2 px-4 rounded inline-flex items-center"
                         >
                           <svg
-                            class="fill-current w-4 h-4 mr-2"
+                            className="fill-current w-4 h-4 mr-2"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
                           >

@@ -50,7 +50,7 @@ const AllUsers = () => {
   ];
 
   const clientsData = useSelector((state) => state.users.clientsData);
-  console.log("clientsData", clientsData);
+  // console.log("clientsData", clientsData);
 
   useEffect(() => {
     dispatch(getAllClientsDataAsync())

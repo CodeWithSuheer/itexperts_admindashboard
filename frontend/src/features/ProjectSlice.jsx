@@ -11,11 +11,11 @@ const updateProjects = "http://localhost:8080/api/projects/updateProject";
 export const createProjectsAsync = createAsyncThunk("createProjects/Projects", async (formData) => {
     try {
       const response = await axios.post(createProjects, formData);
-      console.log(response.data);
+      // console.log(response.data);
       toast.success(response.data.msg);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.msg);
+      // console.log(error.response.data.msg);
       toast.error(error.response.data.msg);
       throw error;
     }
@@ -29,7 +29,7 @@ export const getAllProjectsAsync = createAsyncThunk("getAllProjects/Projects", a
       // console.log(response.data);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.msg);
+      // console.log(error.response.data.msg);
       throw error;
     }
   }
@@ -39,11 +39,11 @@ export const getAllProjectsAsync = createAsyncThunk("getAllProjects/Projects", a
 export const updateProjectsAsync = createAsyncThunk("updateProjects/Projects", async (formData) => {
     try {
       const response = await axios.post(updateProjects, formData);
-      console.log(response.data);
+      // console.log(response.data);
       toast.success(response.data.msg);
       return response.data;
     } catch (error) {
-      console.log(error.response.data.msg);
+      // console.log(error.response.data.msg);
       throw error;
     }
   }
