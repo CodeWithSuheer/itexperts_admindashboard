@@ -53,6 +53,7 @@ const AllInvoices = () => {
   }).filter(Boolean);
 
   console.log("Selected Data", selectedData);
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -106,6 +107,7 @@ const AllInvoices = () => {
 
   // const filteredId = InvoicesData.filter((data) => data.id === Message);
   const delete_MsgId = InvoicesData.filter((data) => data.id === deleteMsgId);
+
   const [filterdByStatus, setFilterdByStatus] = useState([]);
   const [activeTab, setActiveTab] = useState("all");
   useEffect(() => {
@@ -345,7 +347,7 @@ const AllInvoices = () => {
       </div>
 
       {/* --------------- PAGINATION --------------- */}
-      <div className=" flex justify-center mt-5 mb-5">
+      {/* <div className=" flex justify-center mt-5 mb-5">
         <nav aria-label="Page navigation example">
           <ul className="inline-flex -space-x-px text-lg">
             <li>
@@ -387,7 +389,7 @@ const AllInvoices = () => {
             </li>
           </ul>
         </nav>
-      </div>
+      </div> */}
 
       {/* ---------- DELETE MESSAGE MODAL ---------- */}
       {delete_MsgId.map((data, idx) => (

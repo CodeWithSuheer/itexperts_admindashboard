@@ -1,6 +1,7 @@
 .adminBody {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  width: 100%;
 }
 .admin_sideMenu {
   width: 100%;

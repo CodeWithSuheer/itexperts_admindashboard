@@ -16,7 +16,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAsync, reset } from "../../features/authSlice";
 import Icons from "./Icons";
-import { HeartHandshake } from "lucide-react";
+import { HeartHandshake, File } from "lucide-react";
 import "./AdminPanel.css";
 
 const AdminBody = () => {
@@ -62,7 +62,10 @@ const AdminBody = () => {
           <Sidebar
             className="pt-6"
             aria-label="Sidebar with multi-level dropdown example"
-            style={{ minHeight: "92.1vh", backgroundColor: "#fff" }}
+            style={{
+              minHeight: "92.1vh",
+              backgroundColor: "#fff",
+            }}
           >
             <Sidebar.ItemGroup>
               {/* -------- CONTACT QUERIES --------  */}
@@ -128,7 +131,7 @@ const AdminBody = () => {
                 <Sidebar.Item
                   style={{ fontSize: "1.125rem" }}
                   icon={
-                    <Files
+                    <File
                       size={24}
                       className={` ${
                         location.pathname === "/adminpanel/projectsOrders"
