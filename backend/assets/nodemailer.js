@@ -2,10 +2,6 @@ import nodemailer from "nodemailer";
 
 export async function sendEmail(to, from) {
   const { email, emailType, resetToken, orderId } = to;
-  // console.log(email);
-  // console.log(emailType);
-  // console.log(resetToken);
-
   let output;
 
   if (emailType === "RESETPASSWORD") {
@@ -272,7 +268,7 @@ export async function sendEmail(to, from) {
         </body>
       </html>
         `;
-  } else if ("INVOICEGENERATED") {
+  } else if (emailType === "INVOICEGENERATED") {
     output = `
     <!DOCTYPE html>
 <html lang="en">
@@ -452,26 +448,28 @@ export async function sendEmail(to, from) {
     },
   });
 
-  let Subject;
-  INVOICEGENERATED;
-  switch (emailType) {
-    case "RESETPASSWORD":
-      Subject = "Reset Password";
-      break;
-    case "INVOICEGENERATED":
-      Subject = "Pay Your Invoice";
-      break;
-    default:
-      Subject = "No Email";
-  }
+  let subject;
+
+switch (emailType) {
+  case "RESETPASSWORD":
+    subject = "Reset Password";
+    break;
+  case "INVOICEGENERATED":
+    subject = "Pay Your Invoice";
+    break;
+  default:
+    subject = "No Email";
+    break;
+}
+  
 
   let mailoptions = {
     from,
     to: email,
-    subject: Subject,
+    subject,
     html: output,
   };
-  console.log(mailoptions.from);
+ 
   transport.sendMail(mailoptions, (error, info) => {
     if (error) {
       return false;

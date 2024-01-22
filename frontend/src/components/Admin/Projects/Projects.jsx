@@ -7,6 +7,7 @@ const Projects = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  
   // CALL TO GET ALL INVOICES
   useEffect(() => {
     dispatch(getAllProjectsAsync());
@@ -15,6 +16,23 @@ const Projects = () => {
   // HERE WE GET DATA USING USESELECTOR FROM STATE
   const ProjectsData = useSelector((state) => state.project.allProjects);
   // console.log("ProjectsData", ProjectsData);
+
+  const [filteredProjects, setFilteredProjects] = useState(ProjectsData);
+  const handleOngoingFilter = () => {
+    const onGoingProjects = ProjectsData.filter((item)=>!item.completed);
+    setFilteredProjects(onGoingProjects);
+  };
+  const handleCompletedFilter = () => {
+    const completedProjects = ProjectsData.filter((item)=>item.completed);
+    setFilteredProjects(completedProjects);
+  };
+  const handleAllProjectFilter = () => {
+    setFilteredProjects(ProjectsData);
+  };
+
+  useEffect(() => {
+    setFilteredProjects(ProjectsData);
+  }, [ProjectsData]);
 
   return (
     <>
@@ -41,18 +59,21 @@ const Projects = () => {
           <button
             className="bg-[#F11900] text-white rounded-md mr-5"
             style={{ padding: "8px 25px" }}
+            onClick={handleAllProjectFilter}
           >
             All
           </button>
           <button
             className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5"
             style={{ padding: "8px 25px" }}
+            onClick={handleOngoingFilter}
           >
             Ongoing Projects
           </button>
           <button
             className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5"
             style={{ padding: "8px 25px" }}
+            onClick={handleCompletedFilter}
           >
             Complete Projects
           </button>
@@ -74,7 +95,7 @@ const Projects = () => {
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
-              {ProjectsData.map((data, idx) => (
+              {filteredProjects.map((data, idx) => (
                 <tr key={idx}>
                   <td className="px-6 py-4 ">{idx + 1}</td>
                   <td className="px-6 py-4 ">{data.customerName}</td>
