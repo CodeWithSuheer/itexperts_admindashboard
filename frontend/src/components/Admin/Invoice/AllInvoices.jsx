@@ -7,10 +7,6 @@ import { X } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  deleteContactFormAsync,
-  getAllFormsAsync,
-} from "../../../features/contactFormSlice";
-import {
   deleteInvoicesAsync,
   getAllInvoicesAsync,
 } from "../../../features/invoiceSlice";
@@ -22,7 +18,6 @@ const AllInvoices = () => {
   const dispatch = useDispatch();
   const [showModalX, setShowModalX] = useState(false);
   const [showErrorModalX, setShowErrorModalX] = useState(false);
-  const [Message, setMessage] = useState("");
   const [deleteMsgId, setDeleteMsgId] = useState(null);
   const [name, setName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,45 +57,17 @@ const AllInvoices = () => {
     setSearchQuery(e.target.value);
   };
 
-  let filterdData;
-  if (name) {
-    filterdData = InvoicesData.filter((item) => item.reference === name);
-  } else {
-    filterdData = InvoicesData;
-  }
-
-  let searchData = [];
-
-  if (searchQuery) {
-    searchData = filterdData.filter((data) => {
-      const clientName = data.invoices[0]?.to.name || "";
-      const clientEmail = data.invoices[0]?.to.email || "";
-
-      console.log("clientName:", clientName); // Add this line
-      console.log("clientEmail:", clientEmail); // Add this line
-
-      return (
-        clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        clientEmail.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    });
-  }
-
-  console.log("searchQuery:", searchQuery); // Add this line
-  console.log("filterdData:", filterdData); // Add this line
-  console.log("searchData:", searchData); // Add this line
-
   // THESE STATE ARE RELATED TO PAGINATION
   const [limit, setLimit] = useState(7);
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(filterdData.length / limit);
+  const totalPages = Math.ceil(InvoicesData.length / limit);
   const disabled = currentPage === totalPages;
   const disabled2 = currentPage === 1;
 
   const startIndex = (currentPage - 1) * limit;
 
   const endIndex = startIndex + limit;
-  let displayedData = filterdData.slice(startIndex, endIndex);
+  let displayedData = InvoicesData.slice(startIndex, endIndex);
 
   // VIEW MESSAGE MODAL FUNCTION
   const openModal = (objectId, invoiceId) => {
@@ -108,13 +75,6 @@ const AllInvoices = () => {
     setSelectedObjectId(objectId);
     setSelectedInvoiceId(invoiceId);
   };
-
-  // {selectedObjectId && selectedInvoiceId && (
-  //   // Filter the data based on selectedObjectId and selectedInvoiceId
-  //   // You may need to adjust this logic based on your data structure
-  //   const selectedData = InvoicesData.find(
-  //     (item) => item.id === selectedObjectId && item.invoices.some((inv) => inv.id === selectedInvoiceId)
-  //   );
 
   // DELETE MESSAGE MODAL FUNCTION
   const onClickErrorModal = (id) => {
@@ -144,26 +104,49 @@ const AllInvoices = () => {
     });
   };
 
-  const tableItems = [
-    {
-      name: "Project Name",
-      SubName: "Home page / logo / Mockups ",
-      Price: "$7500",
-    },
-    {
-      name: "Project Name",
-      SubName: "Home page / logo / Mockups ",
-      Price: "$7500",
-    },
-    {
-      name: "Project Name",
-      SubName: "Home page / logo / Mockups ",
-      Price: "$7500",
-    },
-  ];
-
   // const filteredId = InvoicesData.filter((data) => data.id === Message);
   const delete_MsgId = InvoicesData.filter((data) => data.id === deleteMsgId);
+  const [filterdByStatus, setFilterdByStatus] = useState([]);
+  const [activeTab, setActiveTab] = useState("all");
+  useEffect(() => {
+    setFilterdByStatus(InvoicesData);
+  }, [InvoicesData]);
+
+  const handlePaid = () => {
+    const data = InvoicesData.filter(
+      (item) =>
+        item.paymentStatus === "paid" ||
+        (item.paymentStatus === "partially paid" &&
+          item.invoices.status === "paid")
+    );
+    setFilterdByStatus(data);
+    setActiveTab("paid");
+  };
+
+  const handleUnPaid = () => {
+    const data = InvoicesData.filter(
+      (item) =>
+        item.paymentStatus === "unpaid" ||
+        (item.paymentStatus === "partially paid" &&
+          item.invoices.status === "unpaid")
+    );
+    setFilterdByStatus(data);
+    setActiveTab("unpaid");
+  };
+
+  const handlePartiallyPaid = () => {
+    const data = InvoicesData.filter(
+      (item) => item.paymentStatus === "partially paid"
+    );
+    setFilterdByStatus(data);
+    setActiveTab("partiallyPaid");
+  };
+
+  const handleAllInvoices = () => {
+    const data = InvoicesData.filter((item) => item);
+    setFilterdByStatus(data);
+    setActiveTab("all");
+  };
 
   return (
     <>
@@ -215,26 +198,46 @@ const AllInvoices = () => {
         {/* ------------- TABS ------------- */}
         <div className="my-10 flex justify-start items-center">
           <button
-            className="bg-[#F11900] text-white rounded-md mr-5"
+            className={`${
+              activeTab === "all"
+                ? "bg-[#F11900] text-white"
+                : "bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900]"
+            } rounded-md mr-5`}
             style={{ padding: "8px 25px" }}
+            onClick={handleAllInvoices}
           >
             All
           </button>
           <button
-            className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5"
+            className={`${
+              activeTab === "paid"
+                ? "bg-[#F11900] text-white"
+                : "bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900]"
+            } rounded-md mr-5`}
             style={{ padding: "8px 25px" }}
+            onClick={handlePaid}
           >
             Paid
           </button>
           <button
-            className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5"
+            className={`${
+              activeTab === "partiallyPaid"
+                ? "bg-[#F11900] text-white"
+                : "bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900]"
+            } rounded-md mr-5`}
             style={{ padding: "8px 25px" }}
+            onClick={handlePartiallyPaid}
           >
             Partially Payment
           </button>
           <button
-            className="bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900] rounded-md mr-5"
+            className={`${
+              activeTab === "unpaid"
+                ? "bg-[#F11900] text-white"
+                : "bg-white text-black border border-black hover:bg-[#F11900] hover:text-white hover:border-[#f11900]"
+            } rounded-md mr-5`}
             style={{ padding: "8px 25px" }}
+            onClick={handleUnPaid}
           >
             Unpaid
           </button>
@@ -259,7 +262,7 @@ const AllInvoices = () => {
             </thead>
             {/* ------------- TABLE BODY ------------- */}
             <tbody className="text-gray-600 divide-y">
-              {InvoicesData.map((data, index) => (
+              {filterdByStatus.map((data, index) => (
                 <React.Fragment key={index}>
                   {data.invoices.map((invoice, invoiceIndex) => (
                     <tr

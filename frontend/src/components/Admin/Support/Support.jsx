@@ -229,7 +229,7 @@ const Support = () => {
                     : "hover:bg-gray-600 hover:text-white "
                 } `}
               >
-                Previous
+                Prev
               </button>
             </li>
             <li>

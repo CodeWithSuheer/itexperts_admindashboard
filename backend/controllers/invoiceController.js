@@ -52,6 +52,7 @@ export const createInvoice = async (req, res, next) => {
         orderId: invoiceData.orderId,
         invoices: [invoice1, invoice2],
       });
+      await sendEmail({email:invoiceData.to.email,emailType:"INVOICEGENERATED",orderId:invoiceData.orderId})
       await mainDocument.save();
     } else {
       const mainDocument = new MainDocument({
@@ -62,8 +63,8 @@ export const createInvoice = async (req, res, next) => {
         invoices: new Invoices(invoiceData),
       });
       await mainDocument.save();
+      await sendEmail({email:invoiceData.to.email,emailType:"INVOICEGENERATED",orderId:invoiceData.orderId})
     }
-    await sendEmail({email:invoiceData.to.email,emailType:"INVOICEGENERATED",orderId})
     res.status(201).json({ msg: "Invoice Generated" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
