@@ -103,9 +103,8 @@ const Invoice = () => {
     }
   };
 
-
   const isFormEmpty = () => {
-    const formFields = document.querySelectorAll('input, select, textarea');
+    const formFields = document.querySelectorAll("input, select, textarea");
     for (const field of formFields) {
       if (!field.value.trim()) {
         return true;
@@ -142,15 +141,9 @@ const Invoice = () => {
 
   // HANDLE DELETE SERVICE
   const handleDeleteService = (index) => {
-    const updatedServices = [...services];
+    const updatedServices = [...formData.service];
     updatedServices.splice(index, 1);
-
-    // Update service numbers after deletion
-    updatedServices.forEach((service, i) => {
-      service.number = i + 1;
-    });
-
-    setServices(updatedServices);
+    setFormData({ ...formData, service: updatedServices });
   };
 
   const tableItems = [
@@ -224,8 +217,8 @@ const Invoice = () => {
     };
 
     console.log(finalData);
-    dispatch(createInvoicesAsync(finalData))
-    navigate("/adminpanel/all-invoice")
+    dispatch(createInvoicesAsync(finalData));
+    navigate("/adminpanel/all-invoice");
   };
 
   return (
@@ -488,7 +481,7 @@ const Invoice = () => {
       <Modal
         size="4xl"
         show={showModalX}
-        icon={<X size={30} onClick={onClickTwo} className="cursor-pointer"/>}
+        icon={<X size={30} onClick={onClickTwo} className="cursor-pointer" />}
       >
         <Modal.Header>
           {/* <div className="flex justify-between items-center border-b-4 border-gray-500 pb-2"> */}
@@ -510,7 +503,7 @@ const Invoice = () => {
             <div className=" p-2 w-100">
               <p className="modelClientText mb-2 text-base">Bill To:</p>
               <h1 className="modelClientHeadText mb-2 font-semibold text-lg">
-              {formData.to.name}
+                {formData.to.name}
               </h1>
               <p className="modelClientText mb-2 text-base">
                 (+92) 334 41087865

@@ -31,6 +31,7 @@ const Support = () => {
   };
 
   let filterdData;
+
   if (name) {
     filterdData = allSupportRequests.filter((item) => item.reference === name);
   } else {
@@ -40,14 +41,20 @@ const Support = () => {
   let searchData = [];
 
   if (searchQuery) {
-    searchData = allSupportRequests.filter((data) => {
-      // Check if data.name is present and not undefined
-      const dataName = data.name || "";
-      return dataName.toLowerCase().includes(searchQuery.toLowerCase());
+    searchData = filterdData.filter((data) => {
+      const clientName = `${data.client?.firstName || ""} ${
+        data.client?.lastName || ""
+      }`;
+      const clientEmail = data.client?.email || "";
+
+      return (
+        clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        clientEmail.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     });
   }
 
-  const [limit, setLimit] = useState(18);
+  const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(
     (searchQuery.length > 1 ? searchData.length : filterdData.length) / limit
@@ -136,8 +143,10 @@ const Support = () => {
             <tbody className="text-gray-600 divide-y">
               {displayedData.length > 0 ? (
                 displayedData.map((data, idx) => (
-                  <tr key={idx} className="cursor-pointer">
-                    <td className="pr-3 py-4 text-lg pl-3">{idx + 1}</td>
+                  <tr key={startIndex + idx} className="cursor-pointer">
+                    <td className="pr-3 py-3 text-lg pl-3">
+                      {startIndex + idx + 1}
+                    </td>
                     <td className="gap-x-3 px-6 whitespace-nowrap">
                       <span className="text-gray-700 text-lg font-medium">
                         {`${data.client?.firstName || ""} ${
@@ -204,7 +213,7 @@ const Support = () => {
           </table>
         </div>
       </div>
-      {/* <div className=" flex justify-center mt-5 mb-5">
+      <div className=" flex justify-center mt-5 mb-5">
         <nav aria-label="Page navigation example">
           <ul className="inline-flex -space-x-px text-lg">
             <li>
@@ -246,7 +255,7 @@ const Support = () => {
             </li>
           </ul>
         </nav>
-      </div> */}
+      </div>
 
       {/* ------------- VIEW MESSAGE MODAL ------------- */}
       {filteredId.map((data, idx) => (

@@ -12,12 +12,15 @@ const ProjectsOrder = () => {
   const ProjectOrders = useSelector(
     (state) => state.projectorder.AllProjectOrder
   );
+
+  console.log("ProjectOrders", ProjectOrders);
+
   useEffect(() => {
     dispatch(getAllProjectOrderAsync());
   }, [dispatch]);
 
   if (!ProjectOrders) {
-    return <div>Loading...</div>; // You can customize the loading message or spinner
+    return <div>Loading...</div>;
   }
 
   const openModal = (objectId) => {
@@ -38,7 +41,10 @@ const ProjectsOrder = () => {
         <div className="items-start justify-between md:flex">
           <div className="max-w-4xl">
             <h3 className="text-gray-800 text-2xl font-semibold tracking-wide sm:text-3xl">
-              Project Orders
+              PROJECT ORDERS{" "}
+              <span className="text-lg font-normal">
+                ({ProjectOrders.length})
+              </span>
             </h3>
           </div>
         </div>
@@ -51,6 +57,8 @@ const ProjectsOrder = () => {
                 <th className="py-4 px-6 text-lg font-medium">Company Name</th>
                 <th className="py-4 px-6 text-lg font-medium">Project Title</th>
                 <th className="py-4 px-6 text-lg font-medium">Customer ID</th>
+                <th className="py-4 px-6 text-lg font-medium">Date</th>
+                <th className="py-4 px-6 text-lg font-medium">Deadline</th>
                 <th className="py-4 px-6 text-lg font-medium">Order ID</th>
                 <th className="py-4 px-6 text-lg font-medium">View Details</th>
               </tr>
@@ -58,17 +66,17 @@ const ProjectsOrder = () => {
             <tbody className="text-gray-600 divide-y">
               {ProjectOrders.map((data, idx) => (
                 <tr key={idx}>
-                  <td className="px-6 py-4 ">{idx + 1}</td>
-                  <td className="px-6 py-4 ">{data.companyName}</td>
-                  <td className="px-6 py-4 ">{data.projectTitle}</td>
-                  <td className="px-6 py-4 text-red-600">{data.customerId}</td>
-                  <td className="px-6 py-4 text-md text-red-600">
-                    {data.orderId}
-                  </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-3 text-lg ">{idx + 1}</td>
+                  <td className="px-6 py-3 text-lg ">{data.companyName}</td>
+                  <td className="px-6 py-3 text-lg ">{data.projectTitle}</td>
+                  <td className="px-6 py-3 text-lg  text-red-600">{data.customerId}</td>
+                  <td className="px-6 py-3 text-md">{new Date(data.startDate).toLocaleDateString()}</td>
+                  <td className="px-6 py-3 ">{new Date(data.Deadline).toLocaleDateString()}</td>
+                  <td className="px-6 py-3 text-lg text-md text-red-600">{data.orderId}</td>
+                  <td className="px-6 py-3">
                     <td
                       onClick={() => openModal(data.id)}
-                      className="bg-[#f11900] text-white px-4 py-2.5 rounded-lg cursor-pointer"
+                      className="bg-[#f11900] text-white text-sm px-4 py-2 rounded-lg cursor-pointer"
                     >
                       View Details
                     </td>

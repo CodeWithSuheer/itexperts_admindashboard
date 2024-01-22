@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button } from "keep-react";
+import { Modal, Button, Tooltip } from "keep-react";
 import { CloudArrowUp } from "phosphor-react";
 import {
   User,
@@ -14,11 +14,12 @@ import {
 import "./OnGoingProjectsDetails.css";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { FormInput } from "lucide-react";
+import { FormInput, CheckCheck } from "lucide-react";
 import {
   getAllProjectsAsync,
   updateProjectsAsync,
 } from "../../../features/ProjectSlice";
+import toast from "react-hot-toast";
 
 const ProjectsDetails = () => {
   const dispatch = useDispatch();
@@ -30,82 +31,87 @@ const ProjectsDetails = () => {
     currentStep: 1,
   });
   const [showModalX, setShowModalX] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [support, setSupport] = useState({
+    AdditionalFile: null,
+  });
   const [newProgress, setNewProgress] = useState({
     title: "",
     description: "",
   });
-
+  console.log("file", support);
+  // USESELECTOR
   const Projects = useSelector((state) => state.project.allProjects);
+
+  // FILTERED PROJECT USING PROJECT ID
   const ProjectsData = Projects.filter((data) => data.id === id);
   console.log("ProjectsData", ProjectsData);
 
-  const people = [
-    {
-      name: "John Doe",
-      title: "Front-end Developer",
-      department: "Engineering",
-      email: "john@devui.com",
-      role: "Developer",
-      image:
-        "https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80",
-    },
-  ];
-  const ProjectStatus = "Testing";
+  // HANDLE MARK AS COMPLETE
+  const handleMarkAsComplete = () => {
+    const updatedProject = {
+      ...ProjectsData[0],
+      completed: true,
+    };
 
-  useEffect(() => {
-    switch (ProjectStatus) {
-      case "Development":
-        setStep((prevState) => ({ ...prevState, currentStep: 2 }));
-        break;
-      case "Testing":
-        setStep((prevState) => ({ ...prevState, currentStep: 3 }));
-        break;
-      case "Completion":
-        setStep((prevState) => ({ ...prevState, currentStep: 4 }));
-        break;
-      default:
-        setStep((prevState) => ({ ...prevState, currentStep: 1 }));
+    dispatch(updateProjectsAsync(updatedProject, id)).then(() => {
+      dispatch(getAllProjectsAsync());
+    });
+  };
+  const handleChange = (e, fieldName) => {
+    if (e.target.type === "file") {
+      setSupport({
+        ...support,
+        [fieldName]: e.target.files[0],
+      });
     }
-  }, [ProjectStatus]);
-
+  };
   const onClickTwo = () => {
     setShowModalX(!showModalX);
   };
 
-  // const handleUpdateProgress = async () => {
-  //   if (!projectId) {
-  //     console.error("Project ID is missing.");
-  //     return;
-  //   }
+  // HANDLE UPDATE PROGRESS
+  const handleUpdateProgress = async () => {
+    const updatedProject = {
+      ...ProjectsData[0],
+      projectProgress: [
+        ...ProjectsData[0].projectProgress,
+        {
+          id: Date.now(),
+          title: newProgress.title,
+          description: newProgress.description,
+        },
+      ],
+    };
 
-  //   try {
-  //     const updatedFormData = { ...ProjectsData[0] }; 
-  //     if (!updatedFormData.projectProgress) {
-  //       updatedFormData.projectProgress = [];
-  //     }
+    dispatch(updateProjectsAsync(updatedProject)).then(() => {
+      dispatch(getAllProjectsAsync());
+      setShowModalX(false);
+    });
+  };
 
-  //     const enhancedNewProgress = {
-  //       ...newProgress,
-  //       id: projectId, 
-  //     };
+  const Output = async (e) => {
+    e.preventDefault();
+    if (support.AdditionalFile) {
+      var loadingToastId = toast.loading("Uploading");
+      const formData = new FormData();
+      formData.append("filename", support.AdditionalFile);
+      formData.append("objectId", id);
+      formData.append("id", id);
 
-  //     updatedFormData.projectProgress.push(enhancedNewProgress);
+      try {
+        await dispatch(updateProjectsAsync(formData));
 
-  //     await dispatch(updateProjectsAsync(updatedFormData));
-
-  //     await dispatch(getAllProjectsAsync());
-
-  //     setNewProgress({
-  //       title: "",
-  //       description: "",
-  //     });
-
-  //     setShowModalX(false);
-  //   } catch (error) {
-  //     console.error("Error updating project progress:", error);
-  //   }
-  // };
+        setSupport({
+          AdditionalFile: null,
+        });
+      } catch (error) {
+        console.error("Error during file upload:", error);
+        toast.error("File Upload Failed");
+      } finally {
+        toast.dismiss(loadingToastId);
+      }
+    }
+  };
 
   return (
     <>
@@ -116,13 +122,38 @@ const ProjectsDetails = () => {
               <h1 className="text-gray-800 text-2xl ml-10 mb-10 font-semibold tracking-wide sm:text-3xl underline decoration-red-500 underline-offset-8">
                 PROJECT DETAILS
               </h1>
-              <div className="button">
-                <Link
-                  to={`/adminpanel/updateproject/${data.id}`}
-                  className="block py-2.5 px-4 text-white font-medium bg-[#f11900] duration-150 hover:bg-[#f11900] active:bg-red-700 rounded-lg shadow-lg hover:shadow-none"
-                >
-                  Update Project
-                </Link>
+
+              {/* ---------- PROJECT COMPLETE BUTTONS HERE ---------- */}
+              <div className="buttons">
+                <div className="flex flex-row gap-4">
+                  {!ProjectsData[0].completed ? (
+                    <Tooltip
+                      content="Confirm to close project permanently"
+                      trigger="hover"
+                      placement="top"
+                      animation="duration-300"
+                      style="dark"
+                    >
+                      <button
+                        className="block py-2.5 px-4 text-white font-medium bg-gray-700 duration-150 hover:bg-gray-800 active:bg-gray-700 rounded-lg shadow-lg hover:shadow-none"
+                        onClick={handleMarkAsComplete}
+                      >
+                        Mark As Complete
+                      </button>
+                    </Tooltip>
+                  ) : (
+                    <p className="block py-2.5 px-4 text-white font-medium bg-gray-700 rounded-lg shadow-lg cursor-not-allowed">
+                      This project is completed
+                    </p>
+                  )}
+
+                  <Link
+                    className="block py-2.5 px-4 text-white font-medium bg-[#f11900] duration-150 hover:bg-[#f11900] active:bg-red-700 rounded-lg shadow-lg hover:shadow-none"
+                    to={`/adminpanel/updateproject/${data.id}`}
+                  >
+                    Update Project
+                  </Link>
+                </div>
               </div>
             </div>
 
@@ -217,6 +248,7 @@ const ProjectsDetails = () => {
               </div>
             </section>
 
+            {/* ---------------- DESCRIPTION ----------------  */}
             <section className="my-14">
               <h2 className="text-gray-700 block mb-2 ml-10 font-semibold tracking-wide text-3xl">
                 Description
@@ -266,14 +298,13 @@ const ProjectsDetails = () => {
                   onClick={onClickTwo}
                   className="px-4 py-2.5 text-white text-sm bg-gray-800 rounded-lg shadow-md focus:shadow-none duration-100 ring-offset-2 focus:ring-none"
                 >
-                  Add Next Step
+                  Add Progress
                 </button>
               </div>
             </section>
 
-            {/* <------Upload File And Message Text Area-----> */}
+            {/* <------ UPLOAD FILE SECTION -----> */}
             <section>
-              {/* <div className="mx-auto max-w-screen-xl py-8 sm:py-12"> */}
               <div className="my-10">
                 <ul className="mx-auto grid w-full max-w-screen-xl items-center space-y-4 px-2 py-10 md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-2">
                   {/* ---------------- FILE UPLOAD ----------------  */}
@@ -303,20 +334,17 @@ const ProjectsDetails = () => {
                         </h2>
 
                         <p className="mt-2 text-xs tracking-wide text-gray-500">
-                          Upload or darg & drop your ZIP File Only.
+                          {support.AdditionalFile
+                            ? support.AdditionalFile.name
+                            : "Upload or darg & drop your file here."}
                         </p>
-
-                        <button
-                          type="button"
-                          className="focus:outline-none text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-10 mt-5 py-2.5 me-2 mb-2"
-                        >
-                          Choose File
-                        </button>
 
                         <input
                           id="dropzone-file"
                           type="file"
                           className="hidden w-full h-80"
+                          onChange={(e) => handleChange(e, "AdditionalFile")}
+                          value={setSupport.AdditionalFile}
                         />
                       </label>
                     </div>
@@ -324,8 +352,14 @@ const ProjectsDetails = () => {
                   {/* ---------------- FILE UPLOAD TEXT ----------------  */}
                   <li>
                     <h2 className="text-4xl font-semibold text-gray-700">
-                      Upload Project Zip File Here:
+                      Upload Project File Here:
                     </h2>
+                    <button
+                      className="text-xm mt-6 bg-[#f11900] text-white rounded-lg px-4 py-2"
+                      onClick={Output}
+                    >
+                      Upload File
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -407,7 +441,7 @@ const ProjectsDetails = () => {
             type="primary"
             color="error"
             className="bg-[#f11900]"
-            // onClick={handleUpdateProgress}
+            onClick={handleUpdateProgress}
           >
             Add Next Step
           </Button>

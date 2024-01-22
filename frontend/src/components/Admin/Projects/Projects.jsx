@@ -97,7 +97,7 @@ const Projects = () => {
                     </span>     
                       </td>
                   <td className="px-6 py-4">
-                    <Link to={`/adminpanel/projectdetails/${data.id}`} onClick={()=>window.scroll(0,0)} className="bg-[#f11900] text-white px-4 py-2.5 rounded-lg">
+                    <Link to={`/adminpanel/projectdetails/${data.id}`} onClick={()=>window.scroll(0,0)} className="bg-[#f11900] text-white text-sm px-3 py-2 rounded-lg">
                       View Details
                     </Link>
                   </td>

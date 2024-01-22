@@ -58,8 +58,6 @@ const AllInvoices = () => {
   }).filter(Boolean);
 
   // console.log("Selected Data", selectedData);
-
-  // HANDLE SEARCH FUNCTION
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -70,6 +68,27 @@ const AllInvoices = () => {
   } else {
     filterdData = InvoicesData;
   }
+
+  let searchData = [];
+
+  if (searchQuery) {
+    searchData = filterdData.filter((data) => {
+      const clientName = data.invoices[0]?.to.name || "";
+      const clientEmail = data.invoices[0]?.to.email || "";
+
+      console.log("clientName:", clientName); // Add this line
+      console.log("clientEmail:", clientEmail); // Add this line
+
+      return (
+        clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        clientEmail.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    });
+  }
+
+  console.log("searchQuery:", searchQuery); // Add this line
+  console.log("filterdData:", filterdData); // Add this line
+  console.log("searchData:", searchData); // Add this line
 
   // THESE STATE ARE RELATED TO PAGINATION
   const [limit, setLimit] = useState(7);
@@ -82,13 +101,6 @@ const AllInvoices = () => {
 
   const endIndex = startIndex + limit;
   let displayedData = filterdData.slice(startIndex, endIndex);
-  let searchData = [];
-  if (searchQuery) {
-    searchData = InvoicesData.filter((data) =>
-      data.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }
-  displayedData = searchQuery.length > 1 ? searchData : displayedData;
 
   // VIEW MESSAGE MODAL FUNCTION
   const openModal = (objectId, invoiceId) => {

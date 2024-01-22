@@ -58,7 +58,7 @@ const AdminBody = () => {
     <>
       <div className="adminBody bg-slate-300 px-0">
         {/* ------------ DASHBOARD SIDE MENU ------------  */}
-        <div className="admin_sideMenu md:max-w-60 lg:max-w-72  ">
+        <div className="admin_sideMenu" style={{ maxWidth: "16%" }}>
           <Sidebar
             className="pt-6"
             aria-label="Sidebar with multi-level dropdown example"
