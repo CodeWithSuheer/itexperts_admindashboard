@@ -38,6 +38,7 @@ const ProjectsDetails = () => {
     title: "",
     description: "",
   });
+
   console.log("file", support);
   // USESELECTOR
   const Projects = useSelector((state) => state.project.allProjects);
@@ -57,6 +58,7 @@ const ProjectsDetails = () => {
       dispatch(getAllProjectsAsync());
     });
   };
+
   const handleChange = (e, fieldName) => {
     if (e.target.type === "file") {
       setSupport({
@@ -65,6 +67,7 @@ const ProjectsDetails = () => {
       });
     }
   };
+
   const onClickTwo = () => {
     setShowModalX(!showModalX);
   };
@@ -99,7 +102,9 @@ const ProjectsDetails = () => {
       formData.append("id", id);
 
       try {
-        await dispatch(updateProjectsAsync(formData));
+        await dispatch(updateProjectsAsync(formData)).then(() => {
+          dispatch(getAllProjectsAsync());
+        });
 
         setSupport({
           AdditionalFile: null,
@@ -147,12 +152,14 @@ const ProjectsDetails = () => {
                     </p>
                   )}
 
-                  <Link
-                    className="block py-2.5 px-4 text-white font-medium bg-[#f11900] duration-150 hover:bg-[#f11900] active:bg-red-700 rounded-lg shadow-lg hover:shadow-none"
-                    to={`/adminpanel/updateproject/${data.id}`}
-                  >
-                    Update Project
-                  </Link>
+                  {!ProjectsData[0].completed ? (
+                    <Link
+                      className="block py-2.5 px-4 text-white font-medium bg-[#f11900] duration-150 hover:bg-[#f11900] active:bg-red-700 rounded-lg shadow-lg hover:shadow-none"
+                      to={`/adminpanel/updateproject/${data.id}`}
+                    >
+                      Update Project
+                    </Link>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -364,6 +371,26 @@ const ProjectsDetails = () => {
                 </ul>
               </div>
             </section>
+
+            {/* ---------------- UPLOADED FILE TABLE ----------------  */}
+            {data.file && (
+              <div className="mt-12 max-w-6xl mx-auto relative h-max overflow-auto">
+                <table className="w-full table-auto text-md text-left overflow-auto">
+                  <thead className="text-[#242435] bg-[#F7F7F7] font-medium border-b">
+                    <tr>
+                      <th className="py-4 px-6 text-lg font-medium">File</th>
+                      <th className="py-4 px-6 text-lg font-medium">Type</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-gray-600 divide-y">
+                    <tr>
+                      <td className="px-6 py-4 ">{data.file.name}</td>
+                      <td className="px-6 py-4 ">{data.file.type}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
           </React.Fragment>
         ))}
       </div>

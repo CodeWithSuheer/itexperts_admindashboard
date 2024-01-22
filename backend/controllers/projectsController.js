@@ -39,7 +39,6 @@ export const createProject = async (req, res) => {
     const projectData = await Projects.create({
       projectTitle,
       companyName,
-      file: fileData,
       startDate,
       Deadline,
       customerId,
